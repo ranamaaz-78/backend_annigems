@@ -18,6 +18,8 @@ class AdminUser extends Authenticatable
 
     protected $fillable = ['name', 'email', 'password', 'is_active'];
 
+    protected $attributes = ['is_active' => true];
+
     protected $hidden = ['password', 'remember_token', 'two_factor_secret', 'two_factor_recovery_codes'];
 
     protected function casts(): array

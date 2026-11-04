@@ -11,8 +11,8 @@ Branch: `development`. Brief: `docs/BACKEND_BRIEF.md`.
 | 3 | Pricing, gold-rate, FX services + public store/content/configurator/quote APIs | ✅ done |
 | 4 | Customer auth (Google, reset code) + account, addresses, wishlist | ✅ done |
 | 5 | Checkout, Stripe PaymentIntents, webhooks, orders APIs, emails, scheduled jobs | ✅ done |
-| 6 | Admin: orders, customers, catalog, configurator, pricing, coupons | ⏳ next |
-| 7 | Admin: CMS, messages, staff/roles, activity log, app settings | ☐ |
+| 6 | Admin: orders, customers, catalog, configurator, pricing, coupons | ✅ done |
+| 7 | Admin: CMS, messages, staff/roles, activity log, app settings | ⏳ next |
 | 8 | Scribe docs, Postman export, tests green, README, storefront integration doc | ☐ |
 
 ## Done
@@ -56,6 +56,12 @@ Branch: `development`. Brief: `docs/BACKEND_BRIEF.md`.
 - Emails (queued): order confirmed (items, custom-ring breakdown, totals), payment failed, stage updates (crafting / quality check / shipped with tracking / delivered), order cancelled, refund issued; staff: new paid order, new contact message, gold API failing.
 - Scheduler: `orders:cancel-stale` hourly (pending orders older than `orders.pending_ttl_hours`).
 
+### M6
+- Admin API (`routes/api/admin_modules.php`, every route permission-checked): dashboard stats, orders (filters: status, stage, date range, currency, platform, search; CSV export; detail; stage forward/back with tracking + "notify customer"; tracking edit; cancel unpaid; full/partial Stripe refund; resend confirmation; internal notes; printable invoice and packing slip HTML views), customers (search, detail with addresses/orders/wishlist/LTV/devices, activate/deactivate, send reset code), products (CRUD, ordered gallery, details/tags, sizes, badge, featured/new flags + order, stock), categories, reviews, configurator rings/stones (new rings/stones get inactive combo rows), combos matrix (toggle + image), price preview (EUR + every active currency), gold rate (status, history, source switch with the test-first rule, manual rate, interval, fetch now), currencies (enable/disable, manual rates, FX source, fetch now), tax / free-shipping threshold / pending-order TTL, shipping methods, countries, coupons (with usage stats), media upload.
+- React screens for all of the above in the AdminLTE layout: KPI small boxes + revenue bar chart + gold/FX widgets on the dashboard, server-side `DataTable` lists, a schema-driven `CrudPage` for simple resources, a full product form with multi-image upload and drag-and-drop ordering, live gem swatch preview for stones, the rings × stones matrix, and a gold-rate history chart.
+- Fixed: the SPA now sends the `XSRF-TOKEN` cookie (not the page `<meta>` token), because Laravel rotates the CSRF token when the session is regenerated at login/2FA.
+- Tests: role permissions (Support/Manager/Super Admin), 2FA enforcement, idle timeout, order stage machine + refund + documents + CSV, customers, catalog CRUD with images, configurator admin, pricing admin.
+
 ## Decisions
 
 - **Laravel 12** pinned as the brief says, although Laravel 13 is the current release (ecosystem packages such as Scribe and spatie are proven on 12).
@@ -89,8 +95,13 @@ Branch: `development`. Brief: `docs/BACKEND_BRIEF.md`.
 - Stale unpaid orders get the "order cancelled" email (reason: payment not completed in time).
 - Mobile ephemeral keys use Stripe API version `STRIPE_EPHEMERAL_KEY_VERSION` (default `2024-06-20`); it must match the mobile Stripe SDK.
 
+- Admin money inputs and lists are in EUR minor units (the base currency); order screens show the order currency plus the EUR total.
+- Refund amounts are entered in the order currency; the order status changes only when Stripe's `charge.refunded` webhook arrives (a note records the request immediately).
+- Invoice / packing slip are HTML print views (browser "Save as PDF"), so no PDF engine is needed at runtime; dompdf is installed if a PDF download is wanted later.
+- Deleting a category with products is blocked; products are soft-deleted (orders keep their snapshots).
+
 ## Next
-- M6: admin API + React screens for dashboard, orders (actions, refunds, invoice/packing slip), customers, catalog, configurator (combos matrix, price preview), pricing (gold, currencies, tax/shipping, countries), coupons.
+- M7: content blocks (structured forms), policy pages, FAQs, testimonials, contact topics, size guide editor, messages inbox + newsletter, staff & roles, activity log, app settings.
 
 ## Open questions
 - Seeded copy still mentions "$" (e.g. "Free Shipping over $500", "Under $1000", policy text "prices are shown in US dollars") while the base currency is now EUR. Left as is per the brief ("leave everything else as it is"); editable in Content.

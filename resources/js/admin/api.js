@@ -1,13 +1,14 @@
 import axios from 'axios';
 
-const token = document.querySelector('meta[name="csrf-token"]')?.content;
-
+// CSRF: axios sends the XSRF-TOKEN cookie back as X-XSRF-TOKEN on every request.
+// (Not the <meta> token: it goes stale when the session is regenerated at login.)
 const api = axios.create({
     baseURL: '/api/v1/admin',
     withCredentials: true,
-    headers: { Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest', ...(token ? { 'X-CSRF-TOKEN': token } : {}) },
+    headers: { Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
     xsrfCookieName: 'XSRF-TOKEN',
     xsrfHeaderName: 'X-XSRF-TOKEN',
+    withXSRFToken: true,
 });
 
 // Broadcast auth state problems so the AuthProvider can react (expired session, 2FA needed).
