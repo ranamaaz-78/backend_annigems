@@ -1,0 +1,12 @@
+/* Small additions on top of the AdminLTE 4 stylesheet. */
+.login-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+.small-box .small-box-icon { opacity: .25; }
+.table td .btn-group-sm > .btn { padding: .1rem .4rem; }
+.gem-swatch { width: 48px; height: 48px; border-radius: 50%; display: inline-block; border: 1px solid rgba(0,0,0,.15); }
+.combo-cell { min-width: 140px; }
+.drag-item { cursor: grab; }
+.drag-item.dragging { opacity: .4; }
+@media print {
+    .app-header, .app-sidebar, .app-footer, .no-print { display: none !important; }
+    .app-main { margin: 0 !important; }
+}
