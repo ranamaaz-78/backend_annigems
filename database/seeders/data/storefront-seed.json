@@ -1,0 +1,1539 @@
+{
+  "_note": "Exported from the AANI GEMAS storefront (web_annigems/src/data) on 2026-11-04. Money values are the storefront display numbers; treat them as EUR (base currency) when seeding. Image paths are relative to the storefront public/ folder.",
+  "brand": {
+    "name": "AANI GEMAS",
+    "logo": "/images/logo_aani.png",
+    "tagline": [
+      "Crafted with passion.",
+      "Worn with pride."
+    ],
+    "since": 1987
+  },
+  "goldRate": {
+    "perOz": 2480,
+    "note": "Storefront placeholder (was USD). Use as the initial MANUAL rate in EUR until admin changes it."
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "Handcrafted Fine Jewelry · Since {since}",
+      "titleLine1": "Where Gold",
+      "titleLine2": "Meets Artistry",
+      "text": "Bespoke rings, necklaces, earrings and bracelets crafted in 18K gold. Every piece tells a story. Every stone speaks in colour.",
+      "image": "/images/hero_banner_user.jpg",
+      "primaryCta": {
+        "label": "Shop Collection",
+        "to": "/shop"
+      }
+    },
+    "uspItems": [
+      {
+        "icon": "🚚",
+        "label": "Free Shipping over $500"
+      },
+      {
+        "icon": "✦",
+        "label": "GIA Certified Gemstones"
+      },
+      {
+        "icon": "↩",
+        "label": "30-Day Free Returns"
+      },
+      {
+        "icon": "🔒",
+        "label": "Secure & Insured Delivery"
+      },
+      {
+        "icon": "♦",
+        "label": "Lifetime Craftsmanship Warranty"
+      }
+    ],
+    "categorySection": {
+      "title": "Shop by Category",
+      "subtitle": "From everyday elegance to once-in-a-lifetime pieces"
+    },
+    "designRingBanner": {
+      "tag": "Bespoke Service",
+      "titleLine1": "Design",
+      "titleLine2": "Your Perfect Ring",
+      "text": "Choose your setting, your size, your stone. Priced live on today's gold market.",
+      "cta": {
+        "label": "Begin Your Creation →",
+        "to": "/design-your-ring"
+      }
+    },
+    "testimonialsSection": {
+      "eyebrow": "Client Stories",
+      "title": "What Our Clients Say"
+    },
+    "featuredProductIds": [
+      "r1",
+      "r5",
+      "e1",
+      "b1",
+      "n1"
+    ],
+    "newArrivalProductIds": [
+      "r3",
+      "r6",
+      "e2",
+      "b2",
+      "n2"
+    ]
+  },
+  "navigation": {
+    "megaMenu": {
+      "columns": [
+        {
+          "heading": "Categories",
+          "links": [
+            {
+              "label": "Rings",
+              "to": "/shop?cat=rings"
+            },
+            {
+              "label": "Necklaces",
+              "to": "/shop?cat=necklaces"
+            },
+            {
+              "label": "Earrings",
+              "to": "/shop?cat=earrings"
+            },
+            {
+              "label": "Bracelets",
+              "to": "/shop?cat=bracelets"
+            }
+          ]
+        },
+        {
+          "heading": "Shop By",
+          "links": [
+            {
+              "label": "New Arrivals",
+              "to": "/shop?sort=newest"
+            },
+            {
+              "label": "Bestsellers",
+              "to": "/shop?sort=rating"
+            },
+            {
+              "label": "On Sale",
+              "to": "/shop"
+            },
+            {
+              "label": "Under $1000",
+              "to": "/shop?max=1000"
+            }
+          ]
+        },
+        {
+          "heading": "Collections",
+          "links": [
+            {
+              "label": "Engagement Rings",
+              "to": "/shop?cat=rings"
+            },
+            {
+              "label": "Anniversary Gifts",
+              "to": "/shop"
+            },
+            {
+              "label": "Bridal Sets",
+              "to": "/shop"
+            },
+            {
+              "label": "Gift Guide",
+              "to": "/shop"
+            }
+          ]
+        }
+      ],
+      "featured": {
+        "tag": "New Arrival",
+        "name": "Seren Sapphire Halo",
+        "image": "/images/ring2_sapphire.jpg",
+        "to": "/product/r4"
+      }
+    },
+    "mobileNav": [
+      {
+        "label": "Home",
+        "to": "/"
+      },
+      {
+        "label": "Shop All",
+        "to": "/shop"
+      },
+      {
+        "label": "Rings",
+        "to": "/shop?cat=rings"
+      },
+      {
+        "label": "Necklaces",
+        "to": "/shop?cat=necklaces"
+      },
+      {
+        "label": "Earrings",
+        "to": "/shop?cat=earrings"
+      },
+      {
+        "label": "Bracelets",
+        "to": "/shop?cat=bracelets"
+      },
+      {
+        "label": "✦ Design Your Ring",
+        "to": "/design-your-ring",
+        "highlight": true
+      },
+      {
+        "label": "Wishlist",
+        "to": "/wishlist"
+      },
+      {
+        "label": "Our Story",
+        "to": "/about"
+      },
+      {
+        "label": "Services",
+        "to": "/services"
+      },
+      {
+        "label": "Wholesale / B2B",
+        "to": "/wholesale"
+      },
+      {
+        "label": "Contact",
+        "to": "/contact"
+      },
+      {
+        "label": "Track Order",
+        "to": "/track-order"
+      }
+    ],
+    "footerColumns": [
+      {
+        "heading": "Collections",
+        "links": [
+          {
+            "label": "Rings",
+            "to": "/shop?cat=rings"
+          },
+          {
+            "label": "Necklaces",
+            "to": "/shop?cat=necklaces"
+          },
+          {
+            "label": "Earrings",
+            "to": "/shop?cat=earrings"
+          },
+          {
+            "label": "Bracelets",
+            "to": "/shop?cat=bracelets"
+          }
+        ]
+      },
+      {
+        "heading": "Services",
+        "links": [
+          {
+            "label": "Design Your Ring",
+            "to": "/design-your-ring"
+          },
+          {
+            "label": "Ring Resizing",
+            "to": "/services"
+          },
+          {
+            "label": "Engraving",
+            "to": "/services"
+          },
+          {
+            "label": "Jewelry Repairs",
+            "to": "/services"
+          }
+        ]
+      },
+      {
+        "heading": "Help",
+        "links": [
+          {
+            "label": "Shipping Info",
+            "to": "/shipping-policy"
+          },
+          {
+            "label": "Returns & Exchange",
+            "to": "/returns"
+          },
+          {
+            "label": "Track Order",
+            "to": "/track-order"
+          },
+          {
+            "label": "Warranty & Care",
+            "to": "/warranty"
+          },
+          {
+            "label": "FAQ",
+            "to": "/faq"
+          },
+          {
+            "label": "Contact Us",
+            "to": "/contact"
+          }
+        ]
+      },
+      {
+        "heading": "Company",
+        "links": [
+          {
+            "label": "Our Story",
+            "to": "/about"
+          },
+          {
+            "label": "My Account",
+            "to": "/account"
+          },
+          {
+            "label": "My Orders",
+            "to": "/account/orders"
+          },
+          {
+            "label": "Wishlist",
+            "to": "/wishlist"
+          },
+          {
+            "label": "Wholesale / B2B",
+            "to": "/wholesale"
+          },
+          {
+            "label": "Business Login",
+            "to": "/b2b/login"
+          }
+        ]
+      }
+    ],
+    "footerLegalLinks": [
+      {
+        "label": "Privacy Policy",
+        "to": "/privacy-policy"
+      },
+      {
+        "label": "Terms of Service",
+        "to": "/terms"
+      },
+      {
+        "label": "Shipping",
+        "to": "/shipping-policy"
+      }
+    ],
+    "_note": "Links to /wholesale and /b2b/login belong to the later B2B phase; keep them but they can be hidden."
+  },
+  "contact": {
+    "address": "21 Linking Road, Bandra West, Mumbai 400050, India",
+    "phone": "+91 98765 43210",
+    "email": "care@aanigems.com",
+    "hours": "Mon–Sat, 10:00 – 19:00 IST",
+    "whatsapp": "919876543210",
+    "mapSrc": "https://www.google.com/maps?q=Linking+Road+Bandra+West+Mumbai&output=embed"
+  },
+  "paymentBadges": [
+    "VISA",
+    "MC",
+    "AMEX",
+    "PayPal",
+    "UPI"
+  ],
+  "trustPoints": [
+    "🔒 Secure Checkout",
+    "✦ GIA Certified Jewelry",
+    "↩ 30-Day Returns"
+  ],
+  "productPageShippingPoints": [
+    "Free shipping on all orders over $500",
+    "Insured and tracked worldwide delivery",
+    "30-day hassle-free returns"
+  ],
+  "careInstructions": [
+    "Store in the provided jewelry pouch",
+    "Avoid exposure to harsh chemicals",
+    "Clean gently with a soft cloth"
+  ],
+  "commerce": {
+    "freeShippingThreshold": 500,
+    "taxRate": 0.08,
+    "shippingMethods": [
+      {
+        "id": "standard",
+        "name": "Standard Delivery",
+        "time": "5-7 business days",
+        "price": 25,
+        "freeOverThreshold": true
+      },
+      {
+        "id": "express",
+        "name": "Express Delivery",
+        "time": "2-3 business days",
+        "price": 45
+      },
+      {
+        "id": "overnight",
+        "name": "Overnight Delivery",
+        "time": "Next business day",
+        "price": 95
+      }
+    ],
+    "countries": [
+      "India",
+      "United States",
+      "United Kingdom",
+      "UAE",
+      "Other"
+    ],
+    "coupons": [
+      {
+        "code": "AANI10",
+        "percent": 10,
+        "label": "10% off your order"
+      },
+      {
+        "code": "WELCOME15",
+        "percent": 15,
+        "label": "15% welcome offer"
+      }
+    ]
+  },
+  "catalog": {
+    "categories": [
+      {
+        "id": "rings",
+        "label": "Rings",
+        "image": "/images/ring1_plain.jpg",
+        "count": 6
+      },
+      {
+        "id": "necklaces",
+        "label": "Necklaces",
+        "image": "/images/cat_necklaces.jpg",
+        "count": 8
+      },
+      {
+        "id": "earrings",
+        "label": "Earrings",
+        "image": "/images/cat_earrings.jpg",
+        "count": 10
+      },
+      {
+        "id": "bracelets",
+        "label": "Bracelets",
+        "image": "/images/cat_bracelets.jpg",
+        "count": 5
+      }
+    ],
+    "badges": [
+      "Bestseller",
+      "Sale",
+      "New",
+      "Limited",
+      "Iconic"
+    ],
+    "stoneFilters": [
+      "Diamond",
+      "Ruby",
+      "Sapphire",
+      "Emerald",
+      "No Stone"
+    ],
+    "sortOptions": [
+      {
+        "value": "featured",
+        "label": "Featured"
+      },
+      {
+        "value": "price-asc",
+        "label": "Price: Low to High"
+      },
+      {
+        "value": "price-desc",
+        "label": "Price: High to Low"
+      },
+      {
+        "value": "rating",
+        "label": "Top Rated"
+      },
+      {
+        "value": "newest",
+        "label": "Newest"
+      }
+    ],
+    "maxPriceFilter": 5000,
+    "ringSizes": [
+      "4",
+      "4.5",
+      "5",
+      "5.5",
+      "6",
+      "6.5",
+      "7",
+      "7.5",
+      "8",
+      "8.5",
+      "9",
+      "9.5",
+      "10",
+      "10.5",
+      "11",
+      "12"
+    ],
+    "ratingDistribution": [
+      {
+        "stars": 5,
+        "percent": 78
+      },
+      {
+        "stars": 4,
+        "percent": 15
+      },
+      {
+        "stars": 3,
+        "percent": 5
+      },
+      {
+        "stars": 2,
+        "percent": 2
+      },
+      {
+        "stars": 1,
+        "percent": 2
+      }
+    ],
+    "products": [
+      {
+        "id": "r1",
+        "category": "rings",
+        "name": "Aurora Solitaire",
+        "subtitle": "Classic 4-Prong Cathedral Setting",
+        "price": 799,
+        "originalPrice": null,
+        "rating": 4.9,
+        "reviews": 128,
+        "badge": "Bestseller",
+        "image": "/images/ring1_plain.jpg",
+        "gallery": [
+          "/images/ring1_plain.jpg",
+          "/images/ring1_ruby.jpg",
+          "/images/ring1_sapphire.jpg",
+          "/images/ring1_diamond.jpg"
+        ],
+        "metal": "18K Gold",
+        "stone": "No Stone",
+        "weight": "3.2g",
+        "description": "A timeless cathedral setting with four elegant prongs that elevate any chosen stone, letting light dance through every facet. Hand-finished by master artisans.",
+        "details": [
+          "18K Yellow Gold",
+          "4-Prong Cathedral Setting",
+          "High Polish Finish",
+          "Available sizes 4-12",
+          "Complimentary engraving",
+          "Free resize within 60 days"
+        ],
+        "tags": [
+          "minimalist",
+          "classic",
+          "gold"
+        ],
+        "inStock": true,
+        "customizable": true
+      },
+      {
+        "id": "r2",
+        "category": "rings",
+        "name": "Elise Vintage Halo",
+        "subtitle": "Ornate Milgrain Setting",
+        "price": 1250,
+        "originalPrice": 1490,
+        "rating": 4.8,
+        "reviews": 94,
+        "badge": "Sale",
+        "image": "/images/ring2_plain.jpg",
+        "gallery": [
+          "/images/ring2_plain.jpg",
+          "/images/ring2_ruby.jpg",
+          "/images/ring2_sapphire.jpg",
+          "/images/ring2_diamond.jpg"
+        ],
+        "metal": "18K Gold",
+        "stone": "No Stone",
+        "weight": "4.8g",
+        "description": "Inspired by Edwardian artistry. Delicate milgrain borders and hand-carved filigree create an heirloom-worthy masterpiece. Each piece takes over 40 hours to create.",
+        "details": [
+          "18K Yellow Gold",
+          "Milgrain Halo Setting",
+          "Satin + High Polish Finish",
+          "Available sizes 4-12",
+          "GIA certified stones upon request"
+        ],
+        "tags": [
+          "vintage",
+          "ornate",
+          "halo"
+        ],
+        "inStock": true,
+        "customizable": true
+      },
+      {
+        "id": "r3",
+        "category": "rings",
+        "name": "Celeste Ruby Solitaire",
+        "subtitle": "Aurora Setting with Burmese Ruby",
+        "price": 1249,
+        "originalPrice": null,
+        "rating": 5,
+        "reviews": 47,
+        "badge": "New",
+        "image": "/images/ring1_ruby.jpg",
+        "gallery": [
+          "/images/ring1_ruby.jpg",
+          "/images/ring1_plain.jpg"
+        ],
+        "metal": "18K Gold",
+        "stone": "Burmese Ruby 1.2ct",
+        "weight": "3.2g",
+        "description": "The Aurora Solitaire setting with a flawless 1.2 carat Burmese Ruby from the Mogok Valley. A declaration of passion in every detail.",
+        "details": [
+          "18K Yellow Gold",
+          "4-Prong Cathedral",
+          "Burmese Ruby 1.2ct AAA",
+          "Certificate of Authenticity"
+        ],
+        "tags": [
+          "ruby",
+          "red",
+          "statement"
+        ],
+        "inStock": true,
+        "customizable": false
+      },
+      {
+        "id": "r4",
+        "category": "rings",
+        "name": "Seren Sapphire Halo",
+        "subtitle": "Elise Setting with Ceylon Sapphire",
+        "price": 1770,
+        "originalPrice": null,
+        "rating": 4.9,
+        "reviews": 61,
+        "badge": null,
+        "image": "/images/ring2_sapphire.jpg",
+        "gallery": [
+          "/images/ring2_sapphire.jpg",
+          "/images/ring2_plain.jpg"
+        ],
+        "metal": "18K Gold",
+        "stone": "Ceylon Sapphire 1.5ct",
+        "weight": "4.8g",
+        "description": "Royal elegance in every curve. The Elise Halo setting cradles a 1.5 carat Ceylon Sapphire in a frame of delicate milgrain.",
+        "details": [
+          "18K Yellow Gold",
+          "Milgrain Halo Setting",
+          "Ceylon Sapphire 1.5ct VVS1",
+          "Certificate of Authenticity"
+        ],
+        "tags": [
+          "sapphire",
+          "blue",
+          "royal"
+        ],
+        "inStock": true,
+        "customizable": false
+      },
+      {
+        "id": "r5",
+        "category": "rings",
+        "name": "Lumiere Diamond Solitaire",
+        "subtitle": "Aurora Setting with White Diamond",
+        "price": 1999,
+        "originalPrice": 2350,
+        "rating": 5,
+        "reviews": 213,
+        "badge": "Sale",
+        "image": "/images/ring1_diamond.jpg",
+        "gallery": [
+          "/images/ring1_diamond.jpg",
+          "/images/ring1_plain.jpg"
+        ],
+        "metal": "18K Gold",
+        "stone": "White Diamond 1.0ct D VS1",
+        "weight": "3.2g",
+        "description": "The eternal classic. A 1.0 carat D-color VS1 diamond, GIA certified, set in the Aurora cathedral. Includes complimentary engraving.",
+        "details": [
+          "18K Yellow Gold",
+          "4-Prong Cathedral",
+          "Diamond 1.0ct D VS1 GIA Certified",
+          "Lifetime warranty"
+        ],
+        "tags": [
+          "diamond",
+          "white",
+          "classic",
+          "engagement"
+        ],
+        "inStock": true,
+        "customizable": false
+      },
+      {
+        "id": "r6",
+        "category": "rings",
+        "name": "Foret Emerald Halo",
+        "subtitle": "Elise Setting with Colombian Emerald",
+        "price": 1830,
+        "originalPrice": null,
+        "rating": 4.7,
+        "reviews": 38,
+        "badge": "Limited",
+        "image": "/images/ring2_emerald.jpg",
+        "gallery": [
+          "/images/ring2_emerald.jpg",
+          "/images/ring2_plain.jpg"
+        ],
+        "metal": "18K Gold",
+        "stone": "Colombian Emerald 1.3ct",
+        "weight": "4.8g",
+        "description": "A 1.3 carat Colombian Emerald from the Muzo mines, embraced by the intricate filigree of the Elise Halo setting. Rare and timeless.",
+        "details": [
+          "18K Yellow Gold",
+          "Milgrain Halo",
+          "Colombian Emerald 1.3ct VS1",
+          "Certificate of Authenticity"
+        ],
+        "tags": [
+          "emerald",
+          "green",
+          "vintage"
+        ],
+        "inStock": false,
+        "customizable": false
+      },
+      {
+        "id": "n1",
+        "category": "necklaces",
+        "name": "Etoile Diamond Pendant",
+        "subtitle": "18K Gold - Brilliant Cut Diamond",
+        "price": 850,
+        "originalPrice": null,
+        "rating": 4.9,
+        "reviews": 176,
+        "badge": "Bestseller",
+        "image": "/images/prod_necklace1.jpg",
+        "gallery": [
+          "/images/prod_necklace1.jpg"
+        ],
+        "metal": "18K Gold",
+        "stone": "Diamond 0.5ct",
+        "weight": "2.8g",
+        "description": "A single diamond suspended on a delicate gold chain. The Etoile pendant captures starlight in a 0.5ct brilliant cut diamond.",
+        "details": [
+          "18K Yellow Gold Chain 18in",
+          "Diamond 0.5ct F VS2",
+          "Lobster clasp",
+          "Gift box included"
+        ],
+        "tags": [
+          "diamond",
+          "pendant",
+          "minimalist"
+        ],
+        "inStock": true,
+        "customizable": false
+      },
+      {
+        "id": "n2",
+        "category": "necklaces",
+        "name": "Ardeur Ruby Pendant",
+        "subtitle": "18K Gold - Teardrop Ruby",
+        "price": 680,
+        "originalPrice": 820,
+        "rating": 4.8,
+        "reviews": 93,
+        "badge": "Sale",
+        "image": "/images/prod_necklace2.jpg",
+        "gallery": [
+          "/images/prod_necklace2.jpg"
+        ],
+        "metal": "18K Gold",
+        "stone": "Ruby 0.8ct",
+        "weight": "3.1g",
+        "description": "Passion distilled into a teardrop. The Ardeur pendant features a vibrant 0.8ct ruby from Mozambique, set in an 18K gold frame.",
+        "details": [
+          "18K Yellow Gold Chain 16-18in adjustable",
+          "Mozambique Ruby 0.8ct AAA",
+          "Diamond halo 0.1ct total",
+          "Certificate included"
+        ],
+        "tags": [
+          "ruby",
+          "red",
+          "pendant"
+        ],
+        "inStock": true,
+        "customizable": false
+      },
+      {
+        "id": "e1",
+        "category": "earrings",
+        "name": "Lumiere Diamond Studs",
+        "subtitle": "18K Gold - Round Brilliant Diamond",
+        "price": 1200,
+        "originalPrice": null,
+        "rating": 5,
+        "reviews": 284,
+        "badge": "Bestseller",
+        "image": "/images/prod_earrings1.jpg",
+        "gallery": [
+          "/images/prod_earrings1.jpg"
+        ],
+        "metal": "18K Gold",
+        "stone": "Diamond 1.0ct pair",
+        "weight": "1.6g pair",
+        "description": "The quintessential diamond studs. Each earring features a 0.5ct round brilliant diamond in a secure four-prong setting.",
+        "details": [
+          "18K Yellow Gold",
+          "4-Prong stud setting",
+          "0.5ct each, 1.0ct total pair",
+          "GIA certified",
+          "Butterfly backs"
+        ],
+        "tags": [
+          "diamond",
+          "studs",
+          "classic"
+        ],
+        "inStock": true,
+        "customizable": false
+      },
+      {
+        "id": "e2",
+        "category": "earrings",
+        "name": "Cascade Sapphire Drops",
+        "subtitle": "18K Gold - Sapphire and Diamond",
+        "price": 1580,
+        "originalPrice": 1800,
+        "rating": 4.8,
+        "reviews": 67,
+        "badge": "Sale",
+        "image": "/images/prod_earrings2.jpg",
+        "gallery": [
+          "/images/prod_earrings2.jpg"
+        ],
+        "metal": "18K Gold",
+        "stone": "Sapphire + Diamond",
+        "weight": "4.2g pair",
+        "description": "Chandelier earrings that cascade with light. Ceylon sapphires alternate with brilliant diamonds in a waterfall design.",
+        "details": [
+          "18K Yellow Gold",
+          "Ceylon Sapphire 1.2ct total",
+          "Diamond accents 0.4ct total",
+          "French wire hook",
+          "Luxury pouch included"
+        ],
+        "tags": [
+          "sapphire",
+          "drop",
+          "chandelier",
+          "statement"
+        ],
+        "inStock": true,
+        "customizable": false
+      },
+      {
+        "id": "b1",
+        "category": "bracelets",
+        "name": "Infini Diamond Tennis",
+        "subtitle": "18K Gold - 3ct Diamond Tennis Bracelet",
+        "price": 3200,
+        "originalPrice": null,
+        "rating": 4.9,
+        "reviews": 142,
+        "badge": "Iconic",
+        "image": "/images/prod_bracelet1.jpg",
+        "gallery": [
+          "/images/prod_bracelet1.jpg"
+        ],
+        "metal": "18K Gold",
+        "stone": "Diamond 3.0ct",
+        "weight": "11.4g",
+        "description": "47 round brilliant diamonds totaling 3.0 carats, set in a flexible 18K gold link bracelet that drapes like liquid metal.",
+        "details": [
+          "18K Yellow Gold",
+          "47 x Round Brilliant Diamonds",
+          "3.0ct total weight",
+          "Box clasp with safety",
+          "Available 7in or 7.5in"
+        ],
+        "tags": [
+          "diamond",
+          "tennis",
+          "luxury",
+          "gift"
+        ],
+        "inStock": true,
+        "customizable": false
+      },
+      {
+        "id": "b2",
+        "category": "bracelets",
+        "name": "Royale Sapphire Bangle",
+        "subtitle": "18K Gold - Sapphire and Diamond Bangle",
+        "price": 2100,
+        "originalPrice": 2500,
+        "rating": 4.7,
+        "reviews": 58,
+        "badge": "Sale",
+        "image": "/images/prod_bracelet2.jpg",
+        "gallery": [
+          "/images/prod_bracelet2.jpg"
+        ],
+        "metal": "18K Gold",
+        "stone": "Sapphire + Diamond",
+        "weight": "14.2g",
+        "description": "Alternating emerald-cut sapphires and round brilliant diamonds set in a polished 18K gold bangle of enduring elegance.",
+        "details": [
+          "18K Yellow Gold",
+          "Emerald-cut Sapphires 2.4ct",
+          "Round Diamond accents 0.8ct",
+          "Inner diameter 58mm",
+          "Certificate of Authenticity"
+        ],
+        "tags": [
+          "sapphire",
+          "bangle",
+          "statement"
+        ],
+        "inStock": true,
+        "customizable": false
+      }
+    ]
+  },
+  "configurator": {
+    "steps": [
+      "Choose Ring",
+      "Select Size",
+      "Pick Stone",
+      "Preview"
+    ],
+    "rings": [
+      {
+        "id": 1,
+        "name": "Aurora Solitaire",
+        "type": "Classic 4-Prong Cathedral",
+        "goldWeightG": 3.2,
+        "craftFee": 180,
+        "setting": "4-Prong Cathedral",
+        "image": "/images/ring1_plain.jpg",
+        "description": "A timeless cathedral setting with four elegant prongs.",
+        "karat": 18,
+        "sizes": [
+          "4",
+          "4.5",
+          "5",
+          "5.5",
+          "6",
+          "6.5",
+          "7",
+          "7.5",
+          "8",
+          "8.5",
+          "9",
+          "9.5",
+          "10",
+          "10.5",
+          "11",
+          "11.5",
+          "12"
+        ]
+      },
+      {
+        "id": 2,
+        "name": "Elise Vintage Halo",
+        "type": "Ornate Milgrain Setting",
+        "goldWeightG": 4.8,
+        "craftFee": 240,
+        "setting": "Milgrain Halo",
+        "image": "/images/ring2_plain.jpg",
+        "description": "Inspired by Edwardian artistry. Delicate milgrain borders and hand-carved filigree.",
+        "karat": 18,
+        "sizes": [
+          "4",
+          "4.5",
+          "5",
+          "5.5",
+          "6",
+          "6.5",
+          "7",
+          "7.5",
+          "8",
+          "8.5",
+          "9",
+          "9.5",
+          "10",
+          "10.5",
+          "11",
+          "11.5",
+          "12"
+        ]
+      }
+    ],
+    "stones": [
+      {
+        "id": "ruby",
+        "name": "Burmese Ruby",
+        "origin": "Mogok Valley, Myanmar",
+        "gemPrice": 450,
+        "rarity": "Rare",
+        "color": "#e53935",
+        "glow": "rgba(229,57,53,0.25)",
+        "gem": "radial-gradient(ellipse at 30% 25%,#ff8a80,#e53935,#7f0000)",
+        "images": {
+          "1": "/images/ring1_ruby.jpg",
+          "2": "/images/ring2_ruby.jpg"
+        },
+        "description": "Fiery passion. 1.2 carats, AAA clarity, Mogok Valley."
+      },
+      {
+        "id": "sapphire",
+        "name": "Ceylon Sapphire",
+        "origin": "Sri Lanka",
+        "gemPrice": 520,
+        "rarity": "Premium",
+        "color": "#1565c0",
+        "glow": "rgba(21,101,192,0.25)",
+        "gem": "radial-gradient(ellipse at 30% 25%,#82b1ff,#1565c0,#0a1628)",
+        "images": {
+          "1": "/images/ring1_sapphire.jpg",
+          "2": "/images/ring2_sapphire.jpg"
+        },
+        "description": "Royal elegance. 1.5 carats, VVS1 clarity, Sri Lanka."
+      },
+      {
+        "id": "emerald",
+        "name": "Colombian Emerald",
+        "origin": "Muzo, Colombia",
+        "gemPrice": 580,
+        "rarity": "Rare",
+        "color": "#00897b",
+        "glow": "rgba(0,137,123,0.25)",
+        "gem": "radial-gradient(ellipse at 30% 25%,#69f0ae,#00897b,#00251a)",
+        "images": {
+          "1": "/images/ring1_emerald.jpg",
+          "2": "/images/ring2_emerald.jpg"
+        },
+        "description": "Finest green. 1.3 carats, VS1, Muzo Mines, Colombia."
+      },
+      {
+        "id": "diamond",
+        "name": "White Diamond",
+        "origin": "D-Color, VS1, GIA",
+        "gemPrice": 1200,
+        "rarity": "Elite",
+        "color": "#90caf9",
+        "glow": "rgba(144,202,249,0.2)",
+        "gem": null,
+        "images": {
+          "1": "/images/ring1_diamond.jpg",
+          "2": "/images/ring2_diamond.jpg"
+        },
+        "description": "The eternal classic. 1.0 carat D-color VS1, GIA certified."
+      }
+    ],
+    "sizes": [
+      "4",
+      "4.5",
+      "5",
+      "5.5",
+      "6",
+      "6.5",
+      "7",
+      "7.5",
+      "8",
+      "8.5",
+      "9",
+      "9.5",
+      "10",
+      "10.5",
+      "11",
+      "11.5",
+      "12"
+    ],
+    "sizeChart": [
+      {
+        "us": "5",
+        "diameter": "15.7mm",
+        "circumference": "49.3mm"
+      },
+      {
+        "us": "6",
+        "diameter": "16.5mm",
+        "circumference": "51.9mm"
+      },
+      {
+        "us": "7",
+        "diameter": "17.3mm",
+        "circumference": "54.4mm"
+      },
+      {
+        "us": "8",
+        "diameter": "18.2mm",
+        "circumference": "57.0mm"
+      },
+      {
+        "us": "9",
+        "diameter": "19.0mm",
+        "circumference": "59.5mm"
+      },
+      {
+        "us": "10",
+        "diameter": "19.8mm",
+        "circumference": "62.1mm"
+      }
+    ],
+    "sizeGuideSteps": [
+      "Wrap a strip of paper around your finger base",
+      "Mark where it overlaps and measure in mm",
+      "Use the chart below to find your US size"
+    ]
+  },
+  "orderStages": [
+    {
+      "id": "placed",
+      "label": "Order Placed",
+      "desc": "We have received your order."
+    },
+    {
+      "id": "crafting",
+      "label": "Crafting",
+      "desc": "Our artisans are hand-finishing your piece."
+    },
+    {
+      "id": "quality",
+      "label": "Quality Check",
+      "desc": "Certified inspection and polishing."
+    },
+    {
+      "id": "shipped",
+      "label": "Shipped",
+      "desc": "Insured and on its way to you."
+    },
+    {
+      "id": "delivered",
+      "label": "Delivered",
+      "desc": "Delivered and signed for."
+    }
+  ],
+  "about": {
+    "story": [
+      "AANI GEMAS began in 1987 as a small bench in Mumbai, where our founder shaped her first 18K gold ring by hand. Today the atelier is still guided by the same belief: jewelry should be personal, lasting and beautiful up close.",
+      "Every piece is designed in-house, set by master artisans and inspected under magnification before it leaves our workshop. We work with GIA certified stones and responsibly sourced gold, and we share the real gold rate so pricing is always transparent."
+    ],
+    "stats": [
+      {
+        "value": 38,
+        "suffix": "+",
+        "label": "Years of craft"
+      },
+      {
+        "value": 12000,
+        "suffix": "+",
+        "label": "Pieces handcrafted"
+      },
+      {
+        "value": 40,
+        "suffix": "+",
+        "label": "Master artisans"
+      },
+      {
+        "value": 98,
+        "suffix": "%",
+        "label": "Happy customers"
+      }
+    ],
+    "values": [
+      {
+        "icon": "✦",
+        "title": "Handcrafted",
+        "text": "Every ring, pendant and bracelet is shaped and finished by hand, never mass-produced."
+      },
+      {
+        "icon": "◈",
+        "title": "Certified & Ethical",
+        "text": "GIA certified gemstones and responsibly sourced 18K gold with full documentation."
+      },
+      {
+        "icon": "♦",
+        "title": "Made to Last",
+        "text": "A lifetime craftsmanship warranty, free resizing and complimentary care for every piece."
+      },
+      {
+        "icon": "❖",
+        "title": "Truly Personal",
+        "text": "Design your own ring and see transparent live pricing as you choose metal and stone."
+      }
+    ],
+    "milestones": [
+      {
+        "year": "1987",
+        "title": "The first bench",
+        "text": "A single workbench opens in Mumbai, crafting rings for family and friends."
+      },
+      {
+        "year": "2001",
+        "title": "The atelier",
+        "text": "A full workshop with 15 artisans and an in-house gemology lab."
+      },
+      {
+        "year": "2014",
+        "title": "Going global",
+        "text": "Insured worldwide shipping begins, bringing AANI GEMAS to customers in 30 countries."
+      },
+      {
+        "year": "2024",
+        "title": "Design Your Ring",
+        "text": "Our bespoke configurator launches so anyone can design a ring online with live pricing."
+      }
+    ]
+  },
+  "services": [
+    {
+      "icon": "◎",
+      "title": "Ring Resizing",
+      "text": "Free resize within 60 days of delivery. Send your ring back, we return it in 7-10 days.",
+      "note": "Free for 60 days"
+    },
+    {
+      "icon": "✎",
+      "title": "Engraving",
+      "text": "Names, dates or short messages hand-engraved inside your band. Available on sizes 5 and above.",
+      "note": "Complimentary on rings",
+      "_note": "Engraving is NOT offered in the configurator; admin may remove this service."
+    },
+    {
+      "icon": "✦",
+      "title": "Jewelry Repairs",
+      "text": "Prong re-tipping, stone tightening, polishing and chain repair by our master artisans.",
+      "note": "Quote within 48 hours"
+    },
+    {
+      "icon": "♦",
+      "title": "Custom Design",
+      "text": "Build your own ring with a setting, size and gemstone, priced on today’s gold rate.",
+      "note": "Design Your Ring",
+      "to": "/design-your-ring"
+    }
+  ],
+  "policies": {
+    "shipping-policy": {
+      "title": "Shipping Policy",
+      "eyebrow": "Delivery",
+      "intro": "Every order is insured, tracked and signed for. Here is how we get your piece safely to you.",
+      "updated": "1 October 2026",
+      "sections": [
+        {
+          "id": "processing",
+          "heading": "Processing time",
+          "body": [
+            "Ready-to-ship pieces are dispatched within 2–3 business days. Made-to-order and customised pieces, including rings from Design Your Ring, are handcrafted and typically ship within 4–6 weeks.",
+            "You will receive an email at every stage: order confirmed, crafting, quality check and shipped."
+          ]
+        },
+        {
+          "id": "methods",
+          "heading": "Delivery methods & rates",
+          "body": [
+            "Standard Delivery (5–7 business days) is $25 and free on orders over $500. Express Delivery (2–3 business days) is $45. Overnight Delivery (next business day) is $95.",
+            "International orders carry an additional $20 handling charge and may take longer depending on customs."
+          ]
+        },
+        {
+          "id": "insurance",
+          "heading": "Insurance & signature",
+          "body": [
+            "All parcels are fully insured for their declared value and require an adult signature on delivery. We cannot leave jewelry unattended."
+          ]
+        },
+        {
+          "id": "customs",
+          "heading": "Customs & duties",
+          "body": [
+            "International customers are responsible for any import duties or taxes charged by their country. These are not included in our prices."
+          ]
+        }
+      ]
+    },
+    "returns": {
+      "title": "Returns & Exchange",
+      "eyebrow": "Peace of mind",
+      "intro": "Not completely in love? Return or exchange within 30 days — no questions asked.",
+      "updated": "1 October 2026",
+      "sections": [
+        {
+          "id": "window",
+          "heading": "30-day returns",
+          "body": [
+            "You may return any ready-to-ship piece within 30 days of delivery for a full refund, provided it is unworn, in original condition and in its original packaging with certificates."
+          ]
+        },
+        {
+          "id": "custom",
+          "heading": "Custom & engraved pieces",
+          "body": [
+            "Because they are made especially for you, bespoke rings and engraved items cannot be returned, but we will happily resize or repair them free of charge for 60 days."
+          ]
+        },
+        {
+          "id": "how",
+          "heading": "How to return",
+          "body": [
+            "Contact us with your order number to receive a prepaid, insured return label. Once we receive and inspect the piece, your refund is issued to the original payment method within 5–7 business days."
+          ]
+        },
+        {
+          "id": "exchange",
+          "heading": "Exchanges",
+          "body": [
+            "Prefer a different size or design? Exchanges are free within 30 days. Any price difference is charged or refunded."
+          ]
+        }
+      ]
+    },
+    "privacy-policy": {
+      "title": "Privacy Policy",
+      "eyebrow": "Your data",
+      "intro": "We collect only what we need to serve you and we never sell your personal information.",
+      "updated": "1 October 2026",
+      "sections": [
+        {
+          "id": "collect",
+          "heading": "Information we collect",
+          "body": [
+            "Account details (name, email, phone), delivery addresses, order history and, if you contact us, the messages you send. Payment details are handled by our payment processor and are never stored by us."
+          ]
+        },
+        {
+          "id": "use",
+          "heading": "How we use it",
+          "body": [
+            "To process and deliver orders, provide support, send order updates and, with your consent, share news about new collections. You can unsubscribe at any time."
+          ]
+        },
+        {
+          "id": "cookies",
+          "heading": "Cookies & storage",
+          "body": [
+            "We use essential cookies and local storage to remember your cart, wishlist, theme and sign-in. Analytics cookies are used only in aggregate."
+          ]
+        },
+        {
+          "id": "rights",
+          "heading": "Your rights",
+          "body": [
+            "You may request access to, correction of, or deletion of your data at any time by contacting privacy@aanigems.com."
+          ]
+        }
+      ]
+    },
+    "terms": {
+      "title": "Terms & Conditions",
+      "eyebrow": "Legal",
+      "intro": "By using this site and placing an order you agree to the terms below.",
+      "updated": "1 October 2026",
+      "sections": [
+        {
+          "id": "orders",
+          "heading": "Orders & pricing",
+          "body": [
+            "All prices are shown in US dollars and may change with the gold market. The price confirmed at checkout is the price you pay. We may cancel an order if a pricing error occurs, with a full refund."
+          ]
+        },
+        {
+          "id": "payment",
+          "heading": "Payment",
+          "body": [
+            "We accept major cards, UPI and net banking. Orders are processed once payment is authorised."
+          ]
+        },
+        {
+          "id": "ip",
+          "heading": "Intellectual property",
+          "body": [
+            "All designs, images and content on this site belong to AANI GEMAS and may not be reproduced without written permission."
+          ]
+        },
+        {
+          "id": "liability",
+          "heading": "Limitation of liability",
+          "body": [
+            "To the extent permitted by law, our liability is limited to the purchase price of the product concerned."
+          ]
+        },
+        {
+          "id": "law",
+          "heading": "Governing law",
+          "body": [
+            "These terms are governed by the laws of India. Disputes fall under the jurisdiction of the courts of Mumbai."
+          ]
+        }
+      ]
+    },
+    "warranty": {
+      "title": "Warranty & Lifetime Care",
+      "eyebrow": "Made to last",
+      "intro": "Every AANI GEMAS piece is backed by a lifetime craftsmanship warranty and complimentary care.",
+      "updated": "1 October 2026",
+      "sections": [
+        {
+          "id": "covered",
+          "heading": "What's covered",
+          "body": [
+            "Manufacturing defects, faulty stone settings, broken clasps and prongs, and loss of plating in normal wear, for the lifetime of the piece."
+          ]
+        },
+        {
+          "id": "not-covered",
+          "heading": "What is not covered",
+          "body": [
+            "Accidental damage, loss or theft, damage from chemicals, and wear from improper use. We can often repair these for a fair charge."
+          ]
+        },
+        {
+          "id": "care",
+          "heading": "Complimentary care",
+          "body": [
+            "Free professional cleaning, inspection and polishing once a year, and free resizing within 60 days of purchase."
+          ]
+        },
+        {
+          "id": "claim",
+          "heading": "Making a claim",
+          "body": [
+            "Contact us with your order number and photos. We will send an insured prepaid label and repair or replace the piece."
+          ]
+        }
+      ]
+    }
+  },
+  "faqs": [
+    {
+      "category": "Orders & Shipping",
+      "items": [
+        {
+          "q": "How long does delivery take?",
+          "a": "Ready-to-ship pieces arrive in 5–7 business days with Standard Delivery. Made-to-order pieces ship within 4–6 weeks."
+        },
+        {
+          "q": "Is shipping free?",
+          "a": "Standard shipping is free on orders over $500. Otherwise rates start at $25."
+        },
+        {
+          "q": "Can I track my order?",
+          "a": "Yes. Use the Track Order page with your order number and email, or view it under My Account."
+        }
+      ]
+    },
+    {
+      "category": "Returns & Care",
+      "items": [
+        {
+          "q": "What is your return policy?",
+          "a": "30-day free returns on unworn, ready-to-ship pieces. Custom and engraved items are repaired or resized instead."
+        },
+        {
+          "q": "Do you offer resizing?",
+          "a": "Free resizing within 60 days of purchase on most rings. Beyond that, a small fee applies."
+        },
+        {
+          "q": "How do I care for my jewelry?",
+          "a": "Store it in the provided pouch, avoid harsh chemicals and clean gently with a soft cloth. We offer complimentary yearly cleaning."
+        }
+      ]
+    },
+    {
+      "category": "Gold & Gemstones",
+      "items": [
+        {
+          "q": "What gold purity do you use?",
+          "a": "All our gold jewelry is 18K (75% pure gold), hallmarked and certified."
+        },
+        {
+          "q": "Are your diamonds certified?",
+          "a": "Yes. All diamonds and major gemstones are GIA certified and come with their certificate."
+        },
+        {
+          "q": "Why does the price change?",
+          "a": "Gold-based prices follow the live gold rate so you only ever pay a fair, transparent price."
+        }
+      ]
+    },
+    {
+      "category": "Custom Rings & Payment",
+      "items": [
+        {
+          "q": "How does Design Your Ring work?",
+          "a": "Choose a setting, a stone and your size in four steps and see a live price. Our artisans then craft it to order."
+        },
+        {
+          "q": "Which payment methods do you accept?",
+          "a": "Visa, Mastercard, AMEX, PayPal, UPI and net banking."
+        },
+        {
+          "q": "Is my payment secure?",
+          "a": "Yes. Payments are encrypted and processed by a PCI-compliant provider."
+        }
+      ]
+    }
+  ],
+  "testimonials": [
+    {
+      "name": "Priya Mehta",
+      "location": "Mumbai, India",
+      "rating": 5,
+      "initials": "PM",
+      "product": "Lumiere Diamond Solitaire",
+      "text": "I ordered the Lumiere Diamond Solitaire for my engagement. The craftsmanship is beyond anything I've seen — every detail is perfect. My fiance was speechless."
+    },
+    {
+      "name": "Sophie Durand",
+      "location": "Paris, France",
+      "rating": 5,
+      "initials": "SD",
+      "product": "Custom Elise Halo + Ceylon Sapphire",
+      "text": "The Design Your Ring feature is incredible. I chose the Elise Halo with a Ceylon Sapphire, and the real-time pricing with live gold rates made everything feel transparent."
+    },
+    {
+      "name": "Aisha Khan",
+      "location": "Dubai, UAE",
+      "rating": 5,
+      "initials": "AK",
+      "product": "Cascade Sapphire Drops",
+      "text": "Ordered the Cascade Sapphire Drops and the Infini Diamond Tennis Bracelet together. The packaging alone is worth a review — pure luxury. Both pieces are stunning."
+    },
+    {
+      "name": "James Hartley",
+      "location": "London, UK",
+      "rating": 5,
+      "initials": "JH",
+      "product": "Aurora Solitaire",
+      "text": "As someone who knew nothing about jewelry, the product pages gave me all the confidence I needed. Bought the Aurora Solitaire for my wife — she hasn't taken it off."
+    }
+  ],
+  "productReviews": [
+    {
+      "name": "Priya Mehta",
+      "location": "Mumbai, India",
+      "initials": "PM",
+      "text": "The craftsmanship is beyond anything I have seen - every detail is perfect."
+    },
+    {
+      "name": "Sophie Durand",
+      "location": "Paris, France",
+      "initials": "SD",
+      "text": "Absolutely stunning. The quality is impeccable and the packaging made it feel like an event. Would buy again."
+    }
+  ]
+}
