@@ -1,8 +1,11 @@
 <?php
 
-use Illuminate\Foundation\Inspiring;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Schedule;
 
-Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote');
+// Rate fetches check their own configurable interval (admin settings) every minute.
+Schedule::command('rates:gold')->everyMinute()->withoutOverlapping()->runInBackground();
+Schedule::command('rates:fx')->everyMinute()->withoutOverlapping()->runInBackground();
+
+if (file_exists(__DIR__.'/console_orders.php')) {
+    require __DIR__.'/console_orders.php';
+}

@@ -35,4 +35,33 @@ return [
         ],
     ],
 
+    'stripe' => [
+        'key' => env('STRIPE_KEY'),
+        'secret' => env('STRIPE_SECRET'),
+        'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
+    ],
+
+    'google' => [
+        'client_ids' => [
+            'web' => env('GOOGLE_CLIENT_ID_WEB'),
+            'ios' => env('GOOGLE_CLIENT_ID_IOS'),
+            'android' => env('GOOGLE_CLIENT_ID_ANDROID'),
+        ],
+    ],
+
+    'goldapi' => [
+        'key' => env('GOLD_API_KEY'),
+        'url' => env('GOLD_API_URL', 'https://www.goldapi.io/api/XAU/EUR'),
+    ],
+
+    'fx' => [
+        'url' => env('FX_API_URL', 'https://open.er-api.com/v6/latest/EUR'),
+    ],
+
+    'storefront' => [
+        'url' => rtrim(env('STOREFRONT_URL', 'http://localhost:5173'), '/'),
+    ],
+
+    'admin_notify' => env('MAIL_ADMIN_NOTIFY'),
+
 ];

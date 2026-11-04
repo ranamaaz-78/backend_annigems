@@ -8,8 +8,8 @@ Branch: `development`. Brief: `docs/BACKEND_BRIEF.md`.
 |---|---|---|
 | 1 | Laravel + React admin shell (AdminLTE), staff auth, mandatory 2FA, roles | ✅ done |
 | 2 | Migrations, models, seeders (from `storefront-seed.json`) | ✅ done |
-| 3 | Pricing, gold-rate, FX services + public store/content/configurator/quote APIs | ⏳ next |
-| 4 | Customer auth (Google, reset code) + account, addresses, wishlist | ☐ |
+| 3 | Pricing, gold-rate, FX services + public store/content/configurator/quote APIs | ✅ done |
+| 4 | Customer auth (Google, reset code) + account, addresses, wishlist | ⏳ next |
 | 5 | Checkout, Stripe PaymentIntents, webhooks, orders APIs, emails, scheduled jobs | ☐ |
 | 6 | Admin: orders, customers, catalog, configurator, pricing, coupons | ☐ |
 | 7 | Admin: CMS, messages, staff/roles, activity log, app settings | ☐ |
@@ -30,6 +30,14 @@ Branch: `development`. Brief: `docs/BACKEND_BRIEF.md`.
 - Eloquent models with casts; admin-managed models log changes to the activity log (`LogsChanges` trait).
 - `StorefrontSeeder` loads everything from `database/seeders/data/storefront-seed.json` (idempotent, re-runnable) and copies `database/seeders/data/images` to the public disk (`storage/app/public/images`). `CurrencySeeder` adds EUR/USD/INR/AED/GBP with manual starter rates and the initial manual gold rate (€2,480/oz). `DemoCustomerSeeder` (local/dev/testing only): `demo@aanigems.com` / `Demo@1234`.
 
+### M3
+- Services: `PricingService` (configurator formula + totals formula), `GoldRateService` (+ `GoldRateProvider` interface, GoldAPI.io driver), `CurrencyService` (+ `ExchangeRateProvider`, open.er-api.com driver, money formatting), `CouponService`, `CartQuoteService`.
+- Gold/FX rules: the selected source is always the one used (no automatic switching); last good API rate kept on failure; switching to `api` requires a successful fetch; staff email after more than 3 consecutive gold API failures; stale/failure warning in `status()`.
+- Scheduler: `rates:gold` and `rates:fx` run every minute and fetch only when the source is `api` and the configured interval elapsed (protects the GoldAPI quota). `--force` fetches now.
+- Public API (`/api/v1/web/*` and `/api/v1/mobile/*`, shared routes in `routes/api/shared.php`): bootstrap (mobile adds `app`), home, categories, products (filters/sort/pagination), product detail by slug or legacy id, search, configurator, configurator/price, cart/quote, pages, faqs, about, services, contact, newsletter.
+- `X-Currency` header resolved by middleware; every JSON response gets `meta.currency`.
+- Tests: pricing formula (brief example €821.36, karat purity, conversion), totals (coupon, threshold on taxable, tax), gold/FX source rules, quote rejections, store endpoints.
+
 ## Decisions
 
 - **Laravel 12** pinned as the brief says, although Laravel 13 is the current release (ecosystem packages such as Scribe and spatie are proven on 12).
@@ -45,8 +53,15 @@ Branch: `development`. Brief: `docs/BACKEND_BRIEF.md`.
 - Storefront country "Other" is not seeded (not a real country); India, US, UK, UAE + 15 EU countries are.
 - Stone `carat` is parsed from the seed description ("1.2 carats"), display only.
 
+- **Currency conversion of composite prices**: each component (gold value, craft fee, stone) is converted first and summed in the target currency, so the configurator breakdown and the cart always add up. Product unit prices are converted, then multiplied by qty.
+- `min_price` / `max_price` product filters are **minor units of the request currency** (same unit as every money `amount`), compared in EUR.
+- Quote lines with errors are excluded from totals; `valid` tells the client whether checkout can proceed. Stock is checked against the summed qty of the same product across lines.
+- `cart/quote` is public; when a Bearer token is sent the per-customer coupon limit is also checked.
+- Coupon `min_subtotal` is compared against the EUR subtotal (it is an EUR amount).
+- `total_eur` of an order will be `round(total / exchange_rate)` (reporting value).
+
 ## Next
-- M3: PricingService, GoldRateService, CurrencyService, CartQuoteService, CouponService + public store/content/configurator/quote APIs.
+- M4: customer auth (register/login/Google/reset code), profile, password, delete account, addresses, wishlist.
 
 ## Open questions
 - Seeded copy still mentions "$" (e.g. "Free Shipping over $500", "Under $1000", policy text "prices are shown in US dollars") while the base currency is now EUR. Left as is per the brief ("leave everything else as it is"); editable in Content.
