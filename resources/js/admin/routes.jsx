@@ -26,6 +26,18 @@ const routes = [
     { path: '/pricing/shipping-methods', perm: 'pricing.manage', component: lazy(() => import('./pages/pricing/ShippingMethods')) },
     { path: '/pricing/countries', perm: 'pricing.manage', component: lazy(() => import('./pages/pricing/Countries')) },
     { path: '/coupons', perm: 'coupons.manage', component: lazy(() => import('./pages/Coupons')) },
+    { path: '/configurator/size-guide', perm: ['configurator.manage', 'content.manage'], component: lazy(() => import('./pages/configurator/SizeGuide')) },
+
+    { path: '/content/blocks', perm: 'content.manage', component: lazy(() => import('./pages/content/ContentBlocks')) },
+    { path: '/content/pages', perm: 'content.manage', component: lazy(() => import('./pages/content/Pages')) },
+    { path: '/content/faqs', perm: 'content.manage', component: lazy(() => import('./pages/content/Faqs')) },
+    { path: '/content/testimonials', perm: 'content.manage', component: lazy(() => import('./pages/content/Testimonials')) },
+    { path: '/messages', perm: 'messages.manage', component: lazy(() => import('./pages/messages/Inbox')) },
+    { path: '/newsletter', perm: 'messages.manage', component: lazy(() => import('./pages/messages/Newsletter')) },
+    { path: '/staff', perm: 'staff.manage', component: lazy(() => import('./pages/system/Staff')) },
+    { path: '/roles', perm: 'staff.manage', component: lazy(() => import('./pages/system/Roles')) },
+    { path: '/activity', perm: 'activity.view', component: lazy(() => import('./pages/system/Activity')) },
+    { path: '/settings', perm: 'settings.manage', component: lazy(() => import('./pages/system/AppSettings')) },
 ];
 
 export default routes;

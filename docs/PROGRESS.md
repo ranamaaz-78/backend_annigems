@@ -12,8 +12,8 @@ Branch: `development`. Brief: `docs/BACKEND_BRIEF.md`.
 | 4 | Customer auth (Google, reset code) + account, addresses, wishlist | ✅ done |
 | 5 | Checkout, Stripe PaymentIntents, webhooks, orders APIs, emails, scheduled jobs | ✅ done |
 | 6 | Admin: orders, customers, catalog, configurator, pricing, coupons | ✅ done |
-| 7 | Admin: CMS, messages, staff/roles, activity log, app settings | ⏳ next |
-| 8 | Scribe docs, Postman export, tests green, README, storefront integration doc | ☐ |
+| 7 | Admin: CMS, messages, staff/roles, activity log, app settings | ✅ done |
+| 8 | Scribe docs, Postman export, tests green, README, storefront integration doc | ⏳ next |
 
 ## Done
 
@@ -62,6 +62,14 @@ Branch: `development`. Brief: `docs/BACKEND_BRIEF.md`.
 - Fixed: the SPA now sends the `XSRF-TOKEN` cookie (not the page `<meta>` token), because Laravel rotates the CSRF token when the session is regenerated at login/2FA.
 - Tests: role permissions (Support/Manager/Super Admin), 2FA enforcement, idle timeout, order stage machine + refund + documents + CSV, customers, catalog CRUD with images, configurator admin, pricing admin.
 
+### M7
+- Content API: the 25 content blocks (fixed keys, shape-checked), policy pages (sections + paragraphs), FAQ categories + items (drag order, move between categories), testimonials; size-guide blocks are also editable by configurator managers.
+- Admin UI: a recursive `SchemaEditor` gives every content block a structured form (no raw JSON): nested lists of links for the mega menu and footer, stats/values/milestones for About, image uploads for hero/logo/featured card, etc. Policy page editor, FAQ board with drag and drop, testimonials, size guide editor.
+- Messages: contact inbox (new/read/replied, opening marks read, reply by email via a branded Mailable or `mailto:`), newsletter list with unsubscribe/delete and CSV export.
+- Staff & roles (Super Admin): staff CRUD with role assignment, invitation by password-reset link when no password is given, reset 2FA, send password reset; "at least one active Super Admin" guard; editable permission matrix (Super Admin locked to all), custom roles.
+- Activity log viewer with area/date/search filters and a before/after diff (spatie/activitylog: catalog, configurator, pricing settings, orders, customers, staff, content, messages).
+- App settings: store name, support/notify emails, iOS/Android min/latest version + force update, maintenance flag + message (returned by mobile bootstrap); read-only integration status (Stripe test/live, webhook, Google ids, GoldAPI key) — secrets stay in `.env`.
+
 ## Decisions
 
 - **Laravel 12** pinned as the brief says, although Laravel 13 is the current release (ecosystem packages such as Scribe and spatie are proven on 12).
@@ -100,8 +108,12 @@ Branch: `development`. Brief: `docs/BACKEND_BRIEF.md`.
 - Invoice / packing slip are HTML print views (browser "Save as PDF"), so no PDF engine is needed at runtime; dompdf is installed if a PDF download is wanted later.
 - Deleting a category with products is blocked; products are soft-deleted (orders keep their snapshots).
 
+- Content blocks have a fixed key list (the storefront expects these keys); admins edit values, not keys. Uploaded image URLs are stored as public-disk paths.
+- Contact topics are a content block (`contact.topics`); the contact form validates `topic` against it.
+- Staff password rule is min 10 characters (customers: min 8 as in the storefront).
+
 ## Next
-- M7: content blocks (structured forms), policy pages, FAQs, testimonials, contact topics, size guide editor, messages inbox + newsletter, staff & roles, activity log, app settings.
+- M8: Scribe docs (Web / Mobile / Admin groups), Postman export, README, `docs/STOREFRONT_INTEGRATION.md`.
 
 ## Open questions
 - Seeded copy still mentions "$" (e.g. "Free Shipping over $500", "Under $1000", policy text "prices are shown in US dollars") while the base currency is now EUR. Left as is per the brief ("leave everything else as it is"); editable in Content.

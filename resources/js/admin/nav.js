@@ -53,7 +53,13 @@ const nav = [
         ],
     },
     { header: 'SYSTEM' },
-    { label: 'Staff & roles', to: '/staff', icon: 'bi-person-badge', perm: 'staff.manage' },
+    {
+        label: 'Staff & roles', icon: 'bi-person-badge', perm: 'staff.manage',
+        children: [
+            { label: 'Staff', to: '/staff' },
+            { label: 'Roles & permissions', to: '/roles' },
+        ],
+    },
     { label: 'Activity log', to: '/activity', icon: 'bi-clock-history', perm: 'activity.view' },
     { label: 'App settings', to: '/settings', icon: 'bi-gear', perm: 'settings.manage' },
 ];

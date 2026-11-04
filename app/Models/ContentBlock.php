@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Concerns\LogsChanges;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ContentBlock extends Model
 {
@@ -16,6 +17,11 @@ class ContentBlock extends Model
     protected $casts = ['value' => 'json'];
 
     private static array $memo = [];
+
+    public function updatedBy(): BelongsTo
+    {
+        return $this->belongsTo(AdminUser::class, 'updated_by');
+    }
 
     public static function value(string $key, mixed $default = null): mixed
     {
