@@ -1,0 +1,151 @@
+name: 'Mobile · Cart'
+description: |-
+
+  The cart lives on the client. This endpoint prices it; it never trusts client prices.
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/mobile/cart/quote
+    metadata:
+      custom: []
+      groupName: 'Mobile · Cart'
+      groupDescription: |-
+
+        The cart lives on the client. This endpoint prices it; it never trusts client prices.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Quote a cart'
+      description: |-
+        Public (guests can price a cart). With a Bearer token, per-customer coupon limits are checked too.
+        Line errors: `not_found`, `inactive`, `out_of_stock`, `invalid_size`, `combo_unavailable`.
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      items:
+        custom: []
+        name: items
+        description: 'Cart lines.'
+        required: true
+        example:
+          - []
+        type: 'object[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'items[].type':
+        custom: []
+        name: 'items[].type'
+        description: 'product or custom_ring.'
+        required: true
+        example: product
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      'items[].product_id':
+        custom: []
+        name: 'items[].product_id'
+        description: 'For products.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      'items[].ring_id':
+        custom: []
+        name: 'items[].ring_id'
+        description: 'For custom rings.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      'items[].stone_id':
+        custom: []
+        name: 'items[].stone_id'
+        description: 'For custom rings.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      'items[].size':
+        custom: []
+        name: 'items[].size'
+        description: 'Required for sized products and custom rings.'
+        required: false
+        example: '7'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      'items[].qty':
+        custom: []
+        name: 'items[].qty'
+        description: ''
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      coupon_code:
+        custom: []
+        name: coupon_code
+        description: ''
+        required: false
+        example: AANI10
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      shipping_method:
+        custom: []
+        name: shipping_method
+        description: 'standard, express or overnight.'
+        required: false
+        example: standard
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      items:
+        -
+          type: product
+          product_id: 1
+          ring_id: 1
+          stone_id: 1
+          size: '7'
+          qty: 1
+      coupon_code: AANI10
+      shipping_method: standard
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

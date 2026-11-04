@@ -1,0 +1,499 @@
+name: 'Admin · Auth'
+description: |-
+
+  Staff session authentication with mandatory TOTP 2FA.
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/admin/auth/me
+    metadata:
+      custom: []
+      groupName: 'Admin · Auth'
+      groupDescription: |-
+
+        Staff session authentication with mandatory TOTP 2FA.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Current staff user and 2FA state.'
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/admin/auth/login
+    metadata:
+      custom: []
+      groupName: 'Admin · Auth'
+      groupDescription: |-
+
+        Staff session authentication with mandatory TOTP 2FA.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      email:
+        custom: []
+        name: email
+        description: 'Must be a valid email address.'
+        required: true
+        example: gbailey@example.net
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      password:
+        custom: []
+        name: password
+        description: ''
+        required: true
+        example: '|]|{+-'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      email: gbailey@example.net
+      password: '|]|{+-'
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/admin/auth/forgot-password
+    metadata:
+      custom: []
+      groupName: 'Admin · Auth'
+      groupDescription: |-
+
+        Staff session authentication with mandatory TOTP 2FA.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      email:
+        custom: []
+        name: email
+        description: 'Must be a valid email address.'
+        required: true
+        example: gbailey@example.net
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      email: gbailey@example.net
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/admin/auth/reset-password
+    metadata:
+      custom: []
+      groupName: 'Admin · Auth'
+      groupDescription: |-
+
+        Staff session authentication with mandatory TOTP 2FA.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      token:
+        custom: []
+        name: token
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      email:
+        custom: []
+        name: email
+        description: 'Must be a valid email address.'
+        required: true
+        example: zbailey@example.net
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      password:
+        custom: []
+        name: password
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      token: architecto
+      email: zbailey@example.net
+      password: architecto
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/admin/auth/logout
+    metadata:
+      custom: []
+      groupName: 'Admin · Auth'
+      groupDescription: |-
+
+        Staff session authentication with mandatory TOTP 2FA.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/admin/auth/two-factor/setup
+    metadata:
+      custom: []
+      groupName: 'Admin · Auth'
+      groupDescription: |-
+
+        Staff session authentication with mandatory TOTP 2FA.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Starts (or restarts) TOTP setup. Only allowed while 2FA is not confirmed.'
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/admin/auth/two-factor/confirm
+    metadata:
+      custom: []
+      groupName: 'Admin · Auth'
+      groupDescription: |-
+
+        Staff session authentication with mandatory TOTP 2FA.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      code:
+        custom: []
+        name: code
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      code: architecto
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/admin/auth/two-factor/challenge
+    metadata:
+      custom: []
+      groupName: 'Admin · Auth'
+      groupDescription: |-
+
+        Staff session authentication with mandatory TOTP 2FA.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      code:
+        custom: []
+        name: code
+        description: 'This field is required when <code>recovery_code</code> is not present.'
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      recovery_code:
+        custom: []
+        name: recovery_code
+        description: ''
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      code: architecto
+      recovery_code: architecto
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PUT
+    uri: api/v1/admin/profile
+    metadata:
+      custom: []
+      groupName: 'Admin · Auth'
+      groupDescription: |-
+
+        Staff session authentication with mandatory TOTP 2FA.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        custom: []
+        name: name
+        description: 'Must not be greater than 120 characters.'
+        required: true
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      current_password:
+        custom: []
+        name: current_password
+        description: 'This field is required when <code>password</code> is present.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      password:
+        custom: []
+        name: password
+        description: ''
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      name: b
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/admin/profile/recovery-codes
+    metadata:
+      custom: []
+      groupName: 'Admin · Auth'
+      groupDescription: |-
+
+        Staff session authentication with mandatory TOTP 2FA.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      password:
+        custom: []
+        name: password
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      password: architecto
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

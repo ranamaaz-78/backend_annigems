@@ -1,5 +1,6 @@
 <?php
 
+use App\Docs\PlatformGroups;
 use Knuckles\Scribe\Config\AuthIn;
 use Knuckles\Scribe\Config\Defaults;
 use Knuckles\Scribe\Extracting\Strategies;
@@ -11,18 +12,28 @@ use function Knuckles\Scribe\Config\removeStrategies;
 
 return [
     // The HTML <title> for the generated documentation.
-    'title' => config('app.name').' API Documentation',
+    'title' => 'AANI GEMAS API',
 
     // A short description of your API. Will be included in the docs webpage, Postman collection and OpenAPI spec.
-    'description' => '',
+    'description' => 'Web storefront, mobile app and admin APIs for AANI GEMAS.',
 
     // Text to place in the "Introduction" section, right after the `description`. Markdown and HTML are supported.
     'intro_text' => <<<'INTRO'
-            This documentation aims to provide all the information you need to work with our API.
+        AANI GEMAS backend API (v1). Groups are prefixed by platform:
 
-            <aside>As you scroll, you'll see code examples for working with the API in different programming languages in the dark area to the right (or as part of the content on mobile).
-            You can switch the language used with the tabs at the top right (or from the nav menu at the top left on mobile).</aside>
-        INTRO,
+        * **Web** – `/api/v1/web/*` (storefront)
+        * **Mobile** – `/api/v1/mobile/*` (same behaviour as web, plus `app` in bootstrap, PaymentSheet keys at checkout and push-token endpoints)
+        * **Admin** – `/api/v1/admin/*` (admin SPA, session cookie)
+        * **Webhooks** – `/api/v1/webhooks/stripe`
+
+        Conventions:
+
+        * Money is always `{ "amount": 82137, "currency": "EUR", "formatted": "€821.37" }` (`amount` in minor units).
+        * Send `X-Currency: EUR|USD|INR|AED|GBP` to get prices in that currency; `meta.currency` says which one was used.
+        * Lists return `{ data, meta, links }` (`per_page` max 50). Validation errors return 422 `{ message, errors }` with user-friendly messages.
+        * Customer endpoints use `Authorization: Bearer <token>` from register / login / Google.
+        * The server prices everything: clients send only ids, qty, size and codes.
+    INTRO,
 
     // The base URL displayed in the docs.
     // If you're using `laravel` type, you can set this to a dynamic string, like '{{ config("app.tenant_url") }}' to get a dynamic base URL.
@@ -33,7 +44,7 @@ return [
         [
             'match' => [
                 // Match only routes whose paths match this pattern (use * as a wildcard to match any characters). Example: 'users/*'.
-                'prefixes' => ['api/*'],
+                'prefixes' => ['api/v1/*'],
 
                 // Match only routes whose domains match this pattern (use * as a wildcard to match any characters). Example: 'api.*'.
                 'domains' => ['*'],
@@ -105,7 +116,7 @@ return [
     // How is your API authenticated? This information will be used in the displayed docs, generated examples and response calls.
     'auth' => [
         // Set this to true if ANY endpoints in your API use authentication.
-        'enabled' => false,
+        'enabled' => true,
 
         // Set this to true if your API should be authenticated by default. If so, you must also set `enabled` (above) to true.
         // You can then use @unauthenticated or @authenticated on individual endpoints to change their status from the default.
@@ -115,7 +126,7 @@ return [
         'in' => AuthIn::BEARER->value,
 
         // The name of the auth parameter (e.g. token, key, apiKey) or header (e.g. Authorization, Api-Key).
-        'name' => 'key',
+        'name' => 'Authorization',
 
         // The value of the parameter to be used by Scribe to authenticate response calls.
         // This will NOT be included in the generated documentation. If empty, Scribe will use a random value.
@@ -123,10 +134,10 @@ return [
 
         // Placeholder your users will see for the auth parameter in the example requests.
         // Set this to null if you want Scribe to use a random value as placeholder instead.
-        'placeholder' => '{YOUR_AUTH_KEY}',
+        'placeholder' => '{YOUR_TOKEN}',
 
         // Any extra authentication-related info for your users. Markdown and HTML are supported.
-        'extra_info' => 'You can retrieve your token by visiting your dashboard and clicking <b>Generate API token</b>.',
+        'extra_info' => 'Get a customer token from <code>POST /auth/login</code>, <code>/auth/register</code> or <code>/auth/google</code> and send it as <code>Authorization: Bearer &lt;token&gt;</code>.',
     ],
 
     // Example requests for each endpoint will be shown in each of these languages.
@@ -179,7 +190,44 @@ return [
         // You can override this by listing the groups, subgroups and endpoints here in the order you want them.
         // See https://scribe.knuckles.wtf/blog/laravel-v4#easier-sorting and https://scribe.knuckles.wtf/laravel/reference/config#order for details
         // Note: does not work for `external` docs types
-        'order' => [],
+        'order' => [
+            'Web · Store',
+            'Web · Catalog',
+            'Web · Design Your Ring',
+            'Web · Cart',
+            'Web · Content',
+            'Web · Forms',
+            'Web · Auth',
+            'Web · Account',
+            'Web · Wishlist',
+            'Web · Checkout & orders',
+            'Mobile · Store',
+            'Mobile · Catalog',
+            'Mobile · Design Your Ring',
+            'Mobile · Cart',
+            'Mobile · Content',
+            'Mobile · Forms',
+            'Mobile · Auth',
+            'Mobile · Account',
+            'Mobile · Wishlist',
+            'Mobile · Checkout & orders',
+            'Mobile · Mobile devices',
+            'Admin · Catalog',
+            'Admin · Design Your Ring',
+            'Admin · Content',
+            'Admin · Auth',
+            'Admin · Activity log',
+            'Admin · App settings',
+            'Admin · Coupons',
+            'Admin · Customers',
+            'Admin · Dashboard',
+            'Admin · Media',
+            'Admin · Messages',
+            'Admin · Orders',
+            'Admin · Pricing',
+            'Admin · Staff & roles',
+            'Webhooks',
+        ],
     ],
 
     // Custom logo path. This will be used as the value of the src attribute for the <img> tag,
@@ -215,12 +263,14 @@ return [
     'strategies' => [
         'metadata' => [
             ...Defaults::METADATA_STRATEGIES,
+            PlatformGroups::class,
         ],
         'headers' => [
             ...Defaults::HEADERS_STRATEGIES,
             Strategies\StaticData::withSettings(data: [
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json',
+                'X-Currency' => 'EUR',
             ]),
         ],
         'urlParameters' => [
@@ -235,7 +285,12 @@ return [
         'responses' => configureStrategy(
             Defaults::RESPONSES_STRATEGIES,
             Strategies\Responses\ResponseCalls::withSettings(
-                only: ['GET *'],
+                only: [
+                    'GET api/v1/web/bootstrap', 'GET api/v1/mobile/bootstrap', 'GET api/v1/web/home',
+                    'GET api/v1/web/categories', 'GET api/v1/web/products', 'GET api/v1/web/products/*',
+                    'GET api/v1/web/search', 'GET api/v1/web/configurator', 'GET api/v1/web/pages/*',
+                    'GET api/v1/web/faqs', 'GET api/v1/web/about', 'GET api/v1/web/services',
+                ],
                 // Recommended: disable debug mode in response calls to avoid error stack traces in responses
                 config: [
                     'app.debug' => false,

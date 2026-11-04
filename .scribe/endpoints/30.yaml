@@ -1,0 +1,980 @@
+name: 'Admin · Content'
+description: |-
+
+  Content blocks have a fixed set of keys (seeded from the storefront). The admin UI renders a structured form per key.
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/admin/content/blocks
+    metadata:
+      custom: []
+      groupName: 'Admin · Content'
+      groupDescription: |-
+
+        Content blocks have a fixed set of keys (seeded from the storefront). The admin UI renders a structured form per key.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/admin/content/blocks/{key}'
+    metadata:
+      custom: []
+      groupName: 'Admin · Content'
+      groupDescription: |-
+
+        Content blocks have a fixed set of keys (seeded from the storefront). The admin UI renders a structured form per key.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters:
+      key:
+        custom: []
+        name: key
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      key: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PUT
+    uri: 'api/v1/admin/content/blocks/{key}'
+    metadata:
+      custom: []
+      groupName: 'Admin · Content'
+      groupDescription: |-
+
+        Content blocks have a fixed set of keys (seeded from the storefront). The admin UI renders a structured form per key.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters:
+      key:
+        custom: []
+        name: key
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      key: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      value:
+        custom: []
+        name: value
+        description: ''
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/admin/content/pages
+    metadata:
+      custom: []
+      groupName: 'Admin · Content'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/admin/content/pages
+    metadata:
+      custom: []
+      groupName: 'Admin · Content'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/admin/content/pages/{id}'
+    metadata:
+      custom: []
+      groupName: 'Admin · Content'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the page.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PUT
+      - PATCH
+    uri: 'api/v1/admin/content/pages/{id}'
+    metadata:
+      custom: []
+      groupName: 'Admin · Content'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the page.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/admin/content/pages/{id}'
+    metadata:
+      custom: []
+      groupName: 'Admin · Content'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the page.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/admin/content/faqs
+    metadata:
+      custom: []
+      groupName: 'Admin · Content'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Categories with all their items (active and inactive), in order.'
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/admin/content/faqs
+    metadata:
+      custom: []
+      groupName: 'Admin · Content'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PUT
+    uri: 'api/v1/admin/content/faqs/{id}'
+    metadata:
+      custom: []
+      groupName: 'Admin · Content'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the faq.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/admin/content/faqs/{id}'
+    metadata:
+      custom: []
+      groupName: 'Admin · Content'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the faq.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/admin/content/faqs/reorder
+    metadata:
+      custom: []
+      groupName: 'Admin · Content'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Drag-and-drop order: {categories: [id…], items: {categoryId: [faqId…]}} (items may move between categories).'
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      categories:
+        custom: []
+        name: categories
+        description: ''
+        required: false
+        example:
+          - 16
+        type: 'integer[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      items:
+        custom: []
+        name: items
+        description: ''
+        required: false
+        example: null
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      categories:
+        - 16
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/admin/content/faq-categories
+    metadata:
+      custom: []
+      groupName: 'Admin · Content'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        custom: []
+        name: name
+        description: 'Must not be greater than 120 characters.'
+        required: true
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      name: b
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PUT
+    uri: 'api/v1/admin/content/faq-categories/{id}'
+    metadata:
+      custom: []
+      groupName: 'Admin · Content'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the faq category.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/admin/content/faq-categories/{id}'
+    metadata:
+      custom: []
+      groupName: 'Admin · Content'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the faq category.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/admin/content/testimonials
+    metadata:
+      custom: []
+      groupName: 'Admin · Content'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/admin/content/testimonials
+    metadata:
+      custom: []
+      groupName: 'Admin · Content'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/admin/content/testimonials/{id}'
+    metadata:
+      custom: []
+      groupName: 'Admin · Content'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the testimonial.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PUT
+      - PATCH
+    uri: 'api/v1/admin/content/testimonials/{id}'
+    metadata:
+      custom: []
+      groupName: 'Admin · Content'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the testimonial.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/admin/content/testimonials/{id}'
+    metadata:
+      custom: []
+      groupName: 'Admin · Content'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the testimonial.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/admin/configurator/size-guide/{key}'
+    metadata:
+      custom: []
+      groupName: 'Admin · Content'
+      groupDescription: |-
+
+        Content blocks have a fixed set of keys (seeded from the storefront). The admin UI renders a structured form per key.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters:
+      key:
+        custom: []
+        name: key
+        description: ''
+        required: true
+        example: configurator.size_chart
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      key: configurator.size_chart
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PUT
+    uri: 'api/v1/admin/configurator/size-guide/{key}'
+    metadata:
+      custom: []
+      groupName: 'Admin · Content'
+      groupDescription: |-
+
+        Content blocks have a fixed set of keys (seeded from the storefront). The admin UI renders a structured form per key.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters:
+      key:
+        custom: []
+        name: key
+        description: ''
+        required: true
+        example: configurator.size_chart
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      key: configurator.size_chart
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      value:
+        custom: []
+        name: value
+        description: ''
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

@@ -1,0 +1,845 @@
+name: 'Admin · Pricing'
+description: ''
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/admin/pricing/gold
+    metadata:
+      custom: []
+      groupName: 'Admin · Pricing'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Current rate, source, provider status, warning, and history for the chart/table.'
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PUT
+    uri: api/v1/admin/pricing/gold
+    metadata:
+      custom: []
+      groupName: 'Admin · Pricing'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Update source / manual rate / interval. Switching to api requires a successful fetch first.'
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      source:
+        custom: []
+        name: source
+        description: ''
+        required: false
+        example: manual
+        type: string
+        enumValues:
+          - api
+          - manual
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      manual_rate_per_oz:
+        custom: []
+        name: manual_rate_per_oz
+        description: 'Must be at least 1.'
+        required: false
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      fetch_interval_minutes:
+        custom: []
+        name: fetch_interval_minutes
+        description: 'Must be at least 5. Must not be greater than 10080.'
+        required: false
+        example: 22
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      source: manual
+      manual_rate_per_oz: 16
+      fetch_interval_minutes: 22
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/admin/pricing/gold/fetch
+    metadata:
+      custom: []
+      groupName: 'Admin · Pricing'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: '"Test & fetch now": calls the provider and stores the rate as the last good API rate.'
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/admin/pricing/currencies
+    metadata:
+      custom: []
+      groupName: 'Admin · Pricing'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PUT
+    uri: api/v1/admin/pricing/currencies/settings
+    metadata:
+      custom: []
+      groupName: 'Admin · Pricing'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      source:
+        custom: []
+        name: source
+        description: ''
+        required: false
+        example: api
+        type: string
+        enumValues:
+          - api
+          - manual
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      fetch_interval_minutes:
+        custom: []
+        name: fetch_interval_minutes
+        description: 'Must be at least 15. Must not be greater than 10080.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      source: api
+      fetch_interval_minutes: 1
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/admin/pricing/currencies/fetch
+    metadata:
+      custom: []
+      groupName: 'Admin · Pricing'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PUT
+    uri: 'api/v1/admin/pricing/currencies/{code}'
+    metadata:
+      custom: []
+      groupName: 'Admin · Pricing'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Toggle a currency and/or set its manual rate.'
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters:
+      code:
+        custom: []
+        name: code
+        description: ''
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      code: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      is_active:
+        custom: []
+        name: is_active
+        description: ''
+        required: false
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      manual_rate:
+        custom: []
+        name: manual_rate
+        description: 'Must not be greater than 1000000.'
+        required: false
+        example: 1
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      symbol:
+        custom: []
+        name: symbol
+        description: 'Must not be greater than 8 characters.'
+        required: false
+        example: ngzmiyvd
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      sort_order:
+        custom: []
+        name: sort_order
+        description: ''
+        required: false
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      is_active: true
+      manual_rate: 1
+      symbol: ngzmiyvd
+      sort_order: 16
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/admin/pricing/commerce
+    metadata:
+      custom: []
+      groupName: 'Admin · Pricing'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PUT
+    uri: api/v1/admin/pricing/commerce
+    metadata:
+      custom: []
+      groupName: 'Admin · Pricing'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      tax_rate:
+        custom: []
+        name: tax_rate
+        description: 'Must be at least 0. Must not be greater than 1.'
+        required: true
+        example: 1
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      free_shipping_threshold:
+        custom: []
+        name: free_shipping_threshold
+        description: 'Must be at least 0.'
+        required: true
+        example: 39
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      pending_ttl_hours:
+        custom: []
+        name: pending_ttl_hours
+        description: 'Must be at least 1. Must not be greater than 720.'
+        required: true
+        example: 7
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      tax_rate: 1
+      free_shipping_threshold: 39
+      pending_ttl_hours: 7
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/admin/pricing/shipping-methods
+    metadata:
+      custom: []
+      groupName: 'Admin · Pricing'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/admin/pricing/shipping-methods
+    metadata:
+      custom: []
+      groupName: 'Admin · Pricing'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/admin/pricing/shipping-methods/{id}'
+    metadata:
+      custom: []
+      groupName: 'Admin · Pricing'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the shipping method.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PUT
+      - PATCH
+    uri: 'api/v1/admin/pricing/shipping-methods/{id}'
+    metadata:
+      custom: []
+      groupName: 'Admin · Pricing'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the shipping method.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/admin/pricing/shipping-methods/{id}'
+    metadata:
+      custom: []
+      groupName: 'Admin · Pricing'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the shipping method.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/admin/pricing/countries
+    metadata:
+      custom: []
+      groupName: 'Admin · Pricing'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/admin/pricing/countries
+    metadata:
+      custom: []
+      groupName: 'Admin · Pricing'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/admin/pricing/countries/{id}'
+    metadata:
+      custom: []
+      groupName: 'Admin · Pricing'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the country.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PUT
+      - PATCH
+    uri: 'api/v1/admin/pricing/countries/{id}'
+    metadata:
+      custom: []
+      groupName: 'Admin · Pricing'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the country.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/admin/pricing/countries/{id}'
+    metadata:
+      custom: []
+      groupName: 'Admin · Pricing'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the country.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

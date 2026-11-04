@@ -1,0 +1,59 @@
+name: 'Admin · Media'
+description: ''
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/admin/media
+    metadata:
+      custom: []
+      groupName: 'Admin · Media'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Upload an image to the public disk. Returns the stored path and URL.'
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: multipart/form-data
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      file:
+        custom: []
+        name: file
+        description: 'Must be an image. Must not be greater than 8192 kilobytes.'
+        required: true
+        example: null
+        type: file
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      folder:
+        custom: []
+        name: folder
+        description: 'Must contain only letters, numbers, dashes and underscores. Must not be greater than 40 characters.'
+        required: false
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      folder: b
+    fileParameters:
+      file: null
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

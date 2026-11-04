@@ -1,0 +1,85 @@
+name: 'Mobile · Store'
+description: |-
+
+  Public store data: bootstrap and home. Send `X-Currency` (EUR, USD, INR, AED, GBP) to get prices in that currency.
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/mobile/bootstrap
+    metadata:
+      custom: []
+      groupName: 'Mobile · Store'
+      groupDescription: |-
+
+        Public store data: bootstrap and home. Send `X-Currency` (EUR, USD, INR, AED, GBP) to get prices in that currency.
+      subgroup: ''
+      subgroupDescription: ''
+      title: Bootstrap
+      description: |-
+        Everything the app needs on start: brand, navigation, footer, contact, currencies (with rates), tax,
+        free-shipping threshold, shipping methods, countries, order stages, catalog filters, Stripe publishable key,
+        Google client id, gold rate. The mobile variant also returns `app` (versions, force update, maintenance).
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"brand":{"name":"AANI GEMAS","logo":"http:\/\/localhost:8000\/storage\/images\/logo_aani.png","tagline":["Crafted with passion.","Worn with pride."],"since":1987},"navigation":{"mega_menu":{"columns":[{"heading":"Categories","links":[{"label":"Rings","to":"\/shop?cat=rings"},{"label":"Necklaces","to":"\/shop?cat=necklaces"},{"label":"Earrings","to":"\/shop?cat=earrings"},{"label":"Bracelets","to":"\/shop?cat=bracelets"}]},{"heading":"Shop By","links":[{"label":"New Arrivals","to":"\/shop?sort=newest"},{"label":"Bestsellers","to":"\/shop?sort=rating"},{"label":"On Sale","to":"\/shop"},{"label":"Under $1000","to":"\/shop?max=1000"}]},{"heading":"Collections","links":[{"label":"Engagement Rings","to":"\/shop?cat=rings"},{"label":"Anniversary Gifts","to":"\/shop"},{"label":"Bridal Sets","to":"\/shop"},{"label":"Gift Guide","to":"\/shop"}]}],"featured":{"tag":"New Arrival","name":"Seren Sapphire Halo","image":"http:\/\/localhost:8000\/storage\/images\/ring2_sapphire.jpg","to":"\/product\/r4"}},"mobile":[{"label":"Home","to":"\/"},{"label":"Shop All","to":"\/shop"},{"label":"Rings","to":"\/shop?cat=rings"},{"label":"Necklaces","to":"\/shop?cat=necklaces"},{"label":"Earrings","to":"\/shop?cat=earrings"},{"label":"Bracelets","to":"\/shop?cat=bracelets"},{"label":"\u2726 Design Your Ring","to":"\/design-your-ring","highlight":true},{"label":"Wishlist","to":"\/wishlist"},{"label":"Our Story","to":"\/about"},{"label":"Services","to":"\/services"},{"label":"Wholesale \/ B2B","to":"\/wholesale"},{"label":"Contact","to":"\/contact"},{"label":"Track Order","to":"\/track-order"}]},"footer":{"columns":[{"heading":"Collections","links":[{"label":"Rings","to":"\/shop?cat=rings"},{"label":"Necklaces","to":"\/shop?cat=necklaces"},{"label":"Earrings","to":"\/shop?cat=earrings"},{"label":"Bracelets","to":"\/shop?cat=bracelets"}]},{"heading":"Services","links":[{"label":"Design Your Ring","to":"\/design-your-ring"},{"label":"Ring Resizing","to":"\/services"},{"label":"Engraving","to":"\/services"},{"label":"Jewelry Repairs","to":"\/services"}]},{"heading":"Help","links":[{"label":"Shipping Info","to":"\/shipping-policy"},{"label":"Returns & Exchange","to":"\/returns"},{"label":"Track Order","to":"\/track-order"},{"label":"Warranty & Care","to":"\/warranty"},{"label":"FAQ","to":"\/faq"},{"label":"Contact Us","to":"\/contact"}]},{"heading":"Company","links":[{"label":"Our Story","to":"\/about"},{"label":"My Account","to":"\/account"},{"label":"My Orders","to":"\/account\/orders"},{"label":"Wishlist","to":"\/wishlist"},{"label":"Wholesale \/ B2B","to":"\/wholesale"},{"label":"Business Login","to":"\/b2b\/login"}]}],"legal_links":[{"label":"Privacy Policy","to":"\/privacy-policy"},{"label":"Terms of Service","to":"\/terms"},{"label":"Shipping","to":"\/shipping-policy"}]},"contact":{"address":"21 Linking Road, Bandra West, Mumbai 400050, India","phone":"+91 98765 43210","email":"care@aanigems.com","hours":"Mon\u2013Sat, 10:00 \u2013 19:00 IST","whatsapp":"919876543210","map_embed_url":"https:\/\/www.google.com\/maps?q=Linking+Road+Bandra+West+Mumbai&output=embed"},"contact_topics":["Order enquiry","Custom \/ bespoke ring","Repairs & resizing","Gold & gemstone advice","Other"],"trust_points":["\ud83d\udd12 Secure Checkout","\u2726 GIA Certified Jewelry","\u21a9 30-Day Returns"],"payment_badges":["VISA","MC","AMEX"],"currencies":[{"code":"EUR","symbol":"\u20ac","name":"Euro","decimals":2,"is_base":true,"rate":1},{"code":"USD","symbol":"$","name":"US Dollar","decimals":2,"is_base":false,"rate":1.08},{"code":"INR","symbol":"\u20b9","name":"Indian Rupee","decimals":2,"is_base":false,"rate":90.5},{"code":"AED","symbol":"AED","name":"UAE Dirham","decimals":2,"is_base":false,"rate":3.97},{"code":"GBP","symbol":"\u00a3","name":"British Pound","decimals":2,"is_base":false,"rate":0.85}],"default_currency":"EUR","tax_rate":0.08,"free_shipping_threshold":{"amount":50000,"currency":"EUR","formatted":"\u20ac500.00"},"shipping_methods":[{"code":"standard","name":"Standard Delivery","delivery_time":"5-7 business days","price":{"amount":2500,"currency":"EUR","formatted":"\u20ac25.00"},"free_over_threshold":true},{"code":"express","name":"Express Delivery","delivery_time":"2-3 business days","price":{"amount":4500,"currency":"EUR","formatted":"\u20ac45.00"},"free_over_threshold":false},{"code":"overnight","name":"Overnight Delivery","delivery_time":"Next business day","price":{"amount":9500,"currency":"EUR","formatted":"\u20ac95.00"},"free_over_threshold":false}],"countries":[{"code":"IN","name":"India"},{"code":"US","name":"United States"},{"code":"GB","name":"United Kingdom"},{"code":"AE","name":"United Arab Emirates"},{"code":"DE","name":"Germany"},{"code":"FR","name":"France"},{"code":"IT","name":"Italy"},{"code":"ES","name":"Spain"},{"code":"NL","name":"Netherlands"},{"code":"BE","name":"Belgium"},{"code":"AT","name":"Austria"},{"code":"IE","name":"Ireland"},{"code":"PT","name":"Portugal"},{"code":"LU","name":"Luxembourg"},{"code":"SE","name":"Sweden"},{"code":"DK","name":"Denmark"},{"code":"FI","name":"Finland"},{"code":"PL","name":"Poland"},{"code":"GR","name":"Greece"}],"order_stages":[{"code":"placed","label":"Order Placed","description":"We have received your order."},{"code":"crafting","label":"Crafting","description":"Our artisans are hand-finishing your piece."},{"code":"quality_check","label":"Quality Check","description":"Certified inspection and polishing."},{"code":"shipped","label":"Shipped","description":"Insured and on its way to you."},{"code":"delivered","label":"Delivered","description":"Delivered and signed for."}],"catalog":{"sort_options":[{"value":"featured","label":"Featured"},{"value":"price-asc","label":"Price: Low to High"},{"value":"price-desc","label":"Price: High to Low"},{"value":"rating","label":"Top Rated"},{"value":"newest","label":"Newest"}],"stone_filters":["Diamond","Ruby","Sapphire","Emerald","No Stone"],"max_price":{"amount":500000,"currency":"EUR","formatted":"\u20ac5,000.00"},"badges":["Bestseller","Sale","New","Limited","Iconic"]},"stripe_publishable_key":"pk_test_xxx","stripe_mode":"test","google_client_id":{"ios":"","android":"","web":""},"gold_rate":{"per_oz":{"amount":248000,"currency":"EUR","formatted":"\u20ac2,480.00"},"per_oz_eur":{"amount":248000,"currency":"EUR","formatted":"\u20ac2,480.00"},"source":"manual","updated_at":"2026-11-04T09:50:27+00:00"},"app":{"ios":{"min_version":"1.0.0","latest_version":"1.0.0","force_update":false},"android":{"min_version":"1.0.0","latest_version":"1.0.0","force_update":false},"maintenance":{"enabled":false,"message":""}}},"meta":{"currency":"EUR"}}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/mobile/home
+    metadata:
+      custom: []
+      groupName: 'Mobile · Store'
+      groupDescription: |-
+
+        Public store data: bootstrap and home. Send `X-Currency` (EUR, USD, INR, AED, GBP) to get prices in that currency.
+      subgroup: ''
+      subgroupDescription: ''
+      title: Home
+      description: 'Hero, USP items, categories with counts, featured products, new arrivals, design-ring banner, testimonials.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

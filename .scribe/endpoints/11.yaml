@@ -1,0 +1,380 @@
+name: 'Mobile · Catalog'
+description: ''
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/mobile/categories
+    metadata:
+      custom: []
+      groupName: 'Mobile · Catalog'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List categories (active, with product counts).'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/mobile/products
+    metadata:
+      custom: []
+      groupName: 'Mobile · Catalog'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List products'
+      description: 'Paginated. Prices in the request currency (`X-Currency`).'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      category:
+        custom: []
+        name: category
+        description: 'Category slug.'
+        required: false
+        example: rings
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      stone:
+        custom: []
+        name: stone
+        description: 'Stone filter values (Diamond, Ruby, Sapphire, Emerald, No Stone).'
+        required: false
+        example:
+          - Ruby
+        type: 'string[]'
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      min_price:
+        custom: []
+        name: min_price
+        description: 'Minimum price in MINOR units of the request currency.'
+        required: false
+        example: 50000
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      max_price:
+        custom: []
+        name: max_price
+        description: 'Maximum price in MINOR units of the request currency.'
+        required: false
+        example: 200000
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      search:
+        custom: []
+        name: search
+        description: 'Text search.'
+        required: false
+        example: solitaire
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      featured:
+        custom: []
+        name: featured
+        description: 'Only featured products.'
+        required: false
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      new:
+        custom: []
+        name: new
+        description: 'Only new arrivals.'
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      in_stock:
+        custom: []
+        name: in_stock
+        description: 'Only in-stock products.'
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      sort:
+        custom: []
+        name: sort
+        description: 'One of featured, price-asc, price-desc, rating, newest.'
+        required: false
+        example: featured
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      per_page:
+        custom: []
+        name: per_page
+        description: 'Max 50.'
+        required: false
+        example: 12
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanQueryParameters:
+      category: rings
+      stone:
+        - Ruby
+      min_price: 50000
+      max_price: 200000
+      search: solitaire
+      featured: true
+      new: false
+      in_stock: false
+      sort: featured
+      per_page: 12
+    bodyParameters:
+      category:
+        custom: []
+        name: category
+        description: ''
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      stone:
+        custom: []
+        name: stone
+        description: ''
+        required: false
+        example:
+          - architecto
+        type: 'string[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      min_price:
+        custom: []
+        name: min_price
+        description: 'Must be at least 0.'
+        required: false
+        example: 39
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      max_price:
+        custom: []
+        name: max_price
+        description: 'Must be at least 0.'
+        required: false
+        example: 84
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      search:
+        custom: []
+        name: search
+        description: 'Must not be greater than 100 characters.'
+        required: false
+        example: z
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      sort:
+        custom: []
+        name: sort
+        description: ''
+        required: false
+        example: price-asc
+        type: string
+        enumValues:
+          - featured
+          - price-asc
+          - price-desc
+          - rating
+          - newest
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      per_page:
+        custom: []
+        name: per_page
+        description: 'Must be at least 1. Must not be greater than 50.'
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      category: architecto
+      stone:
+        - architecto
+      min_price: 39
+      max_price: 84
+      search: z
+      sort: price-asc
+      per_page: 17
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/mobile/products/{slugOrLegacyId}'
+    metadata:
+      custom: []
+      groupName: 'Mobile · Catalog'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Product detail'
+      description: 'Accepts the slug or the storefront legacy id (`r1`, `n1`…).'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters:
+      slugOrLegacyId:
+        custom: []
+        name: slugOrLegacyId
+        description: ''
+        required: true
+        example: r1
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      slugOrLegacyId: r1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/mobile/search
+    metadata:
+      custom: []
+      groupName: 'Mobile · Catalog'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Quick search'
+      description: 'Name, subtitle, tags and category; max 8 results.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      q:
+        custom: []
+        name: q
+        description: ''
+        required: true
+        example: ruby
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanQueryParameters:
+      q: ruby
+    bodyParameters:
+      q:
+        custom: []
+        name: q
+        description: 'Must be at least 1 character. Must not be greater than 100 characters.'
+        required: true
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      q: b
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

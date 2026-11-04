@@ -1,0 +1,253 @@
+name: 'Admin · App settings'
+description: |-
+
+  Store name/emails, mobile app versions, maintenance flag. Secrets (Stripe, Google, provider keys) live only in .env.
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/admin/settings
+    metadata:
+      custom: []
+      groupName: 'Admin · App settings'
+      groupDescription: |-
+
+        Store name/emails, mobile app versions, maintenance flag. Secrets (Stripe, Google, provider keys) live only in .env.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PUT
+    uri: api/v1/admin/settings
+    metadata:
+      custom: []
+      groupName: 'Admin · App settings'
+      groupDescription: |-
+
+        Store name/emails, mobile app versions, maintenance flag. Secrets (Stripe, Google, provider keys) live only in .env.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: 'Admin SPA endpoint: session cookie + `X-XSRF-TOKEN`, 2FA-confirmed staff with the required permission.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      store_name:
+        custom: []
+        name: store_name
+        description: 'Must not be greater than 120 characters.'
+        required: true
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      support_email:
+        custom: []
+        name: support_email
+        description: 'Must be a valid email address.'
+        required: true
+        example: zbailey@example.net
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      notify_email:
+        custom: []
+        name: notify_email
+        description: 'Must be a valid email address.'
+        required: false
+        example: gulgowski.asia@example.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      mobile.ios:
+        custom: []
+        name: mobile.ios
+        description: ''
+        required: false
+        example: []
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      mobile:
+        custom: []
+        name: mobile
+        description: ''
+        required: false
+        example: []
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      mobile.ios.min_version:
+        custom: []
+        name: mobile.ios.min_version
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      mobile.ios.latest_version:
+        custom: []
+        name: mobile.ios.latest_version
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      mobile.ios.force_update:
+        custom: []
+        name: mobile.ios.force_update
+        description: ''
+        required: false
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      mobile.android:
+        custom: []
+        name: mobile.android
+        description: ''
+        required: false
+        example: []
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      mobile.android.min_version:
+        custom: []
+        name: mobile.android.min_version
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      mobile.android.latest_version:
+        custom: []
+        name: mobile.android.latest_version
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      mobile.android.force_update:
+        custom: []
+        name: mobile.android.force_update
+        description: ''
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      maintenance:
+        custom: []
+        name: maintenance
+        description: ''
+        required: false
+        example: []
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      maintenance.enabled:
+        custom: []
+        name: maintenance.enabled
+        description: ''
+        required: false
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      maintenance.message:
+        custom: []
+        name: maintenance.message
+        description: 'Must not be greater than 500 characters.'
+        required: false
+        example: 'n'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      store_name: b
+      support_email: zbailey@example.net
+      notify_email: gulgowski.asia@example.com
+      mobile:
+        ios:
+          min_version: architecto
+          latest_version: architecto
+          force_update: true
+        android:
+          min_version: architecto
+          latest_version: architecto
+          force_update: false
+      maintenance:
+        enabled: true
+        message: 'n'
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

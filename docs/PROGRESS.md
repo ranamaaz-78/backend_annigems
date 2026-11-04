@@ -13,7 +13,7 @@ Branch: `development`. Brief: `docs/BACKEND_BRIEF.md`.
 | 5 | Checkout, Stripe PaymentIntents, webhooks, orders APIs, emails, scheduled jobs | ✅ done |
 | 6 | Admin: orders, customers, catalog, configurator, pricing, coupons | ✅ done |
 | 7 | Admin: CMS, messages, staff/roles, activity log, app settings | ✅ done |
-| 8 | Scribe docs, Postman export, tests green, README, storefront integration doc | ⏳ next |
+| 8 | Scribe docs, Postman export, tests green, README, storefront integration doc | ✅ done |
 
 ## Done
 
@@ -70,6 +70,13 @@ Branch: `development`. Brief: `docs/BACKEND_BRIEF.md`.
 - Activity log viewer with area/date/search filters and a before/after diff (spatie/activitylog: catalog, configurator, pricing settings, orders, customers, staff, content, messages).
 - App settings: store name, support/notify emails, iOS/Android min/latest version + force update, maintenance flag + message (returned by mobile bootstrap); read-only integration status (Stripe test/live, webhook, Google ids, GoldAPI key) — secrets stay in `.env`.
 
+### M8
+- Scribe docs at `/docs`, grouped **Web · …**, **Mobile · …**, **Admin · …**, **Webhooks** (custom `App\Docs\PlatformGroups` strategy, 212 endpoints; example responses captured for public GET endpoints). Postman collection and OpenAPI spec committed in `docs/api/`.
+- README: setup, first admin login + 2FA, Stripe test mode, local webhook forwarding, test cards, currency notes for Stripe, rate providers, env vars, architecture, tests.
+- `docs/STOREFRONT_INTEGRATION.md`: which endpoint replaces each storefront data file/context, with request/response examples (taken from the running API).
+- CORS configured from `CORS_ALLOWED_ORIGINS` for `/api/*`.
+- Test suite: 61 tests / 607 assertions green; Pint clean; admin SPA builds.
+
 ## Decisions
 
 - **Laravel 12** pinned as the brief says, although Laravel 13 is the current release (ecosystem packages such as Scribe and spatie are proven on 12).
@@ -112,9 +119,14 @@ Branch: `development`. Brief: `docs/BACKEND_BRIEF.md`.
 - Contact topics are a content block (`contact.topics`); the contact form validates `topic` against it.
 - Staff password rule is min 10 characters (customers: min 8 as in the storefront).
 
-## Next
-- M8: Scribe docs (Web / Mobile / Admin groups), Postman export, README, `docs/STOREFRONT_INTEGRATION.md`.
+## Next (after the brief)
+- Run the migrations once on a real **MySQL 8** server (only SQLite was available in the build environment; the schema uses standard types and was written for MySQL).
+- Put real Stripe test keys in `.env`, run `stripe listen`, and do an end-to-end payment with the three test cards from web (and later mobile PaymentSheet).
+- Add a `GOLD_API_KEY`, run "Test & fetch now", decide whether to switch the gold source to API.
+- Storefront team: follow `docs/STOREFRONT_INTEGRATION.md`.
+- Later phases (out of scope now): B2B/wholesale (`users.account_type` is ready to be extended), push notification sending (tokens are already stored).
 
 ## Open questions
+- Stripe currency support depends on the client's account country (especially INR); see README → "Currencies and Stripe". Not verifiable without the account.
 - Seeded copy still mentions "$" (e.g. "Free Shipping over $500", "Under $1000", policy text "prices are shown in US dollars") while the base currency is now EUR. Left as is per the brief ("leave everything else as it is"); editable in Content.
 - The Services content still has an "Engraving" card and some product details say "Complimentary engraving". Engraving is not offered anywhere in the flows; the client may want to remove that copy in admin.

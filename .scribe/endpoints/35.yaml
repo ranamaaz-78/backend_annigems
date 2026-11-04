@@ -1,0 +1,41 @@
+name: Webhooks
+description: |-
+
+  Stripe webhook. Verifies the `Stripe-Signature` header with STRIPE_WEBHOOK_SECRET.
+  Idempotent: every event id is processed once. Only this endpoint marks orders paid.
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/webhooks/stripe
+    metadata:
+      custom: []
+      groupName: Webhooks
+      groupDescription: |-
+
+        Stripe webhook. Verifies the `Stripe-Signature` header with STRIPE_WEBHOOK_SECRET.
+        Idempotent: every event id is processed once. Only this endpoint marks orders paid.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

@@ -1,0 +1,395 @@
+name: 'Web · Checkout & orders'
+description: ''
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/web/checkout
+    metadata:
+      custom: []
+      groupName: 'Web · Checkout & orders'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: Checkout
+      description: |-
+        Requires an `Idempotency-Key` header (e.g. a UUID per checkout attempt; repeating the same request
+        with the same key returns the same order). The server re-quotes the cart, validates stock, sizes and
+        combos, creates a `pending_payment` order with snapshots and a Stripe PaymentIntent in the order currency.
+        Web returns `payment: {client_secret, publishable_key}`; mobile also returns `customer_id` and
+        `ephemeral_key` for PaymentSheet. Then confirm with Stripe and poll `GET /orders/{number}`.
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_TOKEN}'
+      Idempotency-Key: 6f1c2b8e-3d4a-4c6f-9a1b-2e3f4a5b6c7d
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      items:
+        custom: []
+        name: items
+        description: 'Cart lines (same shape as cart/quote).'
+        required: true
+        example:
+          - []
+        type: 'object[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'items[].type':
+        custom: []
+        name: 'items[].type'
+        description: ''
+        required: true
+        example: product
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      'items[].product_id':
+        custom: []
+        name: 'items[].product_id'
+        description: ''
+        required: false
+        example: 7
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      'items[].qty':
+        custom: []
+        name: 'items[].qty'
+        description: ''
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      address_id:
+        custom: []
+        name: address_id
+        description: 'Saved address id (or send `address`).'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      address:
+        custom: []
+        name: address
+        description: 'Inline address: label, name, phone, line1, city, state, zip, country_code.'
+        required: false
+        example: []
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      save_address:
+        custom: []
+        name: save_address
+        description: 'Save the inline address to the account.'
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      shipping_method:
+        custom: []
+        name: shipping_method
+        description: ''
+        required: true
+        example: standard
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      coupon_code:
+        custom: []
+        name: coupon_code
+        description: ''
+        required: false
+        example: AANI10
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      customer_note:
+        custom: []
+        name: customer_note
+        description: ''
+        required: false
+        example: 'Gift wrap please'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      items:
+        -
+          type: product
+          product_id: 7
+          qty: 1
+      address_id: 1
+      address: []
+      save_address: false
+      shipping_method: standard
+      coupon_code: AANI10
+      customer_note: 'Gift wrap please'
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/web/orders
+    metadata:
+      custom: []
+      groupName: 'Web · Checkout & orders'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'My orders (newest first)'
+      description: ''
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/web/orders/{number}'
+    metadata:
+      custom: []
+      groupName: 'Web · Checkout & orders'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Order detail'
+      description: 'Full order: items, totals, status, stage, timeline (stage labels and descriptions), tracking.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters:
+      number:
+        custom: []
+        name: number
+        description: ''
+        required: true
+        example: AG-10001
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      number: AG-10001
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/web/orders/{number}/pay'
+    metadata:
+      custom: []
+      groupName: 'Web · Checkout & orders'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Retry payment'
+      description: 'For `pending_payment` / `payment_failed` orders. Re-validates stock; prices stay as snapshotted.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters:
+      number:
+        custom: []
+        name: number
+        description: ''
+        required: true
+        example: AG-10001
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      number: AG-10001
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/web/orders/{number}/cancel'
+    metadata:
+      custom: []
+      groupName: 'Web · Checkout & orders'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Cancel order'
+      description: 'Only while `pending_payment` / `payment_failed` (also cancels the PaymentIntent).'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters:
+      number:
+        custom: []
+        name: number
+        description: ''
+        required: true
+        example: AG-10001
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      number: AG-10001
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/web/orders/{number}/reorder'
+    metadata:
+      custom: []
+      groupName: 'Web · Checkout & orders'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: Reorder
+      description: 'Returns cart lines for still-available items; the client puts them back in its cart and re-quotes.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters:
+      number:
+        custom: []
+        name: number
+        description: ''
+        required: true
+        example: AG-10001
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      number: AG-10001
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null

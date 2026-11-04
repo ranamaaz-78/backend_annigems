@@ -1,0 +1,416 @@
+name: 'Web · Catalog'
+description: ''
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/web/categories
+    metadata:
+      custom: []
+      groupName: 'Web · Catalog'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List categories (active, with product counts).'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":[{"id":1,"slug":"rings","name":"Rings","image":"http:\/\/localhost:8000\/storage\/images\/ring1_plain.jpg","count":6},{"id":2,"slug":"necklaces","name":"Necklaces","image":"http:\/\/localhost:8000\/storage\/images\/cat_necklaces.jpg","count":2},{"id":3,"slug":"earrings","name":"Earrings","image":"http:\/\/localhost:8000\/storage\/images\/cat_earrings.jpg","count":2},{"id":4,"slug":"bracelets","name":"Bracelets","image":"http:\/\/localhost:8000\/storage\/images\/cat_bracelets.jpg","count":2}],"meta":{"currency":"EUR"}}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/web/products
+    metadata:
+      custom: []
+      groupName: 'Web · Catalog'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List products'
+      description: 'Paginated. Prices in the request currency (`X-Currency`).'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      category:
+        custom: []
+        name: category
+        description: 'Category slug.'
+        required: false
+        example: rings
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      stone:
+        custom: []
+        name: stone
+        description: 'Stone filter values (Diamond, Ruby, Sapphire, Emerald, No Stone).'
+        required: false
+        example:
+          - Ruby
+        type: 'string[]'
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      min_price:
+        custom: []
+        name: min_price
+        description: 'Minimum price in MINOR units of the request currency.'
+        required: false
+        example: 50000
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      max_price:
+        custom: []
+        name: max_price
+        description: 'Maximum price in MINOR units of the request currency.'
+        required: false
+        example: 200000
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      search:
+        custom: []
+        name: search
+        description: 'Text search.'
+        required: false
+        example: solitaire
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      featured:
+        custom: []
+        name: featured
+        description: 'Only featured products.'
+        required: false
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      new:
+        custom: []
+        name: new
+        description: 'Only new arrivals.'
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      in_stock:
+        custom: []
+        name: in_stock
+        description: 'Only in-stock products.'
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      sort:
+        custom: []
+        name: sort
+        description: 'One of featured, price-asc, price-desc, rating, newest.'
+        required: false
+        example: featured
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      per_page:
+        custom: []
+        name: per_page
+        description: 'Max 50.'
+        required: false
+        example: 12
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanQueryParameters:
+      category: rings
+      stone:
+        - Ruby
+      min_price: 50000
+      max_price: 200000
+      search: solitaire
+      featured: true
+      new: false
+      in_stock: false
+      sort: featured
+      per_page: 12
+    bodyParameters:
+      category:
+        custom: []
+        name: category
+        description: ''
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      stone:
+        custom: []
+        name: stone
+        description: ''
+        required: false
+        example:
+          - architecto
+        type: 'string[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      min_price:
+        custom: []
+        name: min_price
+        description: 'Must be at least 0.'
+        required: false
+        example: 39
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      max_price:
+        custom: []
+        name: max_price
+        description: 'Must be at least 0.'
+        required: false
+        example: 84
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      search:
+        custom: []
+        name: search
+        description: 'Must not be greater than 100 characters.'
+        required: false
+        example: z
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      sort:
+        custom: []
+        name: sort
+        description: ''
+        required: false
+        example: price-desc
+        type: string
+        enumValues:
+          - featured
+          - price-asc
+          - price-desc
+          - rating
+          - newest
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      per_page:
+        custom: []
+        name: per_page
+        description: 'Must be at least 1. Must not be greater than 50.'
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      category: architecto
+      stone:
+        - architecto
+      min_price: 39
+      max_price: 84
+      search: z
+      sort: price-desc
+      per_page: 17
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":[],"links":{"first":"http:\/\/localhost:8000\/api\/v1\/web\/products?category=rings&stone%5B0%5D=Ruby&min_price=50000&max_price=200000&search=solitaire&featured=1&new=0&in_stock=0&sort=featured&per_page=12&page=1","last":"http:\/\/localhost:8000\/api\/v1\/web\/products?category=rings&stone%5B0%5D=Ruby&min_price=50000&max_price=200000&search=solitaire&featured=1&new=0&in_stock=0&sort=featured&per_page=12&page=1","prev":null,"next":null},"meta":{"current_page":1,"from":null,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"http:\/\/localhost:8000\/api\/v1\/web\/products?category=rings&stone%5B0%5D=Ruby&min_price=50000&max_price=200000&search=solitaire&featured=1&new=0&in_stock=0&sort=featured&per_page=12&page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"http:\/\/localhost:8000\/api\/v1\/web\/products","per_page":17,"to":null,"total":0,"currency":"EUR"}}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/web/products/{slugOrLegacyId}'
+    metadata:
+      custom: []
+      groupName: 'Web · Catalog'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Product detail'
+      description: 'Accepts the slug or the storefront legacy id (`r1`, `n1`…).'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters:
+      slugOrLegacyId:
+        custom: []
+        name: slugOrLegacyId
+        description: ''
+        required: true
+        example: r1
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      slugOrLegacyId: r1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"id":1,"legacy_id":"r1","slug":"aurora-solitaire","sku":null,"name":"Aurora Solitaire","subtitle":"Classic 4-Prong Cathedral Setting","category":{"id":1,"slug":"rings","name":"Rings"},"price":{"amount":79900,"currency":"EUR","formatted":"\u20ac799.00"},"compare_at_price":null,"on_sale":false,"badge":"Bestseller","image":"http:\/\/localhost:8000\/storage\/images\/ring1_plain.jpg","metal":"18K Gold","stone":"No Stone","weight":"3.2g","rating":4.9,"reviews_count":128,"in_stock":true,"has_sizes":true,"is_customizable":true,"is_featured":true,"is_new_arrival":false,"tags":["minimalist","classic","gold"],"gallery":["http:\/\/localhost:8000\/storage\/images\/ring1_plain.jpg","http:\/\/localhost:8000\/storage\/images\/ring1_ruby.jpg","http:\/\/localhost:8000\/storage\/images\/ring1_sapphire.jpg","http:\/\/localhost:8000\/storage\/images\/ring1_diamond.jpg"],"sizes":["4","4.5","5","5.5","6","6.5","7","7.5","8","8.5","9","9.5","10","10.5","11","12"],"description":"A timeless cathedral setting with four elegant prongs that elevate any chosen stone, letting light dance through every facet. Hand-finished by master artisans.","details":["18K Yellow Gold","4-Prong Cathedral Setting","High Polish Finish","Available sizes 4-12","Complimentary engraving","Free resize within 60 days"],"related":[{"id":5,"legacy_id":"r5","slug":"lumiere-diamond-solitaire","sku":null,"name":"Lumiere Diamond Solitaire","subtitle":"Aurora Setting with White Diamond","category":{"id":1,"slug":"rings","name":"Rings"},"price":{"amount":199900,"currency":"EUR","formatted":"\u20ac1,999.00"},"compare_at_price":{"amount":235000,"currency":"EUR","formatted":"\u20ac2,350.00"},"on_sale":true,"badge":"Sale","image":"http:\/\/localhost:8000\/storage\/images\/ring1_diamond.jpg","metal":"18K Gold","stone":"White Diamond 1.0ct D VS1","weight":"3.2g","rating":5,"reviews_count":213,"in_stock":true,"has_sizes":true,"is_customizable":false,"is_featured":true,"is_new_arrival":false,"tags":["diamond","white","classic","engagement"]},{"id":2,"legacy_id":"r2","slug":"elise-vintage-halo","sku":null,"name":"Elise Vintage Halo","subtitle":"Ornate Milgrain Setting","category":{"id":1,"slug":"rings","name":"Rings"},"price":{"amount":125000,"currency":"EUR","formatted":"\u20ac1,250.00"},"compare_at_price":{"amount":149000,"currency":"EUR","formatted":"\u20ac1,490.00"},"on_sale":true,"badge":"Sale","image":"http:\/\/localhost:8000\/storage\/images\/ring2_plain.jpg","metal":"18K Gold","stone":"No Stone","weight":"4.8g","rating":4.8,"reviews_count":94,"in_stock":true,"has_sizes":true,"is_customizable":true,"is_featured":false,"is_new_arrival":false,"tags":["vintage","ornate","halo"]},{"id":3,"legacy_id":"r3","slug":"celeste-ruby-solitaire","sku":null,"name":"Celeste Ruby Solitaire","subtitle":"Aurora Setting with Burmese Ruby","category":{"id":1,"slug":"rings","name":"Rings"},"price":{"amount":124900,"currency":"EUR","formatted":"\u20ac1,249.00"},"compare_at_price":null,"on_sale":false,"badge":"New","image":"http:\/\/localhost:8000\/storage\/images\/ring1_ruby.jpg","metal":"18K Gold","stone":"Burmese Ruby 1.2ct","weight":"3.2g","rating":5,"reviews_count":47,"in_stock":true,"has_sizes":true,"is_customizable":false,"is_featured":false,"is_new_arrival":true,"tags":["ruby","red","statement"]},{"id":4,"legacy_id":"r4","slug":"seren-sapphire-halo","sku":null,"name":"Seren Sapphire Halo","subtitle":"Elise Setting with Ceylon Sapphire","category":{"id":1,"slug":"rings","name":"Rings"},"price":{"amount":177000,"currency":"EUR","formatted":"\u20ac1,770.00"},"compare_at_price":null,"on_sale":false,"badge":null,"image":"http:\/\/localhost:8000\/storage\/images\/ring2_sapphire.jpg","metal":"18K Gold","stone":"Ceylon Sapphire 1.5ct","weight":"4.8g","rating":4.9,"reviews_count":61,"in_stock":true,"has_sizes":true,"is_customizable":false,"is_featured":false,"is_new_arrival":false,"tags":["sapphire","blue","royal"]}],"reviews":[{"id":1,"name":"Priya Mehta","location":"Mumbai, India","initials":"PM","rating":5,"text":"The craftsmanship is beyond anything I have seen - every detail is perfect.","is_generic":true},{"id":2,"name":"Sophie Durand","location":"Paris, France","initials":"SD","rating":5,"text":"Absolutely stunning. The quality is impeccable and the packaging made it feel like an event. Would buy again.","is_generic":true}],"rating_distribution":[{"stars":5,"percent":78},{"stars":4,"percent":15},{"stars":3,"percent":5},{"stars":2,"percent":2},{"stars":1,"percent":2}],"shipping_points":["Free shipping on all orders over $500","Insured and tracked worldwide delivery","30-day hassle-free returns"],"care_instructions":["Store in the provided jewelry pouch","Avoid exposure to harsh chemicals","Clean gently with a soft cloth"]},"meta":{"currency":"EUR"}}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/web/search
+    metadata:
+      custom: []
+      groupName: 'Web · Catalog'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Quick search'
+      description: 'Name, subtitle, tags and category; max 8 results.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      q:
+        custom: []
+        name: q
+        description: ''
+        required: true
+        example: ruby
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanQueryParameters:
+      q: ruby
+    bodyParameters:
+      q:
+        custom: []
+        name: q
+        description: 'Must be at least 1 character. Must not be greater than 100 characters.'
+        required: true
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      q: b
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":[{"id":7,"legacy_id":"n1","slug":"etoile-diamond-pendant","sku":null,"name":"Etoile Diamond Pendant","subtitle":"18K Gold - Brilliant Cut Diamond","category":{"id":2,"slug":"necklaces","name":"Necklaces"},"price":{"amount":85000,"currency":"EUR","formatted":"\u20ac850.00"},"compare_at_price":null,"on_sale":false,"badge":"Bestseller","image":"http:\/\/localhost:8000\/storage\/images\/prod_necklace1.jpg","metal":"18K Gold","stone":"Diamond 0.5ct","weight":"2.8g","rating":4.9,"reviews_count":176,"in_stock":true,"has_sizes":false,"is_customizable":false,"is_featured":true,"is_new_arrival":false,"tags":["diamond","pendant","minimalist"]},{"id":9,"legacy_id":"e1","slug":"lumiere-diamond-studs","sku":null,"name":"Lumiere Diamond Studs","subtitle":"18K Gold - Round Brilliant Diamond","category":{"id":3,"slug":"earrings","name":"Earrings"},"price":{"amount":120000,"currency":"EUR","formatted":"\u20ac1,200.00"},"compare_at_price":null,"on_sale":false,"badge":"Bestseller","image":"http:\/\/localhost:8000\/storage\/images\/prod_earrings1.jpg","metal":"18K Gold","stone":"Diamond 1.0ct pair","weight":"1.6g pair","rating":5,"reviews_count":284,"in_stock":true,"has_sizes":false,"is_customizable":false,"is_featured":true,"is_new_arrival":false,"tags":["diamond","studs","classic"]},{"id":11,"legacy_id":"b1","slug":"infini-diamond-tennis","sku":null,"name":"Infini Diamond Tennis","subtitle":"18K Gold - 3ct Diamond Tennis Bracelet","category":{"id":4,"slug":"bracelets","name":"Bracelets"},"price":{"amount":320000,"currency":"EUR","formatted":"\u20ac3,200.00"},"compare_at_price":null,"on_sale":false,"badge":"Iconic","image":"http:\/\/localhost:8000\/storage\/images\/prod_bracelet1.jpg","metal":"18K Gold","stone":"Diamond 3.0ct","weight":"11.4g","rating":4.9,"reviews_count":142,"in_stock":true,"has_sizes":false,"is_customizable":false,"is_featured":true,"is_new_arrival":false,"tags":["diamond","tennis","luxury","gift"]},{"id":3,"legacy_id":"r3","slug":"celeste-ruby-solitaire","sku":null,"name":"Celeste Ruby Solitaire","subtitle":"Aurora Setting with Burmese Ruby","category":{"id":1,"slug":"rings","name":"Rings"},"price":{"amount":124900,"currency":"EUR","formatted":"\u20ac1,249.00"},"compare_at_price":null,"on_sale":false,"badge":"New","image":"http:\/\/localhost:8000\/storage\/images\/ring1_ruby.jpg","metal":"18K Gold","stone":"Burmese Ruby 1.2ct","weight":"3.2g","rating":5,"reviews_count":47,"in_stock":true,"has_sizes":true,"is_customizable":false,"is_featured":false,"is_new_arrival":true,"tags":["ruby","red","statement"]},{"id":4,"legacy_id":"r4","slug":"seren-sapphire-halo","sku":null,"name":"Seren Sapphire Halo","subtitle":"Elise Setting with Ceylon Sapphire","category":{"id":1,"slug":"rings","name":"Rings"},"price":{"amount":177000,"currency":"EUR","formatted":"\u20ac1,770.00"},"compare_at_price":null,"on_sale":false,"badge":null,"image":"http:\/\/localhost:8000\/storage\/images\/ring2_sapphire.jpg","metal":"18K Gold","stone":"Ceylon Sapphire 1.5ct","weight":"4.8g","rating":4.9,"reviews_count":61,"in_stock":true,"has_sizes":true,"is_customizable":false,"is_featured":false,"is_new_arrival":false,"tags":["sapphire","blue","royal"]},{"id":6,"legacy_id":"r6","slug":"foret-emerald-halo","sku":null,"name":"Foret Emerald Halo","subtitle":"Elise Setting with Colombian Emerald","category":{"id":1,"slug":"rings","name":"Rings"},"price":{"amount":183000,"currency":"EUR","formatted":"\u20ac1,830.00"},"compare_at_price":null,"on_sale":false,"badge":"Limited","image":"http:\/\/localhost:8000\/storage\/images\/ring2_emerald.jpg","metal":"18K Gold","stone":"Colombian Emerald 1.3ct","weight":"4.8g","rating":4.7,"reviews_count":38,"in_stock":false,"has_sizes":true,"is_customizable":false,"is_featured":false,"is_new_arrival":true,"tags":["emerald","green","vintage"]},{"id":8,"legacy_id":"n2","slug":"ardeur-ruby-pendant","sku":null,"name":"Ardeur Ruby Pendant","subtitle":"18K Gold - Teardrop Ruby","category":{"id":2,"slug":"necklaces","name":"Necklaces"},"price":{"amount":68000,"currency":"EUR","formatted":"\u20ac680.00"},"compare_at_price":{"amount":82000,"currency":"EUR","formatted":"\u20ac820.00"},"on_sale":true,"badge":"Sale","image":"http:\/\/localhost:8000\/storage\/images\/prod_necklace2.jpg","metal":"18K Gold","stone":"Ruby 0.8ct","weight":"3.1g","rating":4.8,"reviews_count":93,"in_stock":true,"has_sizes":false,"is_customizable":false,"is_featured":false,"is_new_arrival":true,"tags":["ruby","red","pendant"]},{"id":12,"legacy_id":"b2","slug":"royale-sapphire-bangle","sku":null,"name":"Royale Sapphire Bangle","subtitle":"18K Gold - Sapphire and Diamond Bangle","category":{"id":4,"slug":"bracelets","name":"Bracelets"},"price":{"amount":210000,"currency":"EUR","formatted":"\u20ac2,100.00"},"compare_at_price":{"amount":250000,"currency":"EUR","formatted":"\u20ac2,500.00"},"on_sale":true,"badge":"Sale","image":"http:\/\/localhost:8000\/storage\/images\/prod_bracelet2.jpg","metal":"18K Gold","stone":"Sapphire + Diamond","weight":"14.2g","rating":4.7,"reviews_count":58,"in_stock":true,"has_sizes":false,"is_customizable":false,"is_featured":false,"is_new_arrival":true,"tags":["sapphire","bangle","statement"]}],"meta":{"currency":"EUR"}}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

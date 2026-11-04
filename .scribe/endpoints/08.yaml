@@ -1,0 +1,197 @@
+name: 'Web · Wishlist'
+description: |-
+
+  Product ids may be numeric ids or storefront legacy ids (`r1`).
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/web/wishlist
+    metadata:
+      custom: []
+      groupName: 'Web · Wishlist'
+      groupDescription: |-
+
+        Product ids may be numeric ids or storefront legacy ids (`r1`).
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List wishlist products'
+      description: ''
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/web/wishlist/sync
+    metadata:
+      custom: []
+      groupName: 'Web · Wishlist'
+      groupDescription: |-
+
+        Product ids may be numeric ids or storefront legacy ids (`r1`).
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Sync guest wishlist'
+      description: 'Merges the guest (local) wishlist after login and returns the full list.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      product_ids:
+        custom: []
+        name: product_ids
+        description: ''
+        required: true
+        example:
+          - r1
+          - 5
+        type: 'string[]'
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      product_ids:
+        - r1
+        - 5
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/web/wishlist/{productId}'
+    metadata:
+      custom: []
+      groupName: 'Web · Wishlist'
+      groupDescription: |-
+
+        Product ids may be numeric ids or storefront legacy ids (`r1`).
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Add product'
+      description: ''
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters:
+      productId:
+        custom: []
+        name: productId
+        description: ''
+        required: true
+        example: '1'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      productId: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/web/wishlist/{productId}'
+    metadata:
+      custom: []
+      groupName: 'Web · Wishlist'
+      groupDescription: |-
+
+        Product ids may be numeric ids or storefront legacy ids (`r1`).
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Remove product'
+      description: ''
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+      X-Currency: EUR
+    urlParameters:
+      productId:
+        custom: []
+        name: productId
+        description: ''
+        required: true
+        example: '1'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      productId: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
