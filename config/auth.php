@@ -54,4 +54,7 @@ return [
 
     // Minutes of inactivity after which an admin session is logged out.
     'admin_idle_minutes' => (int) env('ADMIN_IDLE_MINUTES', 30),
+
+    // Mandatory TOTP 2FA for staff; only switch off for local development.
+    'admin_two_factor' => (bool) env('ADMIN_2FA_ENABLED', true),
 ];

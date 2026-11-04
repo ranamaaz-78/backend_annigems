@@ -25,7 +25,7 @@ export default function App() {
             </Routes>
         );
     }
-    if (!user.two_factor.enabled) return <TwoFactorSetup />;
+    if (user.two_factor.required && !user.two_factor.enabled) return <TwoFactorSetup />;
     if (!user.two_factor.passed) return <TwoFactorChallenge />;
 
     if (['/login', '/forgot-password', '/reset-password'].includes(location.pathname)) return <Navigate to="/" replace />;

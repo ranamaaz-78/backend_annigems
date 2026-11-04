@@ -8,12 +8,17 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * 2FA is mandatory for every staff user: first force setup, then require the
- * TOTP (or recovery code) challenge for this session.
+ * TOTP (or recovery code) challenge for this session. Skipped entirely when
+ * ADMIN_2FA_ENABLED=false (local development only).
  */
 class EnsureTwoFactorPassed
 {
     public function handle(Request $request, Closure $next): Response
     {
+        if (! config('auth.admin_two_factor')) {
+            return $next($request);
+        }
+
         $user = $request->user('admin');
 
         if (! $user->hasTwoFactorEnabled()) {

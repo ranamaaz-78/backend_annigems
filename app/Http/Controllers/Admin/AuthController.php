@@ -51,6 +51,11 @@ class AuthController extends Controller
         $request->session()->put('admin_2fa_passed', false);
         $request->session()->put('admin_last_activity', time());
 
+        if (! config('auth.admin_two_factor')) {
+            $user->forceFill(['last_login_at' => now()])->save();
+            activity('auth')->causedBy($user)->log('Signed in');
+        }
+
         return response()->json(['data' => $this->present($request, $user)]);
     }
 
@@ -192,8 +197,9 @@ class AuthController extends Controller
                 ? ['*']
                 : $user->getAllPermissions()->pluck('name')->values(),
             'two_factor' => [
+                'required' => (bool) config('auth.admin_two_factor'),
                 'enabled' => $user->hasTwoFactorEnabled(),
-                'passed' => (bool) $request->session()->get('admin_2fa_passed'),
+                'passed' => ! config('auth.admin_two_factor') || (bool) $request->session()->get('admin_2fa_passed'),
                 'recovery_codes_left' => count($user->two_factor_recovery_codes ?? []),
             ],
             'idle_timeout_minutes' => config('auth.admin_idle_minutes'),
