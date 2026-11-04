@@ -1,0 +1,91 @@
+/* Demo10 layout + small app-specific additions (animations, transitions). */
+@theme {
+	--font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+	html, body, #admin-root { height: 100%; }
+	body { font-family: var(--font-sans); }
+}
+
+@layer components {
+	/* Sidebar drawer on mobile */
+	.demo10-sidebar {
+		transition: transform 0.3s ease;
+	}
+	@media (max-width: 1023.98px) {
+		.demo10-sidebar { transform: translateX(-100%); }
+		.demo10-sidebar.open { transform: translateX(0); }
+	}
+	.demo10-overlay {
+		@apply fixed inset-0 z-10 bg-black/40 backdrop-blur-[2px] lg:hidden;
+		animation: kt-fade-in 0.2s ease both;
+	}
+
+	/* Accordion menu animation */
+	.kt-menu-accordion-anim {
+		display: grid;
+		grid-template-rows: 0fr;
+		transition: grid-template-rows 0.25s ease, opacity 0.25s ease;
+		opacity: 0;
+	}
+	.kt-menu-item.show > .kt-menu-accordion-anim {
+		grid-template-rows: 1fr;
+		opacity: 1;
+	}
+	.kt-menu-accordion-anim > div { overflow: hidden; }
+
+	/* Page enter */
+	.page-enter { animation: kt-page-in 0.35s cubic-bezier(.2,.7,.3,1) both; }
+
+	/* Modal */
+	.kt-modal.open .kt-modal-content { animation: kt-modal-in 0.22s cubic-bezier(.2,.7,.3,1) both; }
+	.kt-modal.open .kt-modal-backdrop-anim { animation: kt-fade-in 0.2s ease both; }
+
+	/* Dropdown */
+	.kt-dropdown-anim { animation: kt-drop-in 0.15s ease-out both; transform-origin: top; }
+
+	/* Toast */
+	.kt-toast-anim { animation: kt-toast-in 0.3s cubic-bezier(.2,.7,.3,1) both; }
+
+	/* Stat card hover lift */
+	.hover-lift { transition: transform .2s ease, box-shadow .2s ease; }
+	.hover-lift:hover { transform: translateY(-2px); box-shadow: 0 8px 24px -12px rgba(0,0,0,.18); }
+
+	/* Table row clickable */
+	.kt-table tr.row-link { cursor: pointer; transition: background-color .15s ease; }
+	.kt-table tr.row-link:hover td { background-color: var(--color-muted, #f4f4f5); }
+
+	/* Gem swatch for configurator stones */
+	.gem-swatch { display: inline-block; border-radius: 9999px; border: 1px solid rgba(0,0,0,.12); }
+	@keyframes gemspin { to { transform: rotate(360deg); } }
+
+	/* Drag & drop */
+	.drag-item { cursor: grab; transition: opacity .15s ease, transform .15s ease; }
+	.drag-item.dragging { opacity: .4; transform: scale(.98); }
+
+	/* Skeleton shimmer */
+	.kt-shimmer {
+		background: linear-gradient(90deg, var(--color-zinc-100) 25%, var(--color-zinc-200) 37%, var(--color-zinc-100) 63%);
+		background-size: 400% 100%;
+		animation: kt-shimmer 1.4s ease infinite;
+	}
+	.dark .kt-shimmer {
+		background: linear-gradient(90deg, var(--color-zinc-900) 25%, var(--color-zinc-800) 37%, var(--color-zinc-900) 63%);
+		background-size: 400% 100%;
+	}
+
+	.branded-bg { background-image: url('/admin-assets/media/auth-bg.png'); }
+	.dark .branded-bg { background-image: url('/admin-assets/media/auth-bg-dark.png'); }
+
+	@media print {
+		.no-print { display: none !important; }
+	}
+}
+
+@keyframes kt-fade-in { from { opacity: 0 } to { opacity: 1 } }
+@keyframes kt-page-in { from { opacity: 0; transform: translateY(8px) } to { opacity: 1; transform: none } }
+@keyframes kt-modal-in { from { opacity: 0; transform: translateY(12px) scale(.98) } to { opacity: 1; transform: none } }
+@keyframes kt-drop-in { from { opacity: 0; transform: translateY(-4px) scale(.98) } to { opacity: 1; transform: none } }
+@keyframes kt-toast-in { from { opacity: 0; transform: translateY(16px) } to { opacity: 1; transform: none } }
+@keyframes kt-shimmer { 0% { background-position: 100% 50% } 100% { background-position: 0 50% } }

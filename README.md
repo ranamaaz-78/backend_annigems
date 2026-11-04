@@ -1,6 +1,6 @@
 # AANI GEMAS – backend & admin panel
 
-Laravel 12 + MySQL 8 backend for the AANI GEMAS fine-jewelry store, with a React 19 admin panel built on the AdminLTE 4 design. It is the single source of truth for catalog, Design-Your-Ring configurator, pricing (live gold rate, multi-currency), customers, orders, Stripe payments and all storefront content.
+Laravel 12 + MySQL 8 backend for the AANI GEMAS fine-jewelry store, with a React 19 admin panel built on the **Metronic 9 (Tailwind 4 + KTUI) demo10** design. It is the single source of truth for catalog, Design-Your-Ring configurator, pricing (live gold rate, multi-currency), customers, orders, Stripe payments and all storefront content.
 
 - **Web storefront API** – `/api/v1/web/*`
 - **Mobile app API** – `/api/v1/mobile/*` (same controllers; mobile adds app-version info and Stripe PaymentSheet keys)
@@ -132,7 +132,8 @@ Secrets live only in `.env`; the admin shows only whether they are configured an
 - `app/Services` – business logic: `PricingService` (configurator and totals formulas), `GoldRateService`, `CurrencyService`, `CartQuoteService`, `CouponService`, `CheckoutService`, `PaymentService`, `OrderService`; Stripe behind `Services/Stripe/StripeGateway`, Google behind `Services/Auth/GoogleTokenVerifier`.
 - `app/Http/Controllers/Api` – web + mobile (shared; routes in `routes/api/shared*.php`, platform files `routes/api/web.php` / `mobile.php`).
 - `app/Http/Controllers/Admin` – admin API (`routes/api/admin*.php`), every route behind `admin.auth` + `admin.2fa` + a permission.
-- `resources/js/admin` – React admin SPA (AdminLTE CSS from `design admin lte/`, components in `components/`, screens in `pages/`).
+- `resources/js/admin` – React admin SPA on Metronic demo10 (layout in `layout/AppLayout.jsx`, primitives in `components/`, screens in `pages/`).
+- `resources/css/admin/metronic.css` – Tailwind 4 entry: Metronic theme tokens, KTUI components (`@keenthemes/ktui`), Metronic menu/scrollable/container components, keenicons (filled set) and the demo10 layout/animations. Compiled by Vite with `@tailwindcss/vite`, so any Tailwind utility used in the React files is generated. Source theme: `design admin lte/metronic-tailwind-html-demos/`.
 - Money is stored as integer minor units (EUR); every API money value is `{amount, currency, formatted}`.
 
 ## Tests

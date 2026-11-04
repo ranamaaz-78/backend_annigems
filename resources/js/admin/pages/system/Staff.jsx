@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import api, { errorMessage } from '../../api';
 import { useAuth } from '../../auth';
 import CrudPage, { ActiveBadge } from '../../components/CrudPage';
-import { formatDate, useFlash } from '../../components/ui';
+import { Icon, Initials, formatDate, useFlash } from '../../components/ui';
 
 export default function Staff() {
     const { user } = useAuth();
@@ -21,43 +21,54 @@ export default function Staff() {
 
     return (
         <>
-            <div className="px-3 pt-3">{flash}</div>
+            {flash}
             <CrudPage
                 title="Staff"
+                singular="staff member"
                 crumbs={[{ label: 'System' }, { label: 'Staff' }]}
                 url="/staff"
                 newItem={{ is_active: true, roles: ['Support'] }}
                 transformOut={(v) => ({ name: v.name, email: v.email, roles: v.roles, is_active: v.is_active, password: v.password || null })}
                 extraActions={(u, reload) => (
                     <>
-                        <button className="btn btn-outline-secondary" title="Send password reset link" onClick={() => action(() => api.post(`/staff/${u.id}/password-reset`))}><i className="bi bi-key" /></button>
+                        <button className="kt-btn kt-btn-sm kt-btn-icon kt-btn-ghost" title="Send password reset link" onClick={() => action(() => api.post(`/staff/${u.id}/password-reset`))}><Icon name="key" /></button>
                         {u.two_factor_enabled && u.id !== user.id && (
-                            <button className="btn btn-outline-warning" title="Reset 2FA" onClick={() => window.confirm(`Reset 2FA for ${u.name}? They will set it up again at next sign-in.`) && action(() => api.post(`/staff/${u.id}/reset-2fa`)).then(reload)}><i className="bi bi-shield-x" /></button>
+                            <button className="kt-btn kt-btn-sm kt-btn-icon kt-btn-ghost text-yellow-600" title="Reset 2FA" onClick={() => window.confirm(`Reset 2FA for ${u.name}? They will set it up again at next sign-in.`) && action(() => api.post(`/staff/${u.id}/reset-2fa`)).then(reload)}><Icon name="shield-cross" /></button>
                         )}
                     </>
                 )}
                 columns={[
-                    { key: 'name', label: 'Name', render: (u) => <>{u.name} {u.id === user.id && <span className="badge text-bg-info">you</span>}<div className="small text-secondary">{u.email}</div></> },
-                    { key: 'roles', label: 'Roles', render: (u) => u.roles.map((r) => <span key={r} className="badge text-bg-primary me-1">{r}</span>) },
-                    { key: 'two_factor_enabled', label: '2FA', render: (u) => (u.two_factor_enabled ? <span className="badge text-bg-success">on</span> : <span className="badge text-bg-warning">pending setup</span>) },
-                    { key: 'last_login_at', label: 'Last sign-in', render: (u) => <span className="small">{formatDate(u.last_login_at)}</span> },
+                    { key: 'name', label: 'Staff member', render: (u) => (
+                        <div className="flex items-center gap-2.5">
+                            <Initials name={u.name} />
+                            <div className="flex flex-col gap-0.5">
+                                <span className="text-sm font-medium text-mono">{u.name} {u.id === user.id && <span className="kt-badge kt-badge-sm kt-badge-info kt-badge-outline ms-1">you</span>}</span>
+                                <span className="text-xs text-secondary-foreground">{u.email}</span>
+                            </div>
+                        </div>
+                    ) },
+                    { key: 'roles', label: 'Roles', render: (u) => <div className="flex flex-wrap gap-1">{u.roles.map((r) => <span key={r} className="kt-badge kt-badge-sm kt-badge-primary kt-badge-outline">{r}</span>)}</div> },
+                    { key: 'two_factor_enabled', label: '2FA', render: (u) => (u.two_factor_enabled ? <span className="kt-badge kt-badge-sm kt-badge-success kt-badge-outline"><Icon name="shield-tick" /> on</span> : <span className="kt-badge kt-badge-sm kt-badge-warning kt-badge-outline">pending setup</span>) },
+                    { key: 'last_login_at', label: 'Last sign-in', render: (u) => <span className="text-sm text-secondary-foreground">{formatDate(u.last_login_at)}</span> },
                     { key: 'is_active', label: 'Status', render: (u) => <ActiveBadge active={u.is_active} /> },
                 ]}
                 fields={[
-                    { key: 'name', label: 'Name', col: 'col-md-6' },
-                    { key: 'email', label: 'Email', col: 'col-md-6' },
+                    { key: 'name', label: 'Name', col: 'md:col-span-6' },
+                    { key: 'email', label: 'Email', col: 'md:col-span-6' },
                     { key: 'password', label: 'Initial password (optional, min 10)', hidden: (i) => !!i.id, help: 'Leave empty to email an invitation link instead.' },
                     {
                         key: 'roles', label: 'Roles', type: 'custom', render: ({ value = [], onChange, error }) => (
-                            <div className="mb-3">
-                                <label className="form-label">Roles</label>
-                                {roles.map((r) => (
-                                    <div className="form-check" key={r}>
-                                        <input className="form-check-input" type="checkbox" id={`role-${r}`} checked={value.includes(r)} onChange={(e) => onChange(e.target.checked ? [...value, r] : value.filter((x) => x !== r))} />
-                                        <label className="form-check-label" htmlFor={`role-${r}`}>{r}</label>
-                                    </div>
-                                ))}
-                                {error && <div className="invalid-feedback d-block">{error}</div>}
+                            <div className="flex flex-col gap-2 mb-4">
+                                <label className="kt-form-label text-sm font-medium text-mono">Roles</label>
+                                <div className="grid sm:grid-cols-3 gap-2">
+                                    {roles.map((r) => (
+                                        <label key={r} className={`flex items-center gap-2.5 rounded-lg border px-3 py-2.5 cursor-pointer transition-colors ${value.includes(r) ? 'border-primary bg-primary/5' : 'border-border'}`}>
+                                            <input className="kt-checkbox kt-checkbox-sm" type="checkbox" checked={value.includes(r)} onChange={(e) => onChange(e.target.checked ? [...value, r] : value.filter((x) => x !== r))} />
+                                            <span className="text-sm text-mono">{r}</span>
+                                        </label>
+                                    ))}
+                                </div>
+                                {error && <div className="text-xs text-destructive">{error}</div>}
                             </div>
                         ),
                     },

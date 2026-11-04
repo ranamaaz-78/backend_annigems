@@ -1,16 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Bar } from 'react-chartjs-2';
-import { BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Tooltip } from 'chart.js';
+import Chart from 'react-apexcharts';
 import api, { errorMessage } from '../api';
 import { useAuth } from '../auth';
-import { Alert, Callout, Card, Money, Page, SmallBox, Spinner, StatusBadge, eur, formatDate } from '../components/ui';
+import { Alert, Callout, Icon, Money, Page, Skeleton, StatCard, StatusBadge, eur, formatDate } from '../components/ui';
 import { stageLabel } from '../lib';
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
-
 export default function Dashboard() {
-    const { can } = useAuth();
+    const { user, can } = useAuth();
     const [d, setD] = useState(null);
     const [error, setError] = useState(null);
 
@@ -19,99 +16,238 @@ export default function Dashboard() {
     }, []);
 
     if (error) return <Page title="Dashboard"><Alert>{error}</Alert></Page>;
-    if (!d) return <Page title="Dashboard"><Spinner /></Page>;
+    if (!d) return <Page title="Dashboard"><DashboardSkeleton /></Page>;
     const k = d.kpis;
+    const statusTotal = Object.values(d.orders_by_status).reduce((a, b) => a + b, 0);
 
     return (
-        <Page title="Dashboard">
-            {d.stripe_mode === 'test' && <Callout type="warning">Stripe is in <strong>test mode</strong>.</Callout>}
-            {d.gold.warning && <Callout type="danger" title="Gold rate">{d.gold.warning} {d.gold.last_error?.message && <small className="d-block">Last error: {d.gold.last_error.message}</small>}</Callout>}
-            {d.stock_issues > 0 && <Callout type="danger">{d.stock_issues} paid order(s) have a stock issue. <Link to="/orders?stock_issue=1">Review</Link></Callout>}
+        <Page
+            title={`Welcome back, ${user.name.split(' ')[0]}`}
+            crumbs={[{ label: 'Dashboard' }]}
+            actions={<>
+                {can('orders.view') && <a className="kt-btn kt-btn-outline" href="/api/v1/admin/orders-export?status=paid" target="_blank" rel="noreferrer"><Icon name="exit-down" /> Export paid orders</a>}
+                <span className={`kt-badge ${d.stripe_mode === 'live' ? 'kt-badge-destructive' : 'kt-badge-warning'} kt-badge-outline`}><Icon name="credit-cart" /> Stripe {d.stripe_mode} mode</span>
+            </>}
+        >
+            {d.gold.warning && <Callout type="danger" title="Gold rate API">{d.gold.warning} {d.gold.last_error?.message && <span className="block text-xs mt-1">Last error: {d.gold.last_error.message}</span>}</Callout>}
+            {d.stock_issues > 0 && <Callout type="warning" title="Stock issue">{d.stock_issues} paid order(s) went below zero stock. <Link to="/orders?stock_issue=1" className="kt-link">Review</Link></Callout>}
 
-            <div className="row">
-                <div className="col-lg-3 col-6"><SmallBox value={eur(k.revenue_today)} label="Revenue today" icon="bi-currency-euro" color="primary" /></div>
-                <div className="col-lg-3 col-6"><SmallBox value={eur(k.revenue_7d)} label="Revenue 7 days" icon="bi-graph-up" color="success" /></div>
-                <div className="col-lg-3 col-6"><SmallBox value={eur(k.revenue_30d)} label="Revenue 30 days" icon="bi-bar-chart" color="info" /></div>
-                <div className="col-lg-3 col-6"><SmallBox value={k.paid_orders_30d} label={`Paid orders (30d) · AOV ${eur(k.average_order_value_30d)}`} icon="bi-bag-check" color="warning" to="/orders?status=paid" /></div>
-                <div className="col-lg-3 col-6"><SmallBox value={k.new_customers_30d} label={`New customers (30d) · ${k.customers_total} total`} icon="bi-person-plus" color="secondary" to="/customers" /></div>
-                <div className="col-lg-3 col-6"><SmallBox value={k.paid_orders_total} label="Paid orders (all time)" icon="bi-receipt" color="dark" /></div>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-7.5">
+                <StatCard value={eur(k.revenue_today)} label="Revenue today" icon="euro" color="primary" />
+                <StatCard value={eur(k.revenue_7d)} label="Revenue, 7 days" icon="chart-line-up" color="success" />
+                <StatCard value={eur(k.revenue_30d)} label="Revenue, 30 days" icon="graph-up" color="info" />
+                <StatCard value={k.paid_orders_30d} label="Paid orders, 30 days" hint={`AOV ${eur(k.average_order_value_30d)}`} icon="handcart" color="warning" to={can('orders.view') ? '/orders?status=paid' : undefined} />
             </div>
 
-            <div className="row">
-                <div className="col-lg-8">
-                    <Card title="Revenue, last 30 days (EUR)">
-                        <Bar
-                            height={110}
-                            data={{
-                                labels: d.revenue_chart.map((r) => r.date.slice(5)),
-                                datasets: [{ label: 'Revenue €', data: d.revenue_chart.map((r) => r.revenue_eur / 100), backgroundColor: 'rgba(168,134,42,.7)' }],
-                            }}
-                            options={{ plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }}
-                        />
-                    </Card>
-                    <Card title="To craft (paid, placed/crafting)" noBody tools={<Link to="/orders?to_craft=1" className="btn btn-sm btn-outline-primary">All</Link>}>
-                        <OrdersTable rows={d.to_craft} empty="Nothing waiting for the workshop." />
-                    </Card>
-                    <Card title="Recent orders" noBody>
-                        <OrdersTable rows={d.recent_orders} />
-                    </Card>
+            <div className="grid lg:grid-cols-3 gap-5 lg:gap-7.5 items-stretch">
+                <div className="lg:col-span-2">
+                    <div className="kt-card h-full">
+                        <div className="kt-card-header">
+                            <h3 className="kt-card-title">Revenue, last 30 days</h3>
+                            <span className="text-sm text-secondary-foreground">EUR</span>
+                        </div>
+                        <div className="kt-card-content flex flex-col justify-end items-stretch grow px-3 py-1">
+                            <RevenueChart rows={d.revenue_chart} />
+                        </div>
+                    </div>
                 </div>
-                <div className="col-lg-4">
-                    <Card title="Gold rate" outline={d.gold.warning ? 'danger' : 'warning'} tools={can('pricing.manage') && <Link to="/pricing/gold" className="btn btn-sm btn-outline-secondary">Manage</Link>}>
-                        <h3 className="mb-1">{eur(d.gold.per_oz)}<small className="fs-6 text-secondary">/oz</small></h3>
-                        <div>Source: <StatusBadge value={d.gold.source} /></div>
-                        <div className="small text-secondary">Updated {formatDate(d.gold.updated_at)}</div>
-                        {d.gold.source === 'api' && d.gold.api_age_minutes !== null && <div className="small">API rate age: {Math.round(d.gold.api_age_minutes / 6) / 10} h</div>}
-                    </Card>
-                    <Card title="Currencies" tools={can('pricing.manage') && <Link to="/pricing/currencies" className="btn btn-sm btn-outline-secondary">Manage</Link>}>
-                        <div className="mb-2">FX source: <StatusBadge value={d.fx.source} /> {d.fx.stale && <span className="badge text-bg-danger">stale</span>}</div>
-                        <table className="table table-sm mb-0">
-                            <tbody>{d.fx.currencies.map((c) => <tr key={c.code}><td>{c.code}</td><td className="text-end">{c.rate ?? '—'}</td></tr>)}</tbody>
-                        </table>
-                        {d.fx.last_error && <div className="small text-danger mt-2">{d.fx.last_error.message}</div>}
-                    </Card>
-                    <Card title="Orders by status">
-                        {Object.entries(d.orders_by_status).map(([s, c]) => <div key={s} className="d-flex justify-content-between"><StatusBadge value={s} /><strong>{c}</strong></div>)}
-                        {!Object.keys(d.orders_by_status).length && <span className="text-secondary">No orders yet.</span>}
-                        <hr />
-                        {Object.entries(d.orders_by_stage).map(([s, c]) => <div key={s} className="d-flex justify-content-between"><span>{stageLabel(s)}</span><strong>{c}</strong></div>)}
-                    </Card>
-                    <Card title="Low stock" noBody>
-                        <ul className="list-group list-group-flush">
-                            {d.low_stock.map((p) => (
-                                <li key={p.id} className="list-group-item d-flex justify-content-between">
-                                    {can('catalog.manage') ? <Link to={`/products/${p.id}`}>{p.name}</Link> : p.name}
-                                    <span className={`badge ${p.stock_qty <= 0 ? 'text-bg-danger' : 'text-bg-warning'}`}>{p.stock_qty}</span>
-                                </li>
-                            ))}
-                            {!d.low_stock.length && <li className="list-group-item text-secondary">All good.</li>}
-                        </ul>
-                    </Card>
+                <div className="lg:col-span-1">
+                    <Highlights d={d} statusTotal={statusTotal} />
+                </div>
+            </div>
+
+            <div className="grid lg:grid-cols-3 gap-5 lg:gap-7.5 items-stretch">
+                <div className="lg:col-span-2 grid gap-5 lg:gap-7.5">
+                    <OrdersCard title="To craft" subtitle="Paid orders in Placed / Crafting" rows={d.to_craft} more={can('orders.view') && '/orders?to_craft=1'} empty="Nothing waiting for the workshop." />
+                    <OrdersCard title="Recent orders" rows={d.recent_orders} more={can('orders.view') && '/orders'} />
+                </div>
+                <div className="lg:col-span-1 grid gap-5 lg:gap-7.5 content-start">
+                    <GoldCard gold={d.gold} manage={can('pricing.manage')} />
+                    <FxCard fx={d.fx} manage={can('pricing.manage')} />
+                    <LowStock rows={d.low_stock} link={can('catalog.manage')} />
+                    <div className="grid grid-cols-2 gap-5">
+                        <StatCard value={k.new_customers_30d} label="New customers" hint={`${k.customers_total} total`} icon="user-tick" color="secondary" to={can('customers.view') ? '/customers' : undefined} />
+                        <StatCard value={k.paid_orders_total} label="Paid orders" hint="All time" icon="receipt-square" color="dark" />
+                    </div>
                 </div>
             </div>
         </Page>
     );
 }
 
-function OrdersTable({ rows, empty = 'No orders yet.' }) {
+function RevenueChart({ rows }) {
+    const dark = document.documentElement.classList.contains('dark');
+    const options = {
+        chart: { type: 'area', toolbar: { show: false }, fontFamily: 'Inter, sans-serif', animations: { enabled: true, speed: 600 } },
+        dataLabels: { enabled: false },
+        stroke: { curve: 'smooth', width: 3, colors: ['var(--color-primary, #3b82f6)'] },
+        fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.35, opacityTo: 0.02, stops: [0, 90, 100] } },
+        colors: ['#3b82f6'],
+        xaxis: {
+            categories: rows.map((r) => r.date.slice(5)),
+            axisBorder: { show: false },
+            axisTicks: { show: false },
+            labels: { style: { colors: dark ? '#a1a1aa' : '#71717a', fontSize: '12px' }, rotate: 0, hideOverlappingLabels: true },
+            tickAmount: 8,
+        },
+        yaxis: { labels: { style: { colors: dark ? '#a1a1aa' : '#71717a', fontSize: '12px' }, formatter: (v) => `€${Math.round(v).toLocaleString()}` } },
+        grid: { borderColor: dark ? '#27272a' : '#f1f1f4', strokeDashArray: 5, yaxis: { lines: { show: true } } },
+        tooltip: { theme: dark ? 'dark' : 'light', y: { formatter: (v) => eur(Math.round(v * 100)) } },
+        markers: { size: 0, hover: { size: 5 } },
+    };
+    return <Chart options={options} series={[{ name: 'Revenue', data: rows.map((r) => r.revenue_eur / 100) }]} type="area" height={280} />;
+}
+
+const STATUS_COLORS = { paid: 'bg-green-500', pending_payment: 'bg-yellow-500', payment_failed: 'bg-destructive', cancelled: 'bg-zinc-400', refunded: 'bg-zinc-800', partially_refunded: 'bg-violet-500' };
+
+function Highlights({ d, statusTotal }) {
+    const entries = Object.entries(d.orders_by_status);
     return (
-        <div className="table-responsive">
-            <table className="table table-sm table-hover mb-0 align-middle">
-                <thead><tr><th>Order</th><th>Customer</th><th>Status</th><th>Stage</th><th className="text-end">Total</th><th>Date</th></tr></thead>
-                <tbody>
-                    {rows.map((o) => (
-                        <tr key={o.order_number}>
-                            <td><Link to={`/orders/${o.order_number}`}>{o.order_number}</Link></td>
-                            <td>{o.customer}</td>
-                            <td><StatusBadge value={o.status} /></td>
-                            <td>{o.stage ? <StatusBadge value={o.stage} label={stageLabel(o.stage)} /> : '—'}</td>
-                            <td className="text-end"><Money value={o.total} /></td>
-                            <td className="small">{formatDate(o.created_at)}</td>
-                        </tr>
+        <div className="kt-card h-full">
+            <div className="kt-card-header"><h3 className="kt-card-title">Highlights</h3></div>
+            <div className="kt-card-content flex flex-col gap-4 p-5 lg:p-7.5 lg:pt-4">
+                <div className="flex flex-col gap-0.5">
+                    <span className="text-sm font-normal text-secondary-foreground">Revenue, 30 days</span>
+                    <div className="flex items-center gap-2.5">
+                        <span className="text-3xl font-semibold text-mono">{eur(d.kpis.revenue_30d)}</span>
+                        <span className="kt-badge kt-badge-outline kt-badge-success kt-badge-sm">{d.kpis.paid_orders_30d} orders</span>
+                    </div>
+                </div>
+                <div className="flex items-center gap-1 mb-1.5">
+                    {entries.map(([s, c]) => <div key={s} className={`h-2 rounded-xs ${STATUS_COLORS[s] || 'bg-zinc-300'} transition-all`} style={{ width: `${(c / (statusTotal || 1)) * 100}%` }} />)}
+                    {!entries.length && <div className="h-2 rounded-xs bg-muted w-full" />}
+                </div>
+                <div className="flex items-center flex-wrap gap-x-4 gap-y-1.5">
+                    {entries.map(([s, c]) => (
+                        <div key={s} className="flex items-center gap-1.5">
+                            <span className={`rounded-full size-2 ${STATUS_COLORS[s] || 'bg-zinc-300'}`} />
+                            <span className="text-sm font-normal text-foreground capitalize">{s.replace(/_/g, ' ')} ({c})</span>
+                        </div>
                     ))}
-                    {!rows.length && <tr><td colSpan={6} className="text-secondary text-center py-3">{empty}</td></tr>}
-                </tbody>
-            </table>
+                </div>
+                <div className="border-b border-input" />
+                <div className="grid gap-3">
+                    {['placed', 'crafting', 'quality_check', 'shipped', 'delivered'].map((s) => (
+                        <div key={s} className="flex items-center justify-between flex-wrap gap-2">
+                            <div className="flex items-center gap-1.5">
+                                <Icon name={{ placed: 'basket', crafting: 'wrench', quality_check: 'shield-tick', shipped: 'delivery', delivered: 'check-circle' }[s]} className="text-base text-muted-foreground" />
+                                <span className="text-sm font-normal text-mono">{stageLabel(s)}</span>
+                            </div>
+                            <span className="text-sm font-medium text-foreground">{d.orders_by_stage[s] || 0}</span>
+                        </div>
+                    ))}
+                </div>
+            </div>
         </div>
+    );
+}
+
+function OrdersCard({ title, subtitle, rows, more, empty = 'No orders yet.' }) {
+    return (
+        <div className="kt-card kt-card-grid min-w-full">
+            <div className="kt-card-header">
+                <div className="flex flex-col">
+                    <h3 className="kt-card-title">{title}</h3>
+                    {subtitle && <span className="text-sm text-secondary-foreground">{subtitle}</span>}
+                </div>
+                {more && <Link to={more} className="kt-btn kt-btn-sm kt-btn-outline">View all <Icon name="black-right" /></Link>}
+            </div>
+            <div className="kt-card-table">
+                <div className="kt-scrollable-x-auto">
+                    <table className="kt-table kt-table-border align-middle">
+                        <thead>
+                            <tr><th>Order</th><th>Customer</th><th>Status</th><th>Stage</th><th className="text-end">Total</th><th>Date</th></tr>
+                        </thead>
+                        <tbody>
+                            {rows.map((o) => (
+                                <tr key={o.order_number}>
+                                    <td className="whitespace-nowrap"><Link to={`/orders/${o.order_number}`} className="text-sm font-medium text-mono hover:text-primary">{o.order_number}</Link></td>
+                                    <td className="text-sm text-foreground">{o.customer}</td>
+                                    <td><StatusBadge value={o.status} /></td>
+                                    <td>{o.stage ? <StatusBadge value={o.stage} label={stageLabel(o.stage)} /> : <span className="text-muted-foreground">—</span>}</td>
+                                    <td className="text-end text-sm font-medium text-mono"><Money value={o.total} /></td>
+                                    <td className="text-sm text-secondary-foreground whitespace-nowrap">{formatDate(o.created_at)}</td>
+                                </tr>
+                            ))}
+                            {!rows.length && <tr><td colSpan={6} className="text-center text-sm text-secondary-foreground py-8">{empty}</td></tr>}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function GoldCard({ gold, manage }) {
+    return (
+        <div className="kt-card">
+            <div className="kt-card-header">
+                <h3 className="kt-card-title">Gold rate</h3>
+                {manage && <Link to="/pricing/gold" className="kt-btn kt-btn-sm kt-btn-icon kt-btn-ghost" title="Manage"><Icon name="setting-2" /></Link>}
+            </div>
+            <div className="kt-card-content flex items-center gap-4">
+                <span className="flex items-center justify-center size-12 rounded-xl bg-yellow-500/10 border border-yellow-500/20"><Icon name="crown-2" className="text-2xl text-yellow-600" /></span>
+                <div className="flex flex-col gap-1">
+                    <span className="text-2xl font-semibold text-mono leading-none">{eur(gold.per_oz)}<span className="text-sm font-normal text-secondary-foreground">/oz</span></span>
+                    <span className="flex items-center gap-1.5 text-xs text-secondary-foreground"><StatusBadge value={gold.source} /> {formatDate(gold.updated_at)}</span>
+                </div>
+            </div>
+            {gold.warning && <div className="kt-card-footer text-xs text-destructive">{gold.warning}</div>}
+        </div>
+    );
+}
+
+function FxCard({ fx, manage }) {
+    return (
+        <div className="kt-card">
+            <div className="kt-card-header">
+                <h3 className="kt-card-title">Currencies</h3>
+                <div className="flex items-center gap-2">
+                    <StatusBadge value={fx.source} />
+                    {fx.stale && <span className="kt-badge kt-badge-sm kt-badge-destructive">stale</span>}
+                    {manage && <Link to="/pricing/currencies" className="kt-btn kt-btn-sm kt-btn-icon kt-btn-ghost" title="Manage"><Icon name="setting-2" /></Link>}
+                </div>
+            </div>
+            <div className="kt-card-content grid gap-2.5">
+                {fx.currencies.map((c) => (
+                    <div key={c.code} className="flex items-center justify-between text-sm">
+                        <span className="flex items-center gap-2"><span className="kt-badge kt-badge-sm kt-badge-outline w-12 justify-center">{c.code}</span><span className="text-secondary-foreground">{c.name}</span></span>
+                        <span className="font-medium text-mono">{c.rate ?? '—'}</span>
+                    </div>
+                ))}
+                {fx.last_error && <div className="text-xs text-destructive">{fx.last_error.message}</div>}
+            </div>
+        </div>
+    );
+}
+
+function LowStock({ rows, link }) {
+    return (
+        <div className="kt-card">
+            <div className="kt-card-header"><h3 className="kt-card-title">Low stock</h3><span className="kt-badge kt-badge-sm kt-badge-outline">{rows.length}</span></div>
+            <div className="kt-card-content grid gap-3">
+                {rows.map((p) => (
+                    <div key={p.id} className="flex items-center justify-between gap-2">
+                        {link ? <Link to={`/products/${p.id}`} className="text-sm font-medium text-mono hover:text-primary">{p.name}</Link> : <span className="text-sm text-mono">{p.name}</span>}
+                        <span className={`kt-badge kt-badge-sm ${p.stock_qty <= 0 ? 'kt-badge-destructive' : 'kt-badge-warning'}`}>{p.stock_qty}</span>
+                    </div>
+                ))}
+                {!rows.length && <span className="flex items-center gap-2 text-sm text-secondary-foreground"><Icon name="check-circle" className="text-green-500" /> All products are stocked.</span>}
+            </div>
+        </div>
+    );
+}
+
+function DashboardSkeleton() {
+    return (
+        <>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-7.5">
+                {[0, 1, 2, 3].map((i) => <div key={i} className="kt-card"><div className="kt-card-content flex gap-4"><Skeleton className="size-12 rounded-xl" /><div className="grow grid gap-2"><Skeleton className="h-6 w-2/3" /><Skeleton className="h-3 w-1/2" /></div></div></div>)}
+            </div>
+            <div className="grid lg:grid-cols-3 gap-5 lg:gap-7.5">
+                <div className="lg:col-span-2 kt-card"><div className="kt-card-content"><Skeleton className="h-[280px]" /></div></div>
+                <div className="kt-card"><div className="kt-card-content grid gap-3"><Skeleton className="h-8 w-1/2" /><Skeleton className="h-2" />{[0, 1, 2, 3, 4].map((i) => <Skeleton key={i} className="h-4" />)}</div></div>
+            </div>
+        </>
     );
 }

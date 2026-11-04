@@ -1,0 +1,29 @@
+/*
+ * AANI GEMAS admin – Metronic 9 (Tailwind 4 + KTUI), demo10 layout.
+ * Compiled by Vite (@tailwindcss/vite) so every utility used in the React admin is generated.
+ */
+@import 'tailwindcss';
+
+/* Scan the React admin + KTUI sources for classes */
+@source '../../js/admin';
+@source '../../../node_modules/@keenthemes/ktui/src';
+
+/* Metronic theme tokens (colors, radius, dark mode) */
+@import './metronic/config.ktui.css';
+
+/* KTUI component styles (kt-btn, kt-card, kt-table, kt-input, kt-modal …) */
+@import '@keenthemes/ktui/styles.css';
+
+/* Metronic components */
+@custom-variant light (&:not(.dark *));
+@import './metronic/components/container.css';
+@import './metronic/components/menu.css';
+@import './metronic/components/scrollable.css';
+@import './metronic/components/apexcharts.css';
+@import './metronic/components/rating.css';
+@import './metronic/components/image-input.css';
+
+/* Keenicons (filled) */
+@import './metronic/keenicons/ki-filled.css';
+
+@import './metronic/demo10.css';

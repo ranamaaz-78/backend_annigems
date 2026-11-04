@@ -30,7 +30,7 @@ export default function SizeGuide() {
         <Page title="Size guide" crumbs={[{ label: 'Design Your Ring' }, { label: 'Size guide' }]}>
             {flash}
             {KEYS.map(([k, label]) => (
-                <Card key={k} title={label} tools={<button className="btn btn-sm btn-primary" onClick={() => save(k)}>Save</button>}>
+                <Card key={k} title={label} tools={<button className="kt-btn kt-btn-sm kt-btn-primary" onClick={() => save(k)}>Save</button>}>
                     <SchemaEditor schema={BLOCK_SCHEMAS[k]} value={values[k]} onChange={(v) => setValues({ ...values, [k]: v })} />
                 </Card>
             ))}

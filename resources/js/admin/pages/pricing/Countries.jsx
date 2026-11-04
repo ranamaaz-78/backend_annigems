@@ -16,10 +16,10 @@ export default function Countries() {
                 { key: 'is_active', label: 'Shipping allowed', render: (c) => <ActiveBadge active={c.is_active} /> },
             ]}
             fields={[
-                { key: 'code', label: 'ISO code (2 letters)', col: 'col-md-4' },
-                { key: 'name', label: 'Name', col: 'col-md-8' },
-                { key: 'sort_order', label: 'Order', type: 'number', col: 'col-md-4' },
-                { key: 'is_active', label: 'Shipping allowed', type: 'check', col: 'col-md-8' },
+                { key: 'code', label: 'ISO code (2 letters)', col: 'md:col-span-4' },
+                { key: 'name', label: 'Name', col: 'md:col-span-8' },
+                { key: 'sort_order', label: 'Order', type: 'number', col: 'md:col-span-4' },
+                { key: 'is_active', label: 'Shipping allowed', type: 'check', col: 'md:col-span-8' },
             ]}
         />
     );

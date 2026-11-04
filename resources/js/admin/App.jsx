@@ -14,7 +14,13 @@ export default function App() {
     const { user, can } = useAuth();
     const location = useLocation();
 
-    if (user === undefined) return <Spinner />;
+    if (user === undefined) {
+        return (
+            <div className="flex grow items-center justify-center min-h-screen">
+                <Spinner text="Loading admin…" />
+            </div>
+        );
+    }
 
     if (!user) {
         return (

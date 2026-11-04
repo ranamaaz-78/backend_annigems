@@ -1,12 +1,12 @@
-// Sidebar menu. `perm` hides entries the staff user cannot access.
+// Sidebar menu (keenicons). `perm` hides entries the staff user cannot access.
 const nav = [
-    { header: 'MAIN' },
-    { label: 'Dashboard', to: '/', icon: 'bi-speedometer', perm: 'dashboard.view' },
-    { label: 'Orders', to: '/orders', icon: 'bi-bag-check', perm: 'orders.view' },
-    { label: 'Customers', to: '/customers', icon: 'bi-people', perm: 'customers.view' },
-    { header: 'CATALOG' },
+    { header: 'Main' },
+    { label: 'Dashboard', to: '/', icon: 'element-11', perm: 'dashboard.view' },
+    { label: 'Orders', to: '/orders', icon: 'handcart', perm: 'orders.view' },
+    { label: 'Customers', to: '/customers', icon: 'users', perm: 'customers.view' },
+    { header: 'Catalog' },
     {
-        label: 'Catalog', icon: 'bi-gem', perm: 'catalog.manage',
+        label: 'Catalog', icon: 'diamonds', perm: 'catalog.manage',
         children: [
             { label: 'Products', to: '/products' },
             { label: 'Categories', to: '/categories' },
@@ -14,7 +14,7 @@ const nav = [
         ],
     },
     {
-        label: 'Design Your Ring', icon: 'bi-stars', perm: 'configurator.manage',
+        label: 'Design Your Ring', icon: 'crown', perm: 'configurator.manage',
         children: [
             { label: 'Rings', to: '/configurator/rings' },
             { label: 'Stones', to: '/configurator/stones' },
@@ -23,9 +23,9 @@ const nav = [
             { label: 'Size guide', to: '/configurator/size-guide' },
         ],
     },
-    { header: 'COMMERCE' },
+    { header: 'Commerce' },
     {
-        label: 'Pricing & settings', icon: 'bi-currency-exchange', perm: 'pricing.manage',
+        label: 'Pricing & settings', icon: 'dollar', perm: 'pricing.manage',
         children: [
             { label: 'Gold rate', to: '/pricing/gold' },
             { label: 'Currencies', to: '/pricing/currencies' },
@@ -34,10 +34,10 @@ const nav = [
             { label: 'Countries', to: '/pricing/countries' },
         ],
     },
-    { label: 'Coupons', to: '/coupons', icon: 'bi-ticket-perforated', perm: 'coupons.manage' },
-    { header: 'CONTENT' },
+    { label: 'Coupons', to: '/coupons', icon: 'discount', perm: 'coupons.manage' },
+    { header: 'Content' },
     {
-        label: 'Content', icon: 'bi-layout-text-window', perm: 'content.manage',
+        label: 'Content', icon: 'notepad-edit', perm: 'content.manage',
         children: [
             { label: 'Content blocks', to: '/content/blocks' },
             { label: 'Policy pages', to: '/content/pages' },
@@ -46,22 +46,32 @@ const nav = [
         ],
     },
     {
-        label: 'Messages', icon: 'bi-envelope', perm: 'messages.manage',
+        label: 'Messages', icon: 'messages', perm: 'messages.manage',
         children: [
             { label: 'Contact inbox', to: '/messages' },
             { label: 'Newsletter', to: '/newsletter' },
         ],
     },
-    { header: 'SYSTEM' },
+    { header: 'System' },
     {
-        label: 'Staff & roles', icon: 'bi-person-badge', perm: 'staff.manage',
+        label: 'Staff & roles', icon: 'security-user', perm: 'staff.manage',
         children: [
             { label: 'Staff', to: '/staff' },
             { label: 'Roles & permissions', to: '/roles' },
         ],
     },
-    { label: 'Activity log', to: '/activity', icon: 'bi-clock-history', perm: 'activity.view' },
-    { label: 'App settings', to: '/settings', icon: 'bi-gear', perm: 'settings.manage' },
+    { label: 'Activity log', to: '/activity', icon: 'time', perm: 'activity.view' },
+    { label: 'App settings', to: '/settings', icon: 'setting-2', perm: 'settings.manage' },
+];
+
+/** Quick-create shortcuts for the sidebar "Add New" button. */
+export const quickCreate = [
+    { label: 'Product', to: '/products/new', icon: 'diamonds', perm: 'catalog.manage' },
+    { label: 'Coupon', to: '/coupons?new=1', icon: 'discount', perm: 'coupons.manage' },
+    { label: 'Ring setting', to: '/configurator/rings?new=1', icon: 'crown', perm: 'configurator.manage' },
+    { label: 'Stone', to: '/configurator/stones?new=1', icon: 'color-swatch', perm: 'configurator.manage' },
+    { label: 'Testimonial', to: '/content/testimonials?new=1', icon: 'like', perm: 'content.manage' },
+    { label: 'Staff member', to: '/staff?new=1', icon: 'user', perm: 'staff.manage' },
 ];
 
 export default nav;

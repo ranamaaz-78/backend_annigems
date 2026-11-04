@@ -14,6 +14,7 @@ Branch: `development`. Brief: `docs/BACKEND_BRIEF.md`.
 | 6 | Admin: orders, customers, catalog, configurator, pricing, coupons | ✅ done |
 | 7 | Admin: CMS, messages, staff/roles, activity log, app settings | ✅ done |
 | 8 | Scribe docs, Postman export, tests green, README, storefront integration doc | ✅ done |
+| 9 | Admin UI moved from AdminLTE to Metronic 9 demo10 (client request) | ✅ done |
 
 ## Done
 
@@ -77,11 +78,22 @@ Branch: `development`. Brief: `docs/BACKEND_BRIEF.md`.
 - CORS configured from `CORS_ALLOWED_ORIGINS` for `/api/*`.
 - Test suite: 61 tests / 607 assertions green; Pint clean; admin SPA builds.
 
+### Metronic redesign (after M8, client request)
+- AdminLTE removed completely (design folder, CSS, Bootstrap Icons, Chart.js). The admin now uses **Metronic 9 demo10** from `design admin lte/metronic-tailwind-html-demos/`:
+  - Tailwind 4 + KTUI compiled through Vite (`resources/css/admin/metronic.css`), Metronic theme tokens, keenicons (filled), Inter font.
+  - demo10 layout: dark sidebar (brand dropdown, "Add New" quick-create menu, search, grouped accordion menu, user menu + theme toggle in the footer) and the rounded content panel with the Metronic toolbar (title + breadcrumb + actions). Mobile: header + slide-in drawer with overlay.
+  - KTUI components everywhere: `kt-card` / `kt-card-table`, `kt-table` with sortable headers and `kt-datatable` pagination + page size, `kt-input` / `kt-select` / `kt-textarea` / `kt-switch` / `kt-checkbox`, `kt-badge`, `kt-btn`, `kt-alert`, `kt-tabs`, `kt-modal`, `kt-dropdown-menu`.
+  - Interactions/animations: page enter transition, animated accordion menu, modal/dropdown/toast animations, skeleton shimmer loaders, hover-lift cards, drag-and-drop with visual states, Ctrl/⌘+K command palette (screens, order numbers, customer emails), light/dark theme switch (stored like Metronic in `kt-theme`).
+  - Charts: ApexCharts (`react-apexcharts`), the chart library Metronic ships with, replacing Chart.js.
+  - Auth screens use Metronic's "branded" sign-in layout; 404 uses Metronic's illustration.
+- The `ADMIN_2FA_ENABLED` switch added by the client is kept (UI shows 2FA as disabled when it is off).
+
 ## Decisions
 
 - **Laravel 12** pinned as the brief says, although Laravel 13 is the current release (ecosystem packages such as Scribe and spatie are proven on 12).
 - **Admin auth uses the plain session guard behind the `web` middleware group** (session cookie + CSRF/XSRF cookie) rather than Sanctum's stateful mode. That is exactly what Sanctum SPA auth does under the hood, but it keeps the staff guard completely separate from customer tokens: Sanctum's `guard` config is empty so `auth:sanctum` only accepts customer Bearer tokens.
 - **Local dev in this container uses SQLite** (no MySQL server available here); the schema is written for MySQL 8 and `.env.example` targets MySQL. Tests run on in-memory SQLite.
+- **Charts use ApexCharts instead of react-chartjs-2** (brief §1) to match Metronic, as requested by the client when switching the admin design.
 - Admin 2FA state lives in the session (`admin_2fa_passed`); every new login requires the TOTP challenge.
 
 - Image paths are stored relative to the public disk (`images/ring1_plain.jpg`); APIs return absolute URLs (`APP_URL/storage/images/...`). Run `php artisan storage:link`.

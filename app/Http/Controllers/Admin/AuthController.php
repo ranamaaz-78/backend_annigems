@@ -203,6 +203,7 @@ class AuthController extends Controller
                 'recovery_codes_left' => count($user->two_factor_recovery_codes ?? []),
             ],
             'idle_timeout_minutes' => config('auth.admin_idle_minutes'),
+            'storefront_url' => config('services.storefront.url'),
             'last_login_at' => $user->last_login_at?->toIso8601String(),
         ];
     }

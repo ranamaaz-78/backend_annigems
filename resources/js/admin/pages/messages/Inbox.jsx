@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import api, { errorMessage, fieldErrors } from '../../api';
-import { Card, Page, Spinner, StatusBadge, formatDate, useFlash } from '../../components/ui';
+import { SearchInput } from '../../components/DataTable';
+import { EmptyState, Icon, Initials, Page, Skeleton, StatusBadge, formatDate, useFlash } from '../../components/ui';
+
+const FOLDERS = [['', 'All messages', 'messages'], ['new', 'New', 'notification-on'], ['read', 'Read', 'eye'], ['replied', 'Replied', 'paper-plane']];
 
 export default function Inbox() {
     const [status, setStatus] = useState('');
@@ -9,6 +12,7 @@ export default function Inbox() {
     const [list, setList] = useState(null);
     const [open, setOpen] = useState(null);
     const [reply, setReply] = useState('');
+    const [sending, setSending] = useState(false);
     const [flash, setFlash] = useFlash();
 
     const load = () => api.get('/messages', { params: { status, q, page } }).then(({ data }) => setList(data));
@@ -21,6 +25,7 @@ export default function Inbox() {
         load();
     };
     const send = async () => {
+        setSending(true);
         try {
             const { data } = await api.post(`/messages/${open.id}/reply`, { body: reply });
             setOpen(data.data);
@@ -29,6 +34,8 @@ export default function Inbox() {
             load();
         } catch (e) {
             setFlash(fieldErrors(e).body || errorMessage(e), 'danger');
+        } finally {
+            setSending(false);
         }
     };
     const setSt = async (s) => {
@@ -36,69 +43,98 @@ export default function Inbox() {
         setOpen(data.data);
         load();
     };
-
+    const mailto = (m) => `mailto:${m.email}?subject=${encodeURIComponent(`Re: ${m.topic || 'Your message'}`)}`;
     const counts = list?.counts || {};
+
     return (
         <Page title="Contact inbox" crumbs={[{ label: 'Messages' }, { label: 'Inbox' }]}>
             {flash}
-            <div className="row">
-                <div className="col-lg-3">
-                    <Card noBody title="Folders">
-                        <div className="list-group list-group-flush">
-                            {[['', 'All'], ['new', 'New'], ['read', 'Read'], ['replied', 'Replied']].map(([v, l]) => (
-                                <button key={v} className={`list-group-item list-group-item-action d-flex justify-content-between ${status === v ? 'active' : ''}`} onClick={() => { setStatus(v); setPage(1); }}>
-                                    {l} {v && <span className="badge text-bg-secondary">{counts[v] || 0}</span>}
-                                </button>
-                            ))}
-                        </div>
-                    </Card>
+            <div className="flex flex-col lg:flex-row gap-5 lg:gap-7.5 items-start">
+                <div className="kt-card w-full lg:w-[250px] shrink-0">
+                    <div className="kt-card-content p-2.5 flex flex-col gap-0.5">
+                        {FOLDERS.map(([v, l, i]) => (
+                            <button key={v} type="button" onClick={() => { setStatus(v); setPage(1); setOpen(null); }}
+                                className={`flex items-center gap-2.5 rounded-md px-2.5 py-2 text-sm transition-colors ${status === v ? 'bg-primary/10 text-primary font-medium' : 'text-foreground hover:bg-accent'}`}>
+                                <Icon name={i} className="text-base" /> {l}
+                                {v && <span className={`kt-badge kt-badge-sm ms-auto ${v === 'new' && counts.new ? 'kt-badge-destructive' : 'kt-badge-outline'}`}>{counts[v] || 0}</span>}
+                            </button>
+                        ))}
+                    </div>
                 </div>
-                <div className="col-lg-9">
+
+                <div className="grow w-full min-w-0">
                     {open ? (
-                        <Card title={<>{open.topic || 'Message'} <StatusBadge value={open.status} /></>} outline="primary"
-                            tools={<button className="btn btn-sm btn-outline-secondary" onClick={() => setOpen(null)}><i className="bi bi-arrow-left" /> Back</button>}>
-                            <div className="mb-3">
-                                <strong>{open.name}</strong> &lt;<a href={`mailto:${open.email}?subject=${encodeURIComponent('Re: ' + (open.topic || 'Your message'))}`}>{open.email}</a>&gt;
-                                <span className="float-end small text-secondary">{formatDate(open.created_at)} · {open.source}</span>
-                            </div>
-                            <div className="p-3 bg-body-tertiary rounded mb-3" style={{ whiteSpace: 'pre-wrap' }}>{open.message}</div>
-                            {open.replied_at && <p className="small text-success">Replied {formatDate(open.replied_at)}{open.admin && ` by ${open.admin.name}`}</p>}
-                            <textarea className="form-control mb-2" rows={6} placeholder="Write a reply (sent by email)…" value={reply} onChange={(e) => setReply(e.target.value)} />
-                            <div className="d-flex gap-2">
-                                <button className="btn btn-primary" disabled={!reply.trim()} onClick={send}><i className="bi bi-send" /> Send reply</button>
-                                <a className="btn btn-outline-secondary" href={`mailto:${open.email}?subject=${encodeURIComponent('Re: ' + (open.topic || 'Your message'))}`}><i className="bi bi-envelope" /> Reply in mail app</a>
-                                <div className="ms-auto btn-group">
-                                    <button className="btn btn-outline-secondary btn-sm" onClick={() => setSt('new')}>Mark unread</button>
-                                    <button className="btn btn-outline-success btn-sm" onClick={() => setSt('replied')}>Mark replied</button>
+                        <div className="kt-card page-enter">
+                            <div className="kt-card-header">
+                                <div className="flex items-center gap-2.5">
+                                    <button className="kt-btn kt-btn-sm kt-btn-icon kt-btn-ghost" onClick={() => setOpen(null)} title="Back"><Icon name="arrow-left" /></button>
+                                    <h3 className="kt-card-title">{open.topic || 'Message'}</h3>
+                                    <StatusBadge value={open.status} />
+                                </div>
+                                <div className="flex gap-1.5">
+                                    <button className="kt-btn kt-btn-sm kt-btn-outline" onClick={() => setSt('new')}><Icon name="notification-on" /> Mark unread</button>
+                                    <button className="kt-btn kt-btn-sm kt-btn-outline" onClick={() => setSt('replied')}><Icon name="check" /> Mark replied</button>
                                 </div>
                             </div>
-                        </Card>
+                            <div className="kt-card-content flex flex-col gap-5">
+                                <div className="flex items-center gap-3">
+                                    <Initials name={open.name} className="size-10 text-sm" />
+                                    <div className="flex flex-col">
+                                        <span className="text-sm font-semibold text-mono">{open.name}</span>
+                                        <a href={mailto(open)} className="text-xs kt-link">{open.email}</a>
+                                    </div>
+                                    <span className="ms-auto text-xs text-secondary-foreground text-end">{formatDate(open.created_at)}<br />via {open.source}</span>
+                                </div>
+                                <div className="rounded-xl border border-border bg-muted/40 p-5 text-sm text-foreground whitespace-pre-wrap leading-6">{open.message}</div>
+                                {open.replied_at && <div className="text-xs text-green-600 flex items-center gap-1.5"><Icon name="check-circle" /> Replied {formatDate(open.replied_at)}{open.admin && ` by ${open.admin.name}`}</div>}
+                                <div className="flex flex-col gap-2.5">
+                                    <textarea className="kt-textarea" rows={6} placeholder="Write a reply (sent by email)…" value={reply} onChange={(e) => setReply(e.target.value)} />
+                                    <div className="flex gap-2.5 justify-end">
+                                        <a className="kt-btn kt-btn-outline" href={mailto(open)}><Icon name="sms" /> Reply in mail app</a>
+                                        <button className="kt-btn kt-btn-primary" disabled={!reply.trim() || sending} onClick={send}><Icon name="paper-plane" /> {sending ? 'Sending…' : 'Send reply'}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     ) : (
-                        <Card noBody title={<input className="form-control form-control-sm" style={{ width: 260 }} placeholder="Search…" value={q} onChange={(e) => { setQ(e.target.value); setPage(1); }} />}>
-                            {!list ? <Spinner /> : (
-                                <table className="table table-hover mb-0 mailbox-messages">
-                                    <tbody>
-                                        {list.data.map((m) => (
-                                            <tr key={m.id} style={{ cursor: 'pointer' }} onClick={() => show(m)} className={m.status === 'new' ? 'fw-bold' : ''}>
-                                                <td style={{ width: 24 }}>{m.status === 'new' && <i className="bi bi-circle-fill text-primary small" />}</td>
-                                                <td>{m.name}<div className="small text-secondary fw-normal">{m.email}</div></td>
-                                                <td>{m.topic && <span className="badge text-bg-light border me-2 fw-normal">{m.topic}</span>}<span className="fw-normal">{m.message.slice(0, 80)}{m.message.length > 80 && '…'}</span></td>
-                                                <td><StatusBadge value={m.status} /></td>
-                                                <td className="small text-nowrap fw-normal">{formatDate(m.created_at)}</td>
-                                            </tr>
-                                        ))}
-                                        {!list.data.length && <tr><td className="text-center text-secondary py-4">No messages.</td></tr>}
-                                    </tbody>
-                                </table>
-                            )}
+                        <div className="kt-card">
+                            <div className="kt-card-header py-3">
+                                <h3 className="kt-card-title">{FOLDERS.find((f) => f[0] === status)?.[1]}</h3>
+                                <SearchInput value={q} onChange={(v) => { setQ(v); setPage(1); }} placeholder="Search messages" />
+                            </div>
+                            <div className="kt-card-content p-0">
+                                {!list && <div className="p-5 grid gap-3">{[0, 1, 2, 3].map((i) => <Skeleton key={i} className="h-12" />)}</div>}
+                                {list && list.data.map((m) => (
+                                    <button key={m.id} type="button" onClick={() => show(m)}
+                                        className="w-full flex items-center gap-3 px-5 py-3.5 border-b border-border last:border-b-0 text-start hover:bg-muted/50 transition-colors">
+                                        <span className={`size-2 rounded-full shrink-0 ${m.status === 'new' ? 'bg-primary' : 'bg-transparent'}`} />
+                                        <Initials name={m.name} />
+                                        <div className="flex flex-col min-w-0 grow">
+                                            <div className="flex items-center gap-2">
+                                                <span className={`text-sm truncate ${m.status === 'new' ? 'font-semibold text-mono' : 'text-foreground'}`}>{m.name}</span>
+                                                {m.topic && <span className="kt-badge kt-badge-sm kt-badge-outline shrink-0">{m.topic}</span>}
+                                            </div>
+                                            <span className="text-xs text-secondary-foreground truncate">{m.message}</span>
+                                        </div>
+                                        <div className="flex flex-col items-end gap-1 shrink-0">
+                                            <span className="text-xs text-secondary-foreground whitespace-nowrap">{formatDate(m.created_at)}</span>
+                                            <StatusBadge value={m.status} />
+                                        </div>
+                                    </button>
+                                ))}
+                                {list && !list.data.length && <EmptyState title="No messages" text="Messages from the storefront contact form appear here." illustration="32" />}
+                            </div>
                             {list && list.meta.last_page > 1 && (
-                                <div className="p-2 d-flex justify-content-end gap-2">
-                                    <button className="btn btn-sm btn-outline-secondary" disabled={page <= 1} onClick={() => setPage(page - 1)}>«</button>
-                                    <span className="small align-self-center">{page} / {list.meta.last_page}</span>
-                                    <button className="btn btn-sm btn-outline-secondary" disabled={page >= list.meta.last_page} onClick={() => setPage(page + 1)}>»</button>
+                                <div className="kt-card-footer justify-between text-sm text-secondary-foreground">
+                                    <span>{list.meta.from}-{list.meta.to} of {list.meta.total}</span>
+                                    <div className="kt-datatable-pagination">
+                                        <button className="kt-datatable-pagination-button" disabled={page <= 1} onClick={() => setPage(page - 1)}><Icon name="black-left" className="text-xs" /></button>
+                                        <span className="px-2">{page} / {list.meta.last_page}</span>
+                                        <button className="kt-datatable-pagination-button" disabled={page >= list.meta.last_page} onClick={() => setPage(page + 1)}><Icon name="black-right" className="text-xs" /></button>
+                                    </div>
                                 </div>
                             )}
-                        </Card>
+                        </div>
                     )}
                 </div>
             </div>

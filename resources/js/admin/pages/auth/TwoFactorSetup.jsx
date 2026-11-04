@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import api, { errorMessage, fieldErrors } from '../../api';
 import { useAuth } from '../../auth';
-import { Alert, Spinner } from '../../components/ui';
+import { Alert, Icon, Spinner } from '../../components/ui';
 import AuthBox from './AuthBox';
 
 /** Forced on first login: no other screen is reachable until TOTP is confirmed. */
@@ -12,6 +12,7 @@ export default function TwoFactorSetup() {
     const [error, setError] = useState(null);
     const [codes, setCodes] = useState(null);
     const [pendingUser, setPendingUser] = useState(null);
+    const [copied, setCopied] = useState(false);
 
     useEffect(() => {
         api.post('/auth/two-factor/setup').then(({ data }) => setSetup(data.data)).catch((e) => setError(errorMessage(e)));
@@ -31,33 +32,32 @@ export default function TwoFactorSetup() {
 
     if (codes) {
         return (
-            <AuthBox message="Save your recovery codes" wide>
-                <p className="small">Each code works once if you lose access to your authenticator app. Store them somewhere safe; they will not be shown again.</p>
-                <pre className="bg-body-tertiary p-3 rounded text-center">{codes.join('\n')}</pre>
-                <div className="d-grid gap-2">
-                    <button className="btn btn-outline-secondary" onClick={() => navigator.clipboard?.writeText(codes.join('\n'))}><i className="bi bi-clipboard" /> Copy</button>
-                    <button className="btn btn-primary" onClick={() => setUser(pendingUser)}>I saved them, continue</button>
+            <AuthBox title="Save your recovery codes" subtitle="Each code works once if you lose your authenticator. They will not be shown again." wide>
+                <div className="grid grid-cols-2 gap-2 rounded-lg border border-border bg-muted/40 p-4 font-mono text-sm text-mono text-center">
+                    {codes.map((c) => <span key={c}>{c}</span>)}
                 </div>
+                <button type="button" className="kt-btn kt-btn-outline justify-center" onClick={() => { navigator.clipboard?.writeText(codes.join('\n')); setCopied(true); }}>
+                    <Icon name={copied ? 'check' : 'copy'} /> {copied ? 'Copied' : 'Copy codes'}
+                </button>
+                <button type="button" className="kt-btn kt-btn-primary justify-center" onClick={() => setUser(pendingUser)}>I saved them, continue</button>
             </AuthBox>
         );
     }
 
     return (
-        <AuthBox message="Two-factor authentication is required" wide>
-            <p className="small">Scan this QR code with Google Authenticator, 1Password, Authy or a similar app, then enter the 6-digit code.</p>
+        <AuthBox title="Set up two-factor authentication" subtitle="Required for every staff account" wide>
+            <div className="text-sm text-secondary-foreground text-center">Scan the QR code with Google Authenticator, 1Password, Authy or a similar app, then enter the 6-digit code.</div>
             <Alert>{error}</Alert>
             {!setup && !error && <Spinner />}
             {setup && (
-                <>
-                    <div className="text-center mb-2 bg-white p-2 rounded" dangerouslySetInnerHTML={{ __html: setup.qr_svg }} />
-                    <p className="small text-center text-break">Key: <code>{setup.secret}</code></p>
-                    <form onSubmit={confirm}>
-                        <input className="form-control form-control-lg text-center mb-3" inputMode="numeric" autoComplete="one-time-code" maxLength={6} placeholder="123456" value={code} onChange={(e) => setCode(e.target.value)} autoFocus />
-                        <div className="d-grid"><button className="btn btn-primary">Confirm & enable</button></div>
-                    </form>
-                </>
+                <form onSubmit={confirm} className="flex flex-col gap-4">
+                    <div className="mx-auto rounded-xl border border-border bg-white p-3" dangerouslySetInnerHTML={{ __html: setup.qr_svg }} />
+                    <div className="text-xs text-center text-secondary-foreground break-all">Key: <code className="text-mono">{setup.secret}</code></div>
+                    <input className="kt-input kt-input-lg text-center tracking-[.5em] font-semibold" inputMode="numeric" autoComplete="one-time-code" maxLength={6} placeholder="000000" value={code} onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))} autoFocus />
+                    <button className="kt-btn kt-btn-primary justify-center" disabled={code.length !== 6}>Confirm & enable</button>
+                </form>
             )}
-            <p className="mt-3 mb-0 text-center"><button className="btn btn-link btn-sm" onClick={logout}>Sign out</button></p>
+            <button type="button" className="kt-link text-sm mx-auto" onClick={logout}>Sign out</button>
         </AuthBox>
     );
 }

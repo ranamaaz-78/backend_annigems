@@ -1,21 +1,22 @@
 import { useCallback, useEffect, useState } from 'react';
 import api, { errorMessage } from '../api';
-import { Spinner } from './ui';
+import { EmptyState, Icon, Skeleton } from './ui';
 
 /**
- * Server-side DataTable: pagination, sorting and filters handled by the API
- * (expects Laravel paginated resources: {data, meta:{current_page,last_page,total}}).
+ * Server-side DataTable in Metronic style (kt-table + kt-datatable pagination):
+ * pagination, sorting and filters are handled by the API
+ * (expects {data, meta:{current_page,last_page,total,from,to}}).
  *
- * columns: [{key, label, sortable?, render?(row), className?}]
- * filters: object of query params (controlled by parent)
+ * columns: [{key, label, sortable?, render?(row, reload), className?, width?}]
  */
-export default function DataTable({ url, columns, filters = {}, defaultSort = '', perPage = 20, rowKey = 'id', reloadKey = 0, onRowClick, empty = 'No records found.' }) {
+export default function DataTable({ url, columns, filters = {}, defaultSort = '', perPage: initialPerPage = 20, rowKey = 'id', reloadKey = 0, onRowClick, empty = 'No records found.' }) {
     const [page, setPage] = useState(1);
+    const [perPage, setPerPage] = useState(initialPerPage);
     const [sort, setSort] = useState(defaultSort);
     const [state, setState] = useState({ loading: true, rows: [], meta: null, error: null });
 
     const filterKey = JSON.stringify(filters);
-    useEffect(() => setPage(1), [filterKey]);
+    useEffect(() => setPage(1), [filterKey, perPage]);
 
     const load = useCallback(async () => {
         setState((s) => ({ ...s, loading: true, error: null }));
@@ -36,34 +37,42 @@ export default function DataTable({ url, columns, filters = {}, defaultSort = ''
     }, [load]);
 
     const toggleSort = (key) => setSort((s) => (s === key ? `-${key}` : key));
-    const sortIcon = (key) => (sort === key ? 'bi-sort-up' : sort === `-${key}` ? 'bi-sort-down' : 'bi-arrow-down-up opacity-25');
-
+    const ariaSort = (key) => (sort === key ? 'asc' : sort === `-${key}` ? 'desc' : undefined);
     const meta = state.meta;
+    const firstLoad = state.loading && !state.rows.length;
+
     return (
-        <div>
-            <div className="table-responsive">
-                <table className="table table-hover table-striped align-middle mb-0">
+        <div className="grid">
+            <div className="kt-scrollable-x-auto relative">
+                <table className="kt-table kt-table-border align-middle">
                     <thead>
                         <tr>
                             {columns.map((c) => (
-                                <th key={c.key} className={c.className} style={c.sortable ? { cursor: 'pointer', whiteSpace: 'nowrap' } : { whiteSpace: 'nowrap' }} onClick={c.sortable ? () => toggleSort(c.key) : undefined}>
-                                    {c.label} {c.sortable && <i className={`bi ${sortIcon(c.key)}`} />}
+                                <th key={c.key} className={`${c.className || ''} whitespace-nowrap`} style={c.width ? { width: c.width } : undefined} aria-sort={c.sortable ? ariaSort(c.key) : undefined}>
+                                    {c.sortable ? (
+                                        <span className="kt-table-col cursor-pointer select-none" onClick={() => toggleSort(c.key)}>
+                                            <span className="kt-table-col-label">{c.label}</span>
+                                            <span className="kt-table-col-sort" />
+                                        </span>
+                                    ) : c.label}
                                 </th>
                             ))}
                         </tr>
                     </thead>
-                    <tbody>
-                        {state.loading && (
-                            <tr><td colSpan={columns.length}><Spinner /></td></tr>
-                        )}
+                    <tbody className={state.loading && !firstLoad ? 'opacity-50 transition-opacity' : 'transition-opacity'}>
+                        {firstLoad && [0, 1, 2, 3, 4].map((i) => (
+                            <tr key={`sk-${i}`}>
+                                {columns.map((c) => <td key={c.key}><Skeleton className="h-4 w-3/4" /></td>)}
+                            </tr>
+                        ))}
                         {!state.loading && state.error && (
-                            <tr><td colSpan={columns.length} className="text-danger">{state.error}</td></tr>
+                            <tr><td colSpan={columns.length} className="text-destructive text-sm py-6 text-center">{state.error}</td></tr>
                         )}
                         {!state.loading && !state.error && state.rows.length === 0 && (
-                            <tr><td colSpan={columns.length} className="text-secondary text-center py-4">{empty}</td></tr>
+                            <tr><td colSpan={columns.length}><EmptyState title={empty} illustration="22" /></td></tr>
                         )}
-                        {!state.loading && state.rows.map((row) => (
-                            <tr key={row[rowKey]} onClick={onRowClick ? () => onRowClick(row) : undefined} style={onRowClick ? { cursor: 'pointer' } : undefined}>
+                        {!firstLoad && state.rows.map((row) => (
+                            <tr key={row[rowKey]} onClick={onRowClick ? () => onRowClick(row) : undefined} className={onRowClick ? 'row-link' : ''}>
                                 {columns.map((c) => (
                                     <td key={c.key} className={c.className}>{c.render ? c.render(row, load) : row[c.key]}</td>
                                 ))}
@@ -72,28 +81,40 @@ export default function DataTable({ url, columns, filters = {}, defaultSort = ''
                     </tbody>
                 </table>
             </div>
-            {meta && meta.last_page > 1 && (
-                <div className="d-flex justify-content-between align-items-center p-2 border-top">
-                    <small className="text-secondary">
-                        {meta.from}–{meta.to} of {meta.total}
-                    </small>
-                    <ul className="pagination pagination-sm m-0">
-                        <li className={`page-item ${page <= 1 ? 'disabled' : ''}`}>
-                            <button className="page-link" onClick={() => setPage(page - 1)}>«</button>
-                        </li>
-                        {pages(page, meta.last_page).map((p, i) => (
-                            <li key={i} className={`page-item ${p === page ? 'active' : ''} ${p === '…' ? 'disabled' : ''}`}>
-                                <button className="page-link" onClick={() => typeof p === 'number' && setPage(p)}>{p}</button>
-                            </li>
-                        ))}
-                        <li className={`page-item ${page >= meta.last_page ? 'disabled' : ''}`}>
-                            <button className="page-link" onClick={() => setPage(page + 1)}>»</button>
-                        </li>
-                    </ul>
+            {meta && meta.total > 0 && (
+                <div className="kt-card-footer justify-center md:justify-between flex-col md:flex-row gap-5 text-secondary-foreground text-sm font-medium">
+                    <div className="flex items-center gap-2 order-2 md:order-1">
+                        Show
+                        <select className="kt-select kt-select-sm w-16" value={perPage} onChange={(e) => setPerPage(Number(e.target.value))}>
+                            {[10, 20, 30, 50].map((n) => <option key={n} value={n}>{n}</option>)}
+                        </select>
+                        per page
+                    </div>
+                    <div className="flex items-center gap-4 order-1 md:order-2">
+                        <span>{meta.from ?? 0}-{meta.to ?? 0} of {meta.total}</span>
+                        {meta.last_page > 1 && (
+                            <div className="kt-datatable-pagination">
+                                <button type="button" className="kt-datatable-pagination-button kt-datatable-pagination-prev" disabled={page <= 1} onClick={() => setPage(page - 1)}>
+                                    <Icon name="black-left" className="text-xs" />
+                                </button>
+                                {pages(page, meta.last_page).map((p, i) => (
+                                    <button
+                                        type="button"
+                                        key={i}
+                                        disabled={p === '…'}
+                                        className={`kt-datatable-pagination-button ${p === page ? 'active' : ''} ${p === '…' ? 'kt-datatable-pagination-more' : ''}`}
+                                        onClick={() => typeof p === 'number' && setPage(p)}
+                                    >
+                                        {p}
+                                    </button>
+                                ))}
+                                <button type="button" className="kt-datatable-pagination-button kt-datatable-pagination-next" disabled={page >= meta.last_page} onClick={() => setPage(page + 1)}>
+                                    <Icon name="black-right" className="text-xs" />
+                                </button>
+                            </div>
+                        )}
+                    </div>
                 </div>
-            )}
-            {meta && meta.last_page <= 1 && meta.total > 0 && (
-                <div className="p-2 border-top"><small className="text-secondary">{meta.total} record{meta.total === 1 ? '' : 's'}</small></div>
             )}
         </div>
     );
@@ -102,13 +123,23 @@ export default function DataTable({ url, columns, filters = {}, defaultSort = ''
 function pages(current, last) {
     const out = [];
     for (let p = 1; p <= last; p++) {
-        if (p === 1 || p === last || Math.abs(p - current) <= 2) out.push(p);
+        if (p === 1 || p === last || Math.abs(p - current) <= 1) out.push(p);
         else if (out[out.length - 1] !== '…') out.push('…');
     }
     return out;
 }
 
-/** Small search + filter bar helper. */
+/** Search input with the magnifier icon (Metronic card header style). */
+export function SearchInput({ value, onChange, placeholder = 'Search…', className = 'w-full sm:w-64' }) {
+    return (
+        <div className={`kt-input ${className}`}>
+            <Icon name="magnifier" />
+            <input type="text" placeholder={placeholder} value={value} onChange={(e) => onChange(e.target.value)} />
+        </div>
+    );
+}
+
+/** Filter row inside a card header / above a table. */
 export function FilterBar({ children }) {
-    return <div className="row g-2 align-items-end mb-3">{children}</div>;
+    return <div className="flex flex-wrap items-center gap-2.5">{children}</div>;
 }
