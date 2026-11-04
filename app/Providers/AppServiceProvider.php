@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Models\Setting;
+use App\Services\Auth\GoogleJwtVerifier;
+use App\Services\Auth\GoogleTokenVerifier;
 use App\Services\CurrencyService;
 use App\Services\GoldRateService;
 use App\Services\Rates\ExchangeRateProvider;
@@ -22,6 +24,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->scoped(CurrencyService::class);
         $this->app->scoped(GoldRateService::class);
         $this->app->bind(ExchangeRateProvider::class, OpenErApiProvider::class);
+        $this->app->bind(GoogleTokenVerifier::class, GoogleJwtVerifier::class);
         $this->app->bind(GoldRateProvider::class, function () {
             $providers = ['goldapi' => GoldApiProvider::class];
 

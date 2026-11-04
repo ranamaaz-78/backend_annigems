@@ -9,8 +9,8 @@ Branch: `development`. Brief: `docs/BACKEND_BRIEF.md`.
 | 1 | Laravel + React admin shell (AdminLTE), staff auth, mandatory 2FA, roles | ✅ done |
 | 2 | Migrations, models, seeders (from `storefront-seed.json`) | ✅ done |
 | 3 | Pricing, gold-rate, FX services + public store/content/configurator/quote APIs | ✅ done |
-| 4 | Customer auth (Google, reset code) + account, addresses, wishlist | ⏳ next |
-| 5 | Checkout, Stripe PaymentIntents, webhooks, orders APIs, emails, scheduled jobs | ☐ |
+| 4 | Customer auth (Google, reset code) + account, addresses, wishlist | ✅ done |
+| 5 | Checkout, Stripe PaymentIntents, webhooks, orders APIs, emails, scheduled jobs | ⏳ next |
 | 6 | Admin: orders, customers, catalog, configurator, pricing, coupons | ☐ |
 | 7 | Admin: CMS, messages, staff/roles, activity log, app settings | ☐ |
 | 8 | Scribe docs, Postman export, tests green, README, storefront integration doc | ☐ |
@@ -38,6 +38,15 @@ Branch: `development`. Brief: `docs/BACKEND_BRIEF.md`.
 - `X-Currency` header resolved by middleware; every JSON response gets `meta.currency`.
 - Tests: pricing formula (brief example €821.36, karat purity, conversion), totals (coupon, threshold on taxable, tax), gold/FX source rules, quote rejections, store endpoints.
 
+### M4
+- Customer auth: register, login (exact brief error messages), Google ID-token sign-in (`GoogleTokenVerifier` interface; `GoogleJwtVerifier` checks Google JWKS, issuer and audience), forgot password → 6-digit code (15 min, max 5 attempts) → verify → reset (revokes all tokens, "password changed" email), logout, logout-all. Rate-limited.
+- Tokens: Sanctum personal access tokens named `{platform}:{device_name}` with ability `platform:{web|mobile}` and an explicit expiry (`SANCTUM_TOKEN_EXPIRATION`, 30 days). Mobile requires `device_name`.
+- Account: profile get/update, change password (Google-only users may set a first password without `current_password`), delete account (password confirmation when set; anonymises, soft-deletes, removes addresses/wishlist/devices, revokes tokens; orders kept).
+- Addresses CRUD with a single default (first address becomes default; deleting the default promotes the oldest). Countries must be active shipping countries.
+- Wishlist: list/add/remove/sync; ids may be numeric or storefront legacy ids (`r1`) so the local wishlist can be merged as-is.
+- Mobile-only: `POST/DELETE /api/v1/mobile/devices` (push tokens stored only).
+- Emails (queued, branded Blade layout): welcome, password reset code, password changed.
+
 ## Decisions
 
 - **Laravel 12** pinned as the brief says, although Laravel 13 is the current release (ecosystem packages such as Scribe and spatie are proven on 12).
@@ -60,8 +69,13 @@ Branch: `development`. Brief: `docs/BACKEND_BRIEF.md`.
 - Coupon `min_subtotal` is compared against the EUR subtotal (it is an EUR amount).
 - `total_eur` of an order will be `round(total / exchange_rate)` (reporting value).
 
+- Google sign-in on **mobile** accepts the iOS, Android **and web** client ids as audience (Android native sign-in commonly issues tokens for the web/server client id); web accepts only the web client id.
+- Linking Google to an existing password account requires `email_verified = true` in the Google token.
+- Changing the password from the account screen keeps the current token and revokes the others; the reset-code flow revokes all.
+- A deactivated or deleted customer's Bearer token is rejected (`401`, `code: account_disabled`).
+
 ## Next
-- M4: customer auth (register/login/Google/reset code), profile, password, delete account, addresses, wishlist.
+- M5: checkout (Idempotency-Key), Stripe PaymentIntents (web Payment Element + mobile PaymentSheet), webhook, orders API, emails, scheduled jobs.
 
 ## Open questions
 - Seeded copy still mentions "$" (e.g. "Free Shipping over $500", "Under $1000", policy text "prices are shown in US dollars") while the base currency is now EUR. Left as is per the brief ("leave everything else as it is"); editable in Content.

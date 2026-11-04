@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\AdminAuthenticate;
+use App\Http\Middleware\EnsureCustomerActive;
 use App\Http\Middleware\EnsureTwoFactorPassed;
 use App\Http\Middleware\ResolveCurrency;
 use App\Http\Middleware\SetPlatform;
@@ -39,6 +40,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'admin.auth' => AdminAuthenticate::class,
+            'customer' => EnsureCustomerActive::class,
             'admin.2fa' => EnsureTwoFactorPassed::class,
             'currency' => ResolveCurrency::class,
             'platform' => SetPlatform::class,
