@@ -39,6 +39,8 @@ return [
         'key' => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
         'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
+        // Must match the Stripe API version expected by the mobile SDK (PaymentSheet).
+        'ephemeral_key_version' => env('STRIPE_EPHEMERAL_KEY_VERSION', '2024-06-20'),
     ],
 
     'google' => [

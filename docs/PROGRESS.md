@@ -10,8 +10,8 @@ Branch: `development`. Brief: `docs/BACKEND_BRIEF.md`.
 | 2 | Migrations, models, seeders (from `storefront-seed.json`) | ✅ done |
 | 3 | Pricing, gold-rate, FX services + public store/content/configurator/quote APIs | ✅ done |
 | 4 | Customer auth (Google, reset code) + account, addresses, wishlist | ✅ done |
-| 5 | Checkout, Stripe PaymentIntents, webhooks, orders APIs, emails, scheduled jobs | ⏳ next |
-| 6 | Admin: orders, customers, catalog, configurator, pricing, coupons | ☐ |
+| 5 | Checkout, Stripe PaymentIntents, webhooks, orders APIs, emails, scheduled jobs | ✅ done |
+| 6 | Admin: orders, customers, catalog, configurator, pricing, coupons | ⏳ next |
 | 7 | Admin: CMS, messages, staff/roles, activity log, app settings | ☐ |
 | 8 | Scribe docs, Postman export, tests green, README, storefront integration doc | ☐ |
 
@@ -47,6 +47,15 @@ Branch: `development`. Brief: `docs/BACKEND_BRIEF.md`.
 - Mobile-only: `POST/DELETE /api/v1/mobile/devices` (push tokens stored only).
 - Emails (queued, branded Blade layout): welcome, password reset code, password changed.
 
+### M5
+- `POST {p}/checkout` (requires `Idempotency-Key`): re-quotes, validates stock/sizes/combos/coupon/shipping/address (saved `address_id` or inline `address` + `save_address`), creates the `pending_payment` order + items + snapshots in one transaction, then creates/reuses the Stripe Customer and a card-only PaymentIntent in the order currency. Web payload: `client_secret`, `publishable_key`; mobile adds `customer_id`, `ephemeral_key` (PaymentSheet).
+- Stripe is behind a `StripeGateway` interface (`StripeClientGateway` in production, a fake in tests).
+- Webhook `POST /api/v1/webhooks/stripe`: signature verified, idempotent via `stripe_events`; `payment_intent.succeeded` → paid/placed, stock decrement (flags `stock_issue` instead of failing), coupon `used_count` +1, history, "order confirmed" + staff "new paid order" emails; `payment_intent.payment_failed` → `payment_failed` + email with retry link; `charge.refunded` → `refunded_amount`, `refunded`/`partially_refunded` + email. `markPaid` is also idempotent per order (row lock), so different events for the same PI cannot double-count.
+- Orders API: list, detail (items, totals, five-stage timeline with labels/descriptions from `order_stages`, history, tracking), retry payment (re-validates availability, reuses a still-usable PI, prices stay snapshotted), cancel (unpaid only, cancels the PI), reorder (cart lines for still-available items).
+- `OrderService` also contains the admin stage machine (forward one step, back one step with a note, `shipped` requires carrier + tracking number, optional customer email) used in M6.
+- Emails (queued): order confirmed (items, custom-ring breakdown, totals), payment failed, stage updates (crafting / quality check / shipped with tracking / delivered), order cancelled, refund issued; staff: new paid order, new contact message, gold API failing.
+- Scheduler: `orders:cancel-stale` hourly (pending orders older than `orders.pending_ttl_hours`).
+
 ## Decisions
 
 - **Laravel 12** pinned as the brief says, although Laravel 13 is the current release (ecosystem packages such as Scribe and spatie are proven on 12).
@@ -74,8 +83,14 @@ Branch: `development`. Brief: `docs/BACKEND_BRIEF.md`.
 - Changing the password from the account screen keeps the current token and revokes the others; the reset-code flow revokes all.
 - A deactivated or deleted customer's Bearer token is rejected (`401`, `code: account_disabled`).
 
+- Idempotency: the same key + same body returns the same order (200) with a fresh/reused payment payload; the same key with a different body returns `409`.
+- If Stripe is unreachable during checkout the order is still created (`pending_payment`) and the API returns `502`; the client can call `/orders/{number}/pay` to retry.
+- If a `payment_intent.succeeded` arrives for an order that was already cancelled (race with the stale-order job), the order is still marked paid (money was taken) and the history note asks staff to review.
+- Stale unpaid orders get the "order cancelled" email (reason: payment not completed in time).
+- Mobile ephemeral keys use Stripe API version `STRIPE_EPHEMERAL_KEY_VERSION` (default `2024-06-20`); it must match the mobile Stripe SDK.
+
 ## Next
-- M5: checkout (Idempotency-Key), Stripe PaymentIntents (web Payment Element + mobile PaymentSheet), webhook, orders API, emails, scheduled jobs.
+- M6: admin API + React screens for dashboard, orders (actions, refunds, invoice/packing slip), customers, catalog, configurator (combos matrix, price preview), pricing (gold, currencies, tax/shipping, countries), coupons.
 
 ## Open questions
 - Seeded copy still mentions "$" (e.g. "Free Shipping over $500", "Under $1000", policy text "prices are shown in US dollars") while the base currency is now EUR. Left as is per the brief ("leave everything else as it is"); editable in Content.
