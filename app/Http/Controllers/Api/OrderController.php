@@ -59,6 +59,7 @@ class OrderController extends Controller
             'shipping_method' => ['required', 'string', 'max:40'],
             'coupon_code' => ['nullable', 'string', 'max:40'],
             'customer_note' => ['nullable', 'string', 'max:1000'],
+            'payment_method' => ['sometimes', 'string', 'in:card,cod'],
         ] + ($request->filled('address_id') ? [] : AddressController::rules('address.')),
             CartItemsRules::messages() + AddressController::messages('address.') + [
                 'address_id.required_without' => 'Please choose or enter a shipping address.',
@@ -66,10 +67,24 @@ class OrderController extends Controller
                 'shipping_method.required' => 'Please choose a shipping method.',
             ]);
 
+        $cod = ($data['payment_method'] ?? 'card') === 'cod';
+        if ($cod && ! config('services.cod.enabled')) {
+            throw ValidationException::withMessages(['payment_method' => 'Cash on delivery is not available right now.']);
+        }
+
         $platform = $request->attributes->get('platform', 'web');
         ['order' => $order, 'replayed' => $replayed] = $checkout->placeOrder($request->user(), $data, $platform, $key);
 
-        $payment = $order->isPayable() ? $this->payments->paymentPayload($order, $platform) : null;
+        if ($cod) {
+            // No Stripe: the order is confirmed straight away and paid in cash on delivery.
+            if ($order->status === 'pending_payment') {
+                $this->orders->confirmCashOnDelivery($order);
+                $order->refresh();
+            }
+            $payment = null;
+        } else {
+            $payment = $order->isPayable() ? $this->payments->paymentPayload($order, $platform) : null;
+        }
 
         return response()->json([
             'data' => [

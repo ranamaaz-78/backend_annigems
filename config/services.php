@@ -35,6 +35,12 @@ return [
         ],
     ],
 
+    // Cash on delivery (temporary, while Stripe is not set up). Checkout with payment_method=cod
+    // confirms the order right away without a PaymentIntent. Keep false in production once Stripe is live.
+    'cod' => [
+        'enabled' => (bool) env('COD_ENABLED', false),
+    ],
+
     'stripe' => [
         'key' => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),

@@ -39,9 +39,9 @@ class OrderService
     // ---- payment (webhook only) ---------------------------------------------
 
     /** payment_intent.succeeded: paid + placed, stock, coupon usage, emails. Idempotent per order. */
-    public function markPaid(Order $order, ?string $paymentIntentId = null): bool
+    public function markPaid(Order $order, ?string $paymentIntentId = null, string $paidNote = 'Payment received'): bool
     {
-        $changed = DB::transaction(function () use ($order, $paymentIntentId) {
+        $changed = DB::transaction(function () use ($order, $paymentIntentId, $paidNote) {
             $order = Order::whereKey($order->id)->lockForUpdate()->first();
             if ($order->isPaidLike()) {
                 return false;
@@ -72,7 +72,7 @@ class OrderService
                 Coupon::withTrashed()->where('code', $order->coupon_code)->increment('used_count');
             }
 
-            $note = $from === 'cancelled' ? 'Payment succeeded after the order was cancelled; please review.' : 'Payment received';
+            $note = $from === 'cancelled' ? 'Payment succeeded after the order was cancelled; please review.' : $paidNote;
             $this->recordHistory($order, 'status', $from, 'paid', $note, null, true);
             $this->recordHistory($order, 'stage', null, 'placed', null, null, true);
 
@@ -88,6 +88,15 @@ class OrderService
         }
 
         return $changed;
+    }
+
+    /**
+     * Cash on delivery (temporary, while Stripe is not set up): confirms the order like a successful
+     * payment (stage placed, stock, coupon usage, emails). The history note marks it as COD.
+     */
+    public function confirmCashOnDelivery(Order $order): bool
+    {
+        return $this->markPaid($order, null, 'Cash on delivery: payment to be collected on delivery');
     }
 
     /** payment_intent.payment_failed: keep the order so the customer can retry. */

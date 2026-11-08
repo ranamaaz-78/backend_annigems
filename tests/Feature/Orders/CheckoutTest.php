@@ -175,6 +175,32 @@ class CheckoutTest extends TestCase
         $this->api('POST', 'orders/AG-10001/pay')->assertStatus(422);
     }
 
+    public function test_cash_on_delivery_confirms_order_without_stripe(): void
+    {
+        config(['services.cod.enabled' => false]);
+        $this->checkout($this->payload(['payment_method' => 'cod']))->assertStatus(422)->assertJsonValidationErrors('payment_method');
+        $this->assertSame(0, Order::count());
+
+        config(['services.cod.enabled' => true]);
+        $stockBefore = Product::findBySlugOrLegacy('r1')->stock_qty;
+        $usedBefore = Coupon::where('code', 'AANI10')->value('used_count');
+
+        $this->checkout($this->payload(['payment_method' => 'cod']), 'cod-1')->assertCreated()
+            ->assertJsonPath('data.order.status', 'paid')
+            ->assertJsonPath('data.payment', null);
+        $this->checkout($this->payload(['payment_method' => 'cod']), 'cod-1')->assertOk()->assertJsonPath('data.order.status', 'paid');
+
+        $order = Order::sole();
+        $this->assertSame('placed', $order->stage);
+        $this->assertNull($order->stripe_payment_intent_id);
+        $this->assertSame([], $this->stripe->intents);
+        $this->assertSame($stockBefore - 2, Product::findBySlugOrLegacy('r1')->stock_qty);
+        $this->assertSame($usedBefore + 1, Coupon::where('code', 'AANI10')->value('used_count'));
+        $this->assertTrue($order->history()->where('note', 'like', 'Cash on delivery%')->exists());
+        Mail::assertQueued(OrderConfirmedMail::class, 1);
+        Mail::assertQueued(NewPaidOrder::class, 1);
+    }
+
     public function test_stock_issue_flag_instead_of_failure(): void
     {
         $this->checkout($this->payload())->assertCreated();
