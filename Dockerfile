@@ -14,6 +14,8 @@ ENV AUTORUN_ENABLED=true
 
 USER root
 RUN install-php-extensions intl gd
+# Startup script: puts the seed images back into storage/app/public (it is not in git)
+COPY --chmod=755 docker/entrypoint.d/ /etc/entrypoint.d/
 USER www-data
 
 COPY --chown=www-data:www-data . /var/www/html
