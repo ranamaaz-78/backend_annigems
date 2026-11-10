@@ -8,6 +8,7 @@ use App\Http\Resources\ConfigStoneResource;
 use App\Models\ConfigRing;
 use App\Models\ConfigRingStone;
 use App\Models\ConfigStone;
+use App\Services\B2bPricingService;
 use App\Services\CartQuoteService;
 use App\Services\CurrencyService;
 use App\Services\GoldRateService;
@@ -58,7 +59,17 @@ class ConfiguratorController extends Controller
             'size_chart' => Content::get('configurator.size_chart', []),
             'size_guide_steps' => Content::get('configurator.size_guide_steps', []),
             'gold_rate' => app(CartQuoteService::class)->presentGold($this->gold->current()),
+            // Business accounts: % off the ring total (Design Your Ring row of their tier); null for retail.
+            'b2b_percent' => $this->b2bPercent(),
         ]]);
+    }
+
+    private function b2bPercent(): ?float
+    {
+        $b2b = app(B2bPricingService::class);
+        $business = $b2b->currentBusiness();
+
+        return $business ? $b2b->ringPercent($business) : null;
     }
 
     /**
@@ -94,6 +105,8 @@ class ConfiguratorController extends Controller
 
         $p = $this->pricing->configuratorPrice($ring, $combo->stone);
         $m = fn ($v) => $this->currency->money($v);
+        $percent = $this->b2bPercent();
+        $b2b = app(B2bPricingService::class);
 
         return response()->json(['data' => [
             'ring' => new ConfigRingResource($ring),
@@ -107,8 +120,10 @@ class ConfiguratorController extends Controller
             'craft_fee' => $m($p['craft_fee']),
             'ring_charge' => $m($p['ring_charge']),
             'stone_price' => $m($p['stone_price']),
-            'total' => $m($p['total']),
-            'total_eur' => $this->currency->money($p['eur']['total'], 'EUR'),
+            'total' => $m($b2b->apply($p['total'], (float) $percent)),
+            'total_eur' => $this->currency->money($b2b->apply($p['eur']['total'], (float) $percent), 'EUR'),
+            'retail_total' => $percent !== null ? $m($p['total']) : null,
+            'b2b_percent' => $percent,
             'delivery_text' => $ring->delivery_text,
             'gold_rate' => app(CartQuoteService::class)->presentGold($this->gold->current()),
         ]]);

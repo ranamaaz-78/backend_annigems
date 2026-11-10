@@ -16,7 +16,8 @@ class CustomerController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $q = User::query()->withCount('orders')
+        // Retail customers only; business accounts are managed in the B2B section.
+        $q = User::query()->where('account_type', 'customer')->withCount('orders')
             ->withSum(['orders as lifetime_value_eur' => fn ($o) => $o->whereIn('status', ['paid', 'partially_refunded'])], 'total_eur');
         if (($term = trim((string) $request->input('q'))) !== '') {
             $q->where(fn ($w) => $w->where('email', 'like', "%{$term}%")->orWhere('first_name', 'like', "%{$term}%")

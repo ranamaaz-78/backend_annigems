@@ -23,6 +23,11 @@ class Permissions
         'settings.manage' => 'App settings',
         'activity.view' => 'Activity log',
         'media.upload' => 'Upload images',
+        'b2b.view' => 'B2B: view all businesses, orders and commissions',
+        'b2b.manage' => 'B2B: sales persons, tiers and all businesses',
+        'b2b.orders' => 'B2B: approve, reject and cancel business orders',
+        'b2b.payouts' => 'B2B: record commission payouts',
+        'b2b.sales' => 'B2B sales person: onboard and follow own businesses',
     ];
 
     public const ROLES = [
@@ -31,9 +36,11 @@ class Permissions
             'dashboard.view', 'orders.view', 'orders.stage', 'orders.manage', 'orders.refund',
             'customers.view', 'customers.manage', 'catalog.manage', 'configurator.manage',
             'pricing.manage', 'coupons.manage', 'content.manage', 'messages.manage', 'media.upload',
+            'b2b.view', 'b2b.manage', 'b2b.orders',
         ],
         'Support' => [
             'dashboard.view', 'orders.view', 'orders.stage', 'customers.view', 'messages.manage',
         ],
+        'Sales Person' => ['b2b.sales'],
     ];
 }

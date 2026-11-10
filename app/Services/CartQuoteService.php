@@ -22,6 +22,7 @@ class CartQuoteService
         private CurrencyService $currency,
         private GoldRateService $gold,
         private CouponService $coupons,
+        private B2bPricingService $b2b,
     ) {}
 
     /**
@@ -40,15 +41,18 @@ class CartQuoteService
         $lines = [];
         foreach (array_values($items) as $index => $item) {
             $lines[] = ($item['type'] ?? null) === 'custom_ring'
-                ? $this->customRingLine($index, $item, $combos, $currency)
-                : $this->productLine($index, $item, $products, $qtyByProduct, $currency);
+                ? $this->customRingLine($index, $item, $combos, $currency, $user)
+                : $this->productLine($index, $item, $products, $qtyByProduct, $currency, $user);
         }
 
         $valid = collect($lines)->where('available', true);
         $subtotal = (int) $valid->sum('line_total');
         $subtotalEur = (int) $valid->sum(fn ($l) => $l['unit_price_eur'] * $l['qty']);
 
-        [$coupon, $couponError] = $this->coupons->check($couponCode, $subtotalEur, $user);
+        // Business accounts already get their tier prices; coupons are for retail customers only.
+        [$coupon, $couponError] = $user?->isBusiness() && $couponCode
+            ? [null, 'Coupons are not available for business accounts.']
+            : $this->coupons->check($couponCode, $subtotalEur, $user);
 
         $methods = ShippingMethod::where('is_active', true)->orderBy('sort_order')->get();
         $selected = $shippingCode ? $methods->firstWhere('code', $shippingCode) : null;
@@ -92,7 +96,7 @@ class CartQuoteService
             ->get()->keyBy(fn ($c) => $c->ring_id.':'.$c->stone_id);
     }
 
-    private function productLine(int $index, array $item, Collection $products, array &$qtyByProduct, string $currency): array
+    private function productLine(int $index, array $item, Collection $products, array &$qtyByProduct, string $currency, ?User $user): array
     {
         $qty = max(1, (int) ($item['qty'] ?? 1));
         $size = isset($item['size']) && $item['size'] !== '' ? (string) $item['size'] : null;
@@ -119,7 +123,9 @@ class CartQuoteService
             $errors[] = 'out_of_stock';
         }
 
-        $unit = $this->pricing->productUnitPrice($product->price, $currency);
+        $percent = $this->b2b->productPercent($user, $product);
+        $unitEur = $this->b2b->apply($product->price, $percent);
+        $unit = $this->pricing->productUnitPrice($unitEur, $currency);
 
         return array_merge($line, [
             'size' => $size,
@@ -129,23 +135,27 @@ class CartQuoteService
             'image' => $product->main_image,
             'unit_price' => $unit,
             'line_total' => $unit * $qty,
-            'unit_price_eur' => $product->price,
+            'unit_price_eur' => $unitEur,
+            'retail_unit_price' => $user?->isBusiness() ? $this->pricing->productUnitPrice($product->price, $currency) : null,
+            'b2b_percent' => $user?->isBusiness() ? $percent : null,
             'compare_at_price' => $product->compare_at_price ? $this->pricing->productUnitPrice($product->compare_at_price, $currency) : null,
             'in_stock' => $product->in_stock,
             'available' => empty($errors),
             'errors' => $errors,
-            'snapshot' => [
+            'snapshot' => array_filter([
                 'sku' => $product->sku,
                 'slug' => $product->slug,
                 'legacy_id' => $product->legacy_id,
                 'metal' => $product->metal,
                 'stone' => $product->stone,
                 'compare_at_price' => $product->compare_at_price,
-            ],
+                'retail_unit_price_eur' => $user?->isBusiness() ? $product->price : null,
+                'b2b_percent' => $user?->isBusiness() ? $percent : null,
+            ], fn ($v) => $v !== null),
         ]);
     }
 
-    private function customRingLine(int $index, array $item, Collection $combos, string $currency): array
+    private function customRingLine(int $index, array $item, Collection $combos, string $currency, ?User $user): array
     {
         $qty = max(1, (int) ($item['qty'] ?? 1));
         $size = isset($item['size']) ? (string) $item['size'] : null;
@@ -169,6 +179,9 @@ class CartQuoteService
         $price = $this->pricing->configuratorPrice($ring, $stone, $currency);
         $eur = $price['eur'];
         $gold = $this->gold->current();
+        // Business accounts: tier % of the Design Your Ring row, on the ring total.
+        $percent = $this->b2b->ringPercent($user);
+        $unit = $this->b2b->apply($price['total'], $percent);
 
         return array_merge($line, [
             'ring' => $ring,
@@ -176,9 +189,11 @@ class CartQuoteService
             'name' => $ring->name.' with '.$stone->name,
             'subtitle' => $ring->karat.'K '.($ring->metal_color ? ucfirst($ring->metal_color).' ' : '').'Gold · '.$ring->setting,
             'image' => $combo->imageOrRing(),
-            'unit_price' => $price['total'],
-            'line_total' => $price['total'] * $qty,
-            'unit_price_eur' => $eur['total'],
+            'unit_price' => $unit,
+            'line_total' => $unit * $qty,
+            'unit_price_eur' => $this->b2b->apply($eur['total'], $percent),
+            'retail_unit_price' => $user?->isBusiness() ? $price['total'] : null,
+            'b2b_percent' => $user?->isBusiness() ? $percent : null,
             'breakdown' => $price,
             'available' => empty($errors),
             'errors' => $errors,
@@ -196,7 +211,7 @@ class CartQuoteService
                 'stone_price_eur' => $eur['stone_price'],
                 'ring_charge_eur' => $eur['ring_charge'],
                 'delivery_text' => $ring->delivery_text,
-            ],
+            ] + ($user?->isBusiness() ? ['retail_unit_price_eur' => $eur['total'], 'b2b_percent' => $percent] : []),
         ]);
     }
 
@@ -223,6 +238,8 @@ class CartQuoteService
                 'size' => $l['size'],
                 'qty' => $l['qty'],
                 'unit_price' => $m($l['unit_price']),
+                'retail_unit_price' => isset($l['retail_unit_price']) ? $m($l['retail_unit_price']) : null,
+                'b2b_percent' => $l['b2b_percent'] ?? null,
                 'compare_at_price' => isset($l['compare_at_price']) ? $m($l['compare_at_price']) : null,
                 'line_total' => $m($l['line_total']),
                 'breakdown' => isset($l['breakdown']) ? [

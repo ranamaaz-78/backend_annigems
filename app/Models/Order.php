@@ -12,7 +12,11 @@ class Order extends Model
 {
     use LogsActivity;
 
-    public const STATUSES = ['pending_payment', 'paid', 'payment_failed', 'cancelled', 'refunded', 'partially_refunded'];
+    // awaiting_approval / confirmed: B2B (cash on delivery) orders before and after staff approval.
+    public const STATUSES = ['pending_payment', 'paid', 'payment_failed', 'cancelled', 'refunded', 'partially_refunded', 'awaiting_approval', 'confirmed'];
+
+    /** Statuses on which fulfilment stages can move. */
+    public const FULFILLABLE = ['paid', 'partially_refunded', 'confirmed'];
 
     public const STAGES = ['placed', 'crafting', 'quality_check', 'shipped', 'delivered'];
 
@@ -36,6 +40,11 @@ class Order extends Model
         'shipped_at' => 'datetime',
         'delivered_at' => 'datetime',
         'cancelled_at' => 'datetime',
+        'approved_at' => 'datetime',
+        'commission_rate' => 'float',
+        'commission_base' => 'integer',
+        'commission_amount' => 'integer',
+        'commission_amount_eur' => 'integer',
     ];
 
     protected static function booted(): void
@@ -76,7 +85,30 @@ class Order extends Model
 
     public function isPaidLike(): bool
     {
-        return in_array($this->status, ['paid', 'partially_refunded', 'refunded'], true);
+        return in_array($this->status, ['paid', 'partially_refunded', 'refunded', 'confirmed'], true);
+    }
+
+    public function isBusiness(): bool
+    {
+        return $this->account_type === 'business';
+    }
+
+    /** B2B commission state: pending (not delivered yet), earned (delivered), void (cancelled). Null for retail orders. */
+    public function commissionState(): ?string
+    {
+        if (! $this->isBusiness() || $this->commission_amount === null) {
+            return null;
+        }
+        if ($this->status === 'cancelled') {
+            return 'void';
+        }
+
+        return $this->stage === 'delivered' ? 'earned' : 'pending';
+    }
+
+    public function salesRep(): BelongsTo
+    {
+        return $this->belongsTo(AdminUser::class, 'sales_rep_id');
     }
 
     public function getRouteKeyName(): string

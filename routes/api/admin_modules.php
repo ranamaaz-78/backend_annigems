@@ -80,6 +80,8 @@ Route::middleware($perm('coupons.manage'))->group(function () {
     Route::apiResource('coupons', Admin\CouponController::class)->whereNumber('coupon');
 });
 
+require __DIR__.'/admin_b2b.php';
+
 if (file_exists(__DIR__.'/admin_content.php')) {
     require __DIR__.'/admin_content.php';
 }

@@ -1,6 +1,6 @@
-import { Icon } from '../../components/ui';
+import BrandShowcase from './BrandShowcase';
 
-/** Metronic "branded" authentication layout: form card left, branded panel right. */
+/** Authentication layout: form card left, AANI GEMAS 3D showcase right (on top on small screens). */
 export default function AuthBox({ title, subtitle, children, wide }) {
     return (
         <div className="grid lg:grid-cols-2 grow min-h-screen bg-background">
@@ -15,27 +15,8 @@ export default function AuthBox({ title, subtitle, children, wide }) {
                     </div>
                 </div>
             </div>
-            <div className="lg:rounded-xl lg:border lg:border-border lg:m-5 order-1 lg:order-2 bg-top xl:bg-cover bg-no-repeat branded-bg">
-                <div className="flex flex-col p-8 lg:p-16 gap-4">
-                    <div className="flex items-center gap-2.5">
-                        <span className="flex items-center justify-center size-9 rounded-full bg-gradient-to-br from-amber-300 to-yellow-600 shadow">
-                            <img src="/storage/images/logo_aani.png" alt="" className="size-6 object-contain" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
-                        </span>
-                        <span className="text-lg font-semibold text-mono tracking-wide">AANI GEMAS</span>
-                    </div>
-                    <div className="flex flex-col gap-3">
-                        <h3 className="text-2xl font-semibold text-mono">Atelier Admin</h3>
-                        <div className="text-base font-medium text-secondary-foreground max-w-md">
-                            Manage the catalog, Design-Your-Ring, live gold pricing, orders and content of the store,
-                            protected by <span className="text-mono font-semibold">mandatory two-factor</span> sign-in.
-                        </div>
-                    </div>
-                    <div className="hidden lg:flex flex-col gap-2.5 mt-4 text-sm text-secondary-foreground">
-                        {[['shield-tick', 'TOTP two-factor authentication'], ['chart-line-up', 'Live gold rate & multi-currency pricing'], ['handcart', 'Orders, refunds & fulfilment stages']].map(([i, t]) => (
-                            <span key={t} className="flex items-center gap-2"><Icon name={i} className="text-primary" /> {t}</span>
-                        ))}
-                    </div>
-                </div>
+            <div className="lg:rounded-xl lg:border lg:border-[#3a3222] lg:m-5 order-1 lg:order-2 overflow-hidden lg:min-h-[calc(100vh-2.5rem)]">
+                <BrandShowcase />
             </div>
         </div>
     );

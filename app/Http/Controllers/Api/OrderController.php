@@ -67,15 +67,22 @@ class OrderController extends Controller
                 'shipping_method.required' => 'Please choose a shipping method.',
             ]);
 
+        // Business accounts always pay cash on delivery; their orders wait for staff approval.
+        $business = $request->user()->isBusiness();
         $cod = ($data['payment_method'] ?? 'card') === 'cod';
-        if ($cod && ! config('services.cod.enabled')) {
+        if ($cod && ! $business && ! config('services.cod.enabled')) {
             throw ValidationException::withMessages(['payment_method' => 'Cash on delivery is not available right now.']);
         }
 
         $platform = $request->attributes->get('platform', 'web');
         ['order' => $order, 'replayed' => $replayed] = $checkout->placeOrder($request->user(), $data, $platform, $key);
 
-        if ($cod) {
+        if ($business) {
+            if (! $replayed) {
+                $this->orders->notifyB2bOrderReceived($order);
+            }
+            $payment = null;
+        } elseif ($cod) {
             // No Stripe: the order is confirmed straight away and paid in cash on delivery.
             if ($order->status === 'pending_payment') {
                 $this->orders->confirmCashOnDelivery($order);

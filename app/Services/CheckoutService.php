@@ -131,7 +131,7 @@ class CheckoutService
         $coupon = $quote['coupon']['model'] ?? null;
         $a = $ship['fields'];
 
-        $order = Order::create([
+        $order = Order::create($this->businessFields($user, $quote) + [
             'user_id' => $user->id,
             'email' => $user->email,
             'placed_from' => $platform,
@@ -179,8 +179,38 @@ class CheckoutService
             ]);
         }
 
-        $this->orders->recordHistory($order, 'status', null, 'pending_payment', 'Order created');
+        $order->isBusiness()
+            ? $this->orders->recordHistory($order, 'status', null, 'awaiting_approval', 'Business order created (cash on delivery), awaiting approval')
+            : $this->orders->recordHistory($order, 'status', null, 'pending_payment', 'Order created');
 
         return $order;
+    }
+
+    /**
+     * Business (B2B) orders: cash on delivery, awaiting staff approval, with a snapshot of the tier,
+     * the sales person and the commission (rate × products total after the tier discount; no shipping/tax).
+     */
+    private function businessFields(User $user, array $quote): array
+    {
+        if (! $user->isBusiness()) {
+            return [];
+        }
+        $profile = $user->businessProfile()->with(['tier', 'salesRep.salesRep'])->first();
+        $rate = (float) ($profile?->salesRep?->salesRep?->commission_rate ?? 0);
+        $base = $quote['totals']['subtotal'] - $quote['totals']['discount'];
+        $baseEur = (int) collect($quote['lines'])->where('available', true)->sum(fn ($l) => $l['unit_price_eur'] * $l['qty']);
+        $hasRep = $profile?->sales_rep_id !== null;
+
+        return [
+            'account_type' => 'business',
+            'status' => 'awaiting_approval',
+            'sales_rep_id' => $profile?->sales_rep_id,
+            'b2b_tier_name' => $profile?->tier?->name,
+            'company_name' => $profile?->company_name,
+            'commission_rate' => $hasRep ? $rate : null,
+            'commission_base' => $hasRep ? $base : null,
+            'commission_amount' => $hasRep ? (int) round($base * $rate / 100) : null,
+            'commission_amount_eur' => $hasRep ? (int) round($baseEur * $rate / 100) : null,
+        ];
     }
 }

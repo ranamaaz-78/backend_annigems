@@ -64,6 +64,26 @@ const nav = [
     { label: 'App settings', to: '/settings', icon: 'setting-2', perm: 'settings.manage' },
 ];
 
+const B2B_ANY = ['b2b.view', 'b2b.sales', 'b2b.manage'];
+
+/** B2B mode sidebar (header switch B2C | B2B). Sales persons only ever see this one. */
+export const b2bNav = [
+    { header: 'B2B' },
+    { label: 'Dashboard', to: '/b2b', icon: 'element-11', perm: B2B_ANY },
+    { label: 'B2B orders', to: '/b2b/orders', icon: 'handcart', perm: B2B_ANY },
+    { label: 'Businesses', to: '/b2b/businesses', icon: 'shop', perm: B2B_ANY },
+    { label: 'Commissions', to: '/b2b/commissions', icon: 'percentage', perm: B2B_ANY },
+    { label: 'Payouts', to: '/b2b/payouts', icon: 'wallet', perm: [...B2B_ANY, 'b2b.payouts'] },
+    { header: 'Setup' },
+    { label: 'Sales persons', to: '/b2b/sales-reps', icon: 'people', perm: ['b2b.view', 'b2b.manage', 'b2b.payouts'] },
+    { label: 'Membership tiers', to: '/b2b/tiers', icon: 'crown-2', perm: 'b2b.manage' },
+];
+
+export const b2bQuickCreate = [
+    { label: 'Business', to: '/b2b/businesses?new=1', icon: 'shop', perm: ['b2b.sales', 'b2b.manage'] },
+    { label: 'Sales person', to: '/b2b/sales-reps?new=1', icon: 'people', perm: 'b2b.manage' },
+];
+
 /** Quick-create shortcuts for the sidebar "Add New" button. */
 export const quickCreate = [
     { label: 'Product', to: '/products/new', icon: 'diamonds', perm: 'catalog.manage' },

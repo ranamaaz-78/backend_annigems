@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Mail\B2bOrderReceivedMail;
+use App\Mail\NewB2bOrder;
 use App\Mail\NewPaidOrder;
 use App\Mail\OrderCancelledMail;
 use App\Mail\OrderConfirmedMail;
@@ -56,16 +58,7 @@ class OrderService
                 'cancel_reason' => null,
             ]);
 
-            // Decrement stock; flag the order instead of failing when it goes negative.
-            foreach ($order->items()->where('kind', 'product')->whereNotNull('product_id')->get() as $item) {
-                $product = Product::withTrashed()->whereKey($item->product_id)->lockForUpdate()->first();
-                if ($product && $product->track_stock) {
-                    $product->decrement('stock_qty', $item->qty);
-                    if ($product->fresh()->stock_qty < 0) {
-                        $order->stock_issue = true;
-                    }
-                }
-            }
+            $this->reserveStock($order);
             $order->save();
 
             if ($order->coupon_code) {
@@ -88,6 +81,88 @@ class OrderService
         }
 
         return $changed;
+    }
+
+    /** Decrements stock for the order's products; flags the order instead of failing when it goes negative. */
+    private function reserveStock(Order $order): void
+    {
+        foreach ($order->items()->where('kind', 'product')->whereNotNull('product_id')->get() as $item) {
+            $product = Product::withTrashed()->whereKey($item->product_id)->lockForUpdate()->first();
+            if ($product && $product->track_stock) {
+                $product->decrement('stock_qty', $item->qty);
+                if ($product->fresh()->stock_qty < 0) {
+                    $order->stock_issue = true;
+                }
+            }
+        }
+    }
+
+    private function releaseStock(Order $order): void
+    {
+        foreach ($order->items()->where('kind', 'product')->whereNotNull('product_id')->get() as $item) {
+            $product = Product::withTrashed()->whereKey($item->product_id)->lockForUpdate()->first();
+            if ($product && $product->track_stock) {
+                $product->increment('stock_qty', $item->qty);
+            }
+        }
+    }
+
+    // ---- B2B (business, cash on delivery) ------------------------------------------
+
+    /** New business order: tells the business it awaits approval and notifies staff. */
+    public function notifyB2bOrderReceived(Order $order): void
+    {
+        Mail::to($order->email)->queue(new B2bOrderReceivedMail($order));
+        if ($to = AdminNotify::address()) {
+            Mail::to($to)->queue(new NewB2bOrder($order));
+        }
+    }
+
+    /** Staff approval: confirmed + placed, stock reserved, confirmation email. */
+    public function approveB2b(Order $order, AdminUser $admin): void
+    {
+        DB::transaction(function () use ($order, $admin) {
+            $locked = Order::whereKey($order->id)->lockForUpdate()->first();
+            if (! $locked->isBusiness() || $locked->status !== 'awaiting_approval') {
+                throw ValidationException::withMessages(['order' => 'Only business orders awaiting approval can be approved.']);
+            }
+            $locked->forceFill(['status' => 'confirmed', 'stage' => 'placed', 'approved_at' => now()]);
+            $this->reserveStock($locked);
+            $locked->save();
+            $this->recordHistory($locked, 'status', 'awaiting_approval', 'confirmed', 'Approved (cash on delivery)', $admin, true);
+            $this->recordHistory($locked, 'stage', null, 'placed', null, $admin, true);
+        });
+        Mail::to($order->email)->queue(new OrderConfirmedMail($order->refresh()));
+    }
+
+    /** Staff rejection of a business order awaiting approval (no stock was reserved). */
+    public function rejectB2b(Order $order, string $reason, AdminUser $admin): void
+    {
+        if (! $order->isBusiness() || $order->status !== 'awaiting_approval') {
+            throw ValidationException::withMessages(['order' => 'Only business orders awaiting approval can be rejected.']);
+        }
+        $order->forceFill(['status' => 'cancelled', 'cancelled_at' => now(), 'cancel_reason' => $reason])->save();
+        $this->recordHistory($order, 'status', 'awaiting_approval', 'cancelled', 'Rejected: '.$reason, $admin, true);
+        Mail::to($order->email)->queue(new OrderCancelledMail($order));
+    }
+
+    /** Cancels a confirmed business order before it ships; reserved stock goes back. Commission becomes void. */
+    public function cancelB2b(Order $order, string $reason, AdminUser $admin): void
+    {
+        if ($order->status === 'awaiting_approval') {
+            $this->rejectB2b($order, $reason, $admin);
+
+            return;
+        }
+        if (! $order->isBusiness() || $order->status !== 'confirmed' || in_array($order->stage, ['shipped', 'delivered'], true)) {
+            throw ValidationException::withMessages(['order' => 'Only business orders that have not shipped yet can be cancelled.']);
+        }
+        DB::transaction(function () use ($order, $reason, $admin) {
+            $this->releaseStock($order);
+            $order->forceFill(['status' => 'cancelled', 'cancelled_at' => now(), 'cancel_reason' => $reason])->save();
+            $this->recordHistory($order, 'status', 'confirmed', 'cancelled', $reason, $admin, true);
+        });
+        Mail::to($order->email)->queue(new OrderCancelledMail($order));
     }
 
     /**
@@ -167,8 +242,8 @@ class OrderService
      */
     public function changeStage(Order $order, string $to, AdminUser $admin, array $data = []): void
     {
-        if (! in_array($order->status, ['paid', 'partially_refunded'], true)) {
-            throw ValidationException::withMessages(['stage' => 'Stages can only change on paid orders.']);
+        if (! in_array($order->status, Order::FULFILLABLE, true)) {
+            throw ValidationException::withMessages(['stage' => 'Stages can only change on paid or approved orders.']);
         }
         $stages = Order::STAGES;
         $cur = array_search($order->stage ?? 'placed', $stages, true);

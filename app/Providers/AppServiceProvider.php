@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\Setting;
 use App\Services\Auth\GoogleJwtVerifier;
 use App\Services\Auth\GoogleTokenVerifier;
+use App\Services\B2bPricingService;
 use App\Services\CurrencyService;
 use App\Services\GoldRateService;
 use App\Services\Rates\ExchangeRateProvider;
@@ -25,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->scoped(CurrencyService::class);
         $this->app->scoped(GoldRateService::class);
+        $this->app->singleton(B2bPricingService::class);
         $this->app->bind(ExchangeRateProvider::class, OpenErApiProvider::class);
         $this->app->bind(GoogleTokenVerifier::class, GoogleJwtVerifier::class);
         $this->app->singleton(StripeGateway::class, StripeClientGateway::class);

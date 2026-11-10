@@ -130,6 +130,8 @@ const BADGE = {
     refunded: 'mono', partially_refunded: 'info', placed: 'primary', crafting: 'info',
     quality_check: 'warning', shipped: 'primary', delivered: 'success', new: 'destructive', read: 'secondary', replied: 'success',
     active: 'success', inactive: 'secondary', api: 'info', manual: 'secondary',
+    // B2B: order approval + commission states
+    awaiting_approval: 'warning', confirmed: 'success', pending: 'warning', earned: 'success', void: 'secondary',
 };
 
 export function Badge({ color = 'secondary', children, appearance = 'outline', size = '', dot }) {

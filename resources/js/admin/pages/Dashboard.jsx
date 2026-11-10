@@ -4,7 +4,7 @@ import Chart from 'react-apexcharts';
 import api, { errorMessage } from '../api';
 import { useAuth } from '../auth';
 import { Alert, Callout, Icon, Money, Page, Skeleton, StatCard, StatusBadge, eur, formatDate } from '../components/ui';
-import { stageLabel } from '../lib';
+import { chartColors, stageLabel } from '../lib';
 
 export default function Dashboard() {
     const { user, can } = useAuth();
@@ -77,12 +77,13 @@ export default function Dashboard() {
 
 function RevenueChart({ rows }) {
     const dark = document.documentElement.classList.contains('dark');
+    const { primary } = chartColors(dark);
     const options = {
         chart: { type: 'area', toolbar: { show: false }, fontFamily: 'Inter, sans-serif', animations: { enabled: true, speed: 600 } },
         dataLabels: { enabled: false },
-        stroke: { curve: 'smooth', width: 3, colors: ['var(--color-primary, #3b82f6)'] },
+        stroke: { curve: 'smooth', width: 3, colors: [primary] },
         fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.35, opacityTo: 0.02, stops: [0, 90, 100] } },
-        colors: ['#3b82f6'],
+        colors: [primary],
         xaxis: {
             categories: rows.map((r) => r.date.slice(5)),
             axisBorder: { show: false },

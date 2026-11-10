@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\Product;
+use App\Services\B2bPricingService;
 use App\Services\CurrencyService;
 use App\Support\Media;
 use Illuminate\Http\Request;
@@ -24,6 +25,10 @@ class ProductResource extends JsonResource
     {
         $money = app(CurrencyService::class);
         $gallery = $this->whenLoaded('images', fn () => $this->images->map(fn ($i) => Media::url($i->path))->values(), collect());
+        // Signed-in business account: `price` is its tier price, `retail_price` the normal one.
+        $b2b = app(B2bPricingService::class);
+        $business = $b2b->currentBusiness();
+        $percent = $business ? $b2b->productPercent($business, $this->resource) : 0.0;
 
         $base = [
             'id' => $this->id,
@@ -33,7 +38,9 @@ class ProductResource extends JsonResource
             'name' => $this->name,
             'subtitle' => $this->subtitle,
             'category' => $this->whenLoaded('category', fn () => ['id' => $this->category->id, 'slug' => $this->category->slug, 'name' => $this->category->name]),
-            'price' => $money->moneyFromEur($this->price),
+            'price' => $money->moneyFromEur($b2b->apply($this->price, $percent)),
+            'retail_price' => $business ? $money->moneyFromEur($this->price) : null,
+            'b2b_percent' => $business ? $percent : null,
             'compare_at_price' => $money->moneyFromEur($this->compare_at_price),
             'on_sale' => $this->compare_at_price !== null && $this->compare_at_price > $this->price,
             'badge' => $this->badge,

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import api, { errorMessage, fieldErrors } from '../../api';
 import { useAuth } from '../../auth';
 import Dropdown from '../../components/Dropdown';
@@ -9,9 +9,13 @@ import { stageLabel } from '../../lib';
 
 const STAGE_ICON = { placed: 'basket', crafting: 'wrench', quality_check: 'shield-tick', shipped: 'delivery', delivered: 'check-circle' };
 
+/** Retail order detail; under /b2b/orders/:number it is the B2B view (approve/reject, commission, cash on delivery). */
 export default function OrderDetail() {
     const { number } = useParams();
     const { can } = useAuth();
+    const b2b = useLocation().pathname.startsWith('/b2b/');
+    const listTo = b2b ? '/b2b/orders' : '/orders';
+    const listCrumbs = b2b ? [{ label: 'B2B', to: '/b2b' }, { label: 'B2B orders', to: listTo }] : [{ label: 'Orders', to: listTo }];
     const [o, setO] = useState(null);
     const [error, setError] = useState(null);
     const [flash, setFlash] = useFlash();
@@ -21,7 +25,7 @@ export default function OrderDetail() {
     const [busy, setBusy] = useState(false);
     const [note, setNote] = useState('');
 
-    const load = useCallback(() => api.get(`/orders/${number}`).then(({ data }) => setO(data.data)).catch((e) => setError(errorMessage(e))), [number]);
+    const load = useCallback(() => api.get(`${b2b ? '/b2b' : ''}/orders/${number}`).then(({ data }) => setO(data.data)).catch((e) => setError(errorMessage(e))), [number, b2b]);
     useEffect(() => { load(); }, [load]);
 
     const act = async (method, url, body, okMsg) => {
@@ -42,10 +46,10 @@ export default function OrderDetail() {
         }
     };
 
-    if (error) return <Page title="Order" crumbs={[{ label: 'Orders', to: '/orders' }]}><Alert>{error}</Alert></Page>;
+    if (error) return <Page title="Order" crumbs={listCrumbs}><Alert>{error}</Alert></Page>;
     if (!o) {
         return (
-            <Page title={`Order ${number}`} crumbs={[{ label: 'Orders', to: '/orders' }, { label: number }]}>
+            <Page title={`Order ${number}`} crumbs={[...listCrumbs, { label: number }]}>
                 <div className="grid lg:grid-cols-3 gap-5 lg:gap-7.5">
                     <div className="lg:col-span-2 kt-card"><div className="kt-card-content grid gap-4">{[0, 1, 2, 3].map((i) => <Skeleton key={i} className="h-12" />)}</div></div>
                     <div className="kt-card"><div className="kt-card-content grid gap-3">{[0, 1, 2].map((i) => <Skeleton key={i} className="h-5" />)}</div></div>
@@ -54,8 +58,11 @@ export default function OrderDetail() {
         );
     }
 
-    const paid = ['paid', 'partially_refunded'].includes(o.status);
+    // "paid" = stages can move (paid retail order, or approved B2B cash-on-delivery order)
+    const paid = ['paid', 'partially_refunded', 'confirmed'].includes(o.status);
     const payable = ['pending_payment', 'payment_failed'].includes(o.status);
+    const business = o.account_type === 'business';
+    const cod = business || !o.stripe_payment_intent_id;
     const refundableMinor = o.totals.refundable.amount;
     const openModal = (m, f = {}) => { setErrors({}); setForm(f); setModal(m); };
     const f = (k) => ({ value: form[k], onChange: (v) => setForm({ ...form, [k]: v }), error: errors[k] });
@@ -63,9 +70,20 @@ export default function OrderDetail() {
     return (
         <Page
             title={<span className="flex items-center gap-2.5">Order {o.order_number} <StatusBadge value={o.status} /> {o.stage && <StatusBadge value={o.stage} label={stageLabel(o.stage)} />}</span>}
-            crumbs={[{ label: 'Orders', to: '/orders' }, { label: o.order_number }]}
+            crumbs={[...listCrumbs, { label: o.order_number }]}
             actions={
                 <>
+                    {o.can_approve && can('b2b.orders') && (
+                        <>
+                            <button className="kt-btn kt-btn-primary" disabled={busy} onClick={() => window.confirm(`Approve order ${o.order_number}? Stock will be reserved and the business emailed.`) && act('post', `/b2b/orders/${o.order_number}/approve`, {}, 'Approved.')}>
+                                <Icon name="check-circle" /> Approve
+                            </button>
+                            <button className="kt-btn kt-btn-destructive" onClick={() => openModal('reject', { reason: '' })}><Icon name="cross-circle" /> Reject</button>
+                        </>
+                    )}
+                    {business && !o.can_approve && o.can_cancel_b2b && can('b2b.orders') && (
+                        <button className="kt-btn kt-btn-outline text-destructive" onClick={() => openModal('cancel_b2b', { reason: '' })}><Icon name="cross-circle" /> Cancel order</button>
+                    )}
                     {paid && o.next_stage && can('orders.stage') && (
                         <button className="kt-btn kt-btn-primary" onClick={() => openModal('stage', { stage: o.next_stage, notify: true, carrier: o.carrier || '', tracking_number: o.tracking_number || '', tracking_url: o.tracking_url || '' })}>
                             <Icon name={STAGE_ICON[o.next_stage]} /> Move to {stageLabel(o.next_stage)}
@@ -77,13 +95,13 @@ export default function OrderDetail() {
                             <button className="kt-dropdown-menu-link" data-close onClick={() => openModal('back', { stage: o.previous_stage, note: '' })}><Icon name="arrow-left" /> Back to {stageLabel(o.previous_stage)}</button>
                         )}
                         {paid && can('orders.stage') && <button className="kt-dropdown-menu-link" data-close onClick={() => openModal('tracking', { carrier: o.carrier || '', tracking_number: o.tracking_number || '', tracking_url: o.tracking_url || '' })}><Icon name="delivery-geolocation" /> Edit tracking</button>}
-                        {paid && can('orders.refund') && refundableMinor > 0 && <button className="kt-dropdown-menu-link" data-close onClick={() => openModal('refund', { amount: (refundableMinor / 100).toFixed(2), reason: '' })}><Icon name="arrows-loop" /> Refund…</button>}
-                        {['paid', 'partially_refunded', 'refunded'].includes(o.status) && can('orders.manage') && (
+                        {paid && !cod && can('orders.refund') && refundableMinor > 0 && <button className="kt-dropdown-menu-link" data-close onClick={() => openModal('refund', { amount: (refundableMinor / 100).toFixed(2), reason: '' })}><Icon name="arrows-loop" /> Refund…</button>}
+                        {['paid', 'partially_refunded', 'refunded', 'confirmed'].includes(o.status) && can('orders.manage') && (
                             <button className="kt-dropdown-menu-link" data-close onClick={() => act('post', `/orders/${o.order_number}/resend-confirmation`, {}, 'Email queued.')}><Icon name="sms" /> Resend confirmation</button>
                         )}
-                        <div className="kt-dropdown-menu-separator" />
-                        <a className="kt-dropdown-menu-link" href={`/api/v1/admin/orders/${o.order_number}/invoice`} target="_blank" rel="noreferrer"><Icon name="printer" /> Invoice</a>
-                        <a className="kt-dropdown-menu-link" href={`/api/v1/admin/orders/${o.order_number}/packing-slip`} target="_blank" rel="noreferrer"><Icon name="package" /> Packing slip</a>
+                        {can('orders.view') && <div className="kt-dropdown-menu-separator" />}
+                        {can('orders.view') && <a className="kt-dropdown-menu-link" href={`/api/v1/admin/orders/${o.order_number}/invoice`} target="_blank" rel="noreferrer"><Icon name="printer" /> Invoice</a>}
+                        {can('orders.view') && <a className="kt-dropdown-menu-link" href={`/api/v1/admin/orders/${o.order_number}/packing-slip`} target="_blank" rel="noreferrer"><Icon name="package" /> Packing slip</a>}
                         {o.stripe_url && <a className="kt-dropdown-menu-link" href={o.stripe_url} target="_blank" rel="noreferrer"><Icon name="credit-cart" /> Open in Stripe</a>}
                     </Dropdown>
                 </>
@@ -91,6 +109,12 @@ export default function OrderDetail() {
         >
             {flash}
             {o.stock_issue && <Callout type="danger" title="Stock issue">Stock went below zero when this order was paid. Check availability before crafting.</Callout>}
+
+            {o.can_approve && (
+                <Callout type="warning" title="Waiting for approval">
+                    Business order, cash on delivery. {can('b2b.orders') ? 'Approve it to reserve stock and start fulfilment, or reject it with a reason for the business.' : 'Staff will approve or reject it.'}
+                </Callout>
+            )}
 
             <Card title="Fulfilment">
                 <Stepper timeline={o.timeline} status={o.status} />
@@ -174,12 +198,23 @@ export default function OrderDetail() {
                 </div>
 
                 <div className="grid gap-5 lg:gap-7.5">
-                    <Card title="Customer">
+                    <Card title={business ? 'Business' : 'Customer'}>
+                        {business && (
+                            <div className="mb-3">
+                                <Link to={o.customer ? `/b2b/businesses/${o.customer.id}` : '/b2b/businesses'} className="text-base font-semibold text-mono hover:text-primary">{o.company_name}</Link>
+                                <div className="flex flex-wrap gap-1.5 mt-1">
+                                    {o.tier && <span className="kt-badge kt-badge-sm kt-badge-warning kt-badge-outline"><Icon name="crown-2" /> {o.tier}</span>}
+                                    {o.sales_rep && <span className="kt-badge kt-badge-sm kt-badge-primary kt-badge-outline"><Icon name="people" /> {o.sales_rep.name}</span>}
+                                </div>
+                            </div>
+                        )}
                         {o.customer ? (
                             <div className="flex items-center gap-3">
                                 <Initials name={o.customer.name} className="size-10 text-sm" />
                                 <div className="flex flex-col min-w-0">
-                                    <Link to={`/customers/${o.customer.id}`} className="text-sm font-semibold text-mono hover:text-primary">{o.customer.name}</Link>
+                                    {business || !can('customers.view')
+                                        ? <span className="text-sm font-semibold text-mono">{o.customer.name}</span>
+                                        : <Link to={`/customers/${o.customer.id}`} className="text-sm font-semibold text-mono hover:text-primary">{o.customer.name}</Link>}
                                     <span className="text-xs text-secondary-foreground truncate">{o.email}</span>
                                     {o.customer.phone && <span className="text-xs text-secondary-foreground">{o.customer.phone}</span>}
                                 </div>
@@ -191,6 +226,7 @@ export default function OrderDetail() {
                         <Row label="Placed">{formatDate(o.created_at)}</Row>
                         <Row label="Platform"><span className="capitalize">{o.placed_from}</span></Row>
                         {o.paid_at && <Row label="Paid">{formatDate(o.paid_at)}</Row>}
+                        {o.approved_at && <Row label="Approved">{formatDate(o.approved_at)}</Row>}
                         {o.customer_note && <div className="mt-3"><Callout type="info" title="Customer note">{o.customer_note}</Callout></div>}
                     </Card>
 
@@ -213,11 +249,31 @@ export default function OrderDetail() {
                     </Card>
 
                     <Card title="Payment">
-                        <Row label="Provider"><span className="flex items-center gap-1.5"><Icon name="credit-cart" /> Stripe (card)</span></Row>
-                        <Row label="PaymentIntent">{o.stripe_payment_intent_id ? <a href={o.stripe_url} target="_blank" rel="noreferrer" className="kt-link font-mono text-xs">{o.stripe_payment_intent_id}</a> : '—'}</Row>
-                        <Row label="Refundable"><Money value={o.totals.refundable} /></Row>
+                        {cod ? (
+                            <>
+                                <Row label="Method"><span className="flex items-center gap-1.5"><Icon name="dollar" /> Cash on delivery</span></Row>
+                                <Row label="To collect"><Money value={o.totals.total} /></Row>
+                            </>
+                        ) : (
+                            <>
+                                <Row label="Provider"><span className="flex items-center gap-1.5"><Icon name="credit-cart" /> Stripe (card)</span></Row>
+                                <Row label="PaymentIntent"><a href={o.stripe_url} target="_blank" rel="noreferrer" className="kt-link font-mono text-xs">{o.stripe_payment_intent_id}</a></Row>
+                                <Row label="Refundable"><Money value={o.totals.refundable} /></Row>
+                            </>
+                        )}
                         {o.cancel_reason && <div className="text-xs text-destructive mt-2">Cancelled: {o.cancel_reason}</div>}
                     </Card>
+
+                    {o.commission && (
+                        <Card title="Commission" description={o.sales_rep ? `Sales person: ${o.sales_rep.name}` : undefined}>
+                            <Row label="State"><StatusBadge value={o.commission.state} /></Row>
+                            <Row label="Rate">{o.commission.rate}%</Row>
+                            <Row label="On (products after discount)"><Money value={o.commission.base} /></Row>
+                            <Row label={<span className="font-semibold text-mono">Commission</span>}><span className="font-semibold"><Money value={o.commission.amount} /></span></Row>
+                            {o.currency !== 'EUR' && <Row label="In EUR"><Money value={o.commission.amount_eur} /></Row>}
+                            <div className="text-xs text-muted-foreground mt-2">Pending until delivered; void if the order is cancelled.</div>
+                        </Card>
+                    )}
 
                     <Card title="Internal notes" description="Visible to staff only">
                         <div className="flex flex-col gap-3">
@@ -276,6 +332,17 @@ export default function OrderDetail() {
                 <Textarea label="Reason (internal)" {...f('reason')} />
             </Modal>
 
+            <Modal show={modal === 'reject'} onClose={() => setModal(null)} title="Reject business order" size="sm"
+                footer={<><button className="kt-btn kt-btn-outline" onClick={() => setModal(null)}>Keep order</button><button className="kt-btn kt-btn-destructive" disabled={busy} onClick={() => act('post', `/b2b/orders/${o.order_number}/reject`, form)}>Reject order</button></>}>
+                <Input label="Reason (sent to the business)" {...f('reason')} />
+            </Modal>
+
+            <Modal show={modal === 'cancel_b2b'} onClose={() => setModal(null)} title="Cancel business order" size="sm"
+                footer={<><button className="kt-btn kt-btn-outline" onClick={() => setModal(null)}>Keep order</button><button className="kt-btn kt-btn-destructive" disabled={busy} onClick={() => act('post', `/b2b/orders/${o.order_number}/cancel`, form)}>Cancel order</button></>}>
+                <Callout type="info">Reserved stock goes back and the commission becomes void.</Callout>
+                <div className="mt-4"><Input label="Reason (sent to the business)" {...f('reason')} /></div>
+            </Modal>
+
             <Modal show={modal === 'cancel'} onClose={() => setModal(null)} title="Cancel unpaid order" size="sm"
                 footer={<><button className="kt-btn kt-btn-outline" onClick={() => setModal(null)}>Keep order</button><button className="kt-btn kt-btn-destructive" disabled={busy} onClick={() => act('post', `/orders/${o.order_number}/cancel`, form)}>Cancel order</button></>}>
                 <Input label="Reason" {...f('reason')} />
@@ -287,17 +354,18 @@ export default function OrderDetail() {
 
 /** Horizontal fulfilment stepper (Metronic stepper look). */
 function Stepper({ timeline, status }) {
-    const inactive = !['paid', 'partially_refunded', 'refunded'].includes(status);
+    const inactive = !['paid', 'partially_refunded', 'refunded', 'confirmed'].includes(status);
+    const waiting = status === 'awaiting_approval' ? 'awaiting approval' : 'awaiting payment';
     return (
         <div className="grid grid-cols-5 gap-2">
             {timeline.map((t, i) => (
                 <div key={t.code} className="flex flex-col items-center text-center gap-2 relative">
                     {i > 0 && <div className={`absolute top-5 end-1/2 w-full h-0.5 -z-0 transition-colors duration-500 ${t.done ? 'bg-primary' : 'bg-border'}`} />}
-                    <span className={`relative z-[1] flex items-center justify-center size-10 rounded-full border-2 transition-all duration-500 ${t.current ? 'bg-primary border-primary text-white shadow-[0_0_0_5px_var(--color-blue-100)] dark:shadow-none' : t.done ? 'bg-primary/10 border-primary text-primary' : 'bg-background border-border text-muted-foreground'}`}>
+                    <span className={`relative z-[1] flex items-center justify-center size-10 rounded-full border-2 transition-all duration-500 ${t.current ? 'bg-primary border-primary text-primary-foreground shadow-[0_0_0_5px_color-mix(in_oklab,var(--primary)_20%,transparent)]' : t.done ? 'bg-primary/10 border-primary text-primary' : 'bg-background border-border text-muted-foreground'}`}>
                         <Icon name={t.done && !t.current ? 'check' : STAGE_ICON[t.code]} className="text-lg" />
                     </span>
                     <span className={`text-xs sm:text-sm font-medium ${t.done ? 'text-mono' : 'text-secondary-foreground'}`}>{t.label}</span>
-                    <span className="text-[11px] text-muted-foreground hidden sm:block">{t.at ? formatDate(t.at) : inactive && i === 0 ? 'awaiting payment' : ''}</span>
+                    <span className="text-[11px] text-muted-foreground hidden sm:block">{t.at ? formatDate(t.at) : inactive && i === 0 ? waiting : ''}</span>
                 </div>
             ))}
         </div>

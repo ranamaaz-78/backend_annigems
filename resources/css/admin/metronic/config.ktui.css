@@ -6,8 +6,10 @@
   --card-foreground: var(--color-zinc-950);
   --popover: var(--color-white);
   --popover-foreground: var(--color-zinc-950);
-  --primary: var(--color-blue-500);
-  --primary-foreground: var(--color-white);
+  /* AANI GEMAS gold (from the logo) instead of Metronic blue. Deep gold keeps links readable on white
+     (4.1:1). Text on gold buttons is white (brand choice); brand.css adds a soft text shadow for legibility. */
+  --primary: #AB7117;
+  --primary-foreground: #FFFFFF;
   --secondary: var(--color-zinc-100);
   --secondary-foreground: var(--color-zinc-900);
   --muted: var(--color-zinc-100);
@@ -31,8 +33,8 @@
   --card-foreground: var(--color-zinc-50);
   --popover: var(--color-zinc-950);
   --popover-foreground: var(--color-zinc-50);
-  --primary: var(--color-blue-600);
-  --primary-foreground: var(--color-white);
+  --primary: #D9A93A; /* brighter logo gold on dark (9.2:1 on zinc-950) */
+  --primary-foreground: #FFFFFF;
   --secondary: var(--color-zinc-800);
   --secondary-foreground: var(--color-zinc-50);
   --muted: var(--color-zinc-900);

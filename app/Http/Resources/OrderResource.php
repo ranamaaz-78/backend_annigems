@@ -38,6 +38,9 @@ class OrderResource extends JsonResource
                 'name' => $this->items->first()->name,
                 'image' => Media::url($this->items->first()->image),
             ] : null),
+            'account_type' => $this->account_type,
+            // Business orders and retail orders confirmed without Stripe (temporary COD) are cash on delivery.
+            'payment_method' => $this->isBusiness() || ($this->isPaidLike() && ! $this->stripe_payment_intent_id) ? 'cod' : 'card',
             'can_pay' => $this->isPayable(),
             'can_cancel' => $this->isPayable(),
             'created_at' => $this->created_at?->toIso8601String(),
@@ -64,6 +67,7 @@ class OrderResource extends JsonResource
                 'qty' => $i->qty,
                 'unit_price' => $m($i->unit_price),
                 'line_total' => $m($i->line_total),
+                'b2b_percent' => $i->snapshot['b2b_percent'] ?? null,
                 'custom_ring' => $i->kind === 'custom_ring' ? [
                     'ring_name' => $i->snapshot['ring_name'] ?? null,
                     'setting' => $i->snapshot['setting'] ?? null,
@@ -84,6 +88,9 @@ class OrderResource extends JsonResource
                 'refunded' => $m($this->refunded_amount),
             ],
             'coupon_code' => $this->coupon_code,
+            'company_name' => $this->company_name,
+            'tier' => $this->b2b_tier_name,
+            'approved_at' => $this->approved_at?->toIso8601String(),
             'shipping_method' => [
                 'code' => $this->shipping_method_code,
                 'name' => $this->shipping_method_name,

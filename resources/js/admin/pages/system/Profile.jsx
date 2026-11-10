@@ -44,7 +44,7 @@ export default function Profile() {
             <div className="kt-card overflow-hidden">
                 <div className="h-24 bg-gradient-to-r from-zinc-900 via-zinc-800 to-yellow-700/70" />
                 <div className="kt-card-content flex flex-col sm:flex-row sm:items-end gap-4 -mt-12">
-                    <Initials name={user.name} className="size-20 text-2xl border-4 border-background bg-primary text-white" />
+                    <Initials name={user.name} className="size-20 text-2xl border-4 border-background bg-primary text-primary-foreground" />
                     <div className="flex flex-col gap-1 grow">
                         <span className="text-lg font-semibold text-mono">{user.name}</span>
                         <span className="text-sm text-secondary-foreground flex items-center gap-1.5"><Icon name="sms" /> {user.email}</span>

@@ -12,5 +12,5 @@
 @if($stage === 'delivered')
 <p>We hope you love it. Care tips: store your piece in its pouch, avoid harsh chemicals and clean gently with a soft cloth.</p>
 @endif
-@include('emails.partials.button', ['url' => $storefrontUrl.'/account/orders/'.$order->order_number, 'label' => 'View your order'])
+@include('emails.partials.button', ['url' => $storefrontUrl.($order->isBusiness() ? '/b2b/orders/' : '/account/orders/').$order->order_number, 'label' => 'View your order'])
 @endsection

@@ -1,0 +1,32 @@
+/*
+ * AANI GEMAS brand layer on top of Metronic/KTUI. The primary colour itself is the logo gold
+ * (--primary in metronic/config.ktui.css); this adds the logo's gold gradient to solid primary buttons.
+ * Logo golds: #814404 (deep) · #AB7117 · #C3922A · #F6D051 · #FCECA5 (highlight).
+ */
+:root {
+    --brand-gold-grad: linear-gradient(135deg, #f6d051 0%, #c3922a 55%, #ab7117 100%);
+    --brand-gold-shadow: 0 6px 18px -8px rgba(171, 113, 23, 0.55);
+}
+
+/* Solid primary buttons only (outline/ghost/dim variants keep their own look via --primary). */
+.kt-btn-primary:not(.kt-btn-outline):not(.kt-btn-ghost):not(.kt-btn-dim) {
+    background-image: var(--brand-gold-grad);
+    border-color: transparent;
+    color: #fff;
+    /* white on gold: a soft dark shadow keeps the label readable on the light end of the gradient */
+    text-shadow: 0 1px 2px rgba(74, 44, 4, 0.55);
+    box-shadow: var(--brand-gold-shadow);
+    transition: filter 0.15s ease, box-shadow 0.15s ease;
+}
+.kt-btn-primary:not(.kt-btn-outline):not(.kt-btn-ghost):not(.kt-btn-dim):hover,
+.kt-btn-primary:not(.kt-btn-outline):not(.kt-btn-ghost):not(.kt-btn-dim).active {
+    filter: brightness(1.06) saturate(1.05);
+    box-shadow: 0 8px 22px -8px rgba(171, 113, 23, 0.7);
+}
+.kt-btn-primary:not(.kt-btn-outline):not(.kt-btn-ghost):not(.kt-btn-dim):disabled {
+    filter: saturate(0.6);
+    box-shadow: none;
+}
+.kt-btn-primary:not(.kt-btn-outline):not(.kt-btn-ghost):not(.kt-btn-dim) i {
+    color: inherit;
+}

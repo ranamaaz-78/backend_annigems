@@ -1,0 +1,330 @@
+/*
+ * Sign-in showcase (AANI GEMAS): pure CSS 3D. Always dark & gold, in both admin themes.
+ * Gem geometry (8 sides, apothem R = 60px; 6-sided variant further down):
+ *   side      w = 2R·tan(22.5°) = 49.706px
+ *   pavilion  depth 80px  → slant 100px, tilt asin(60/100) = 36.87°
+ *   crown     height 28px, table apothem 30px → slant 41.04px, tilt asin(30/41.04) = 46.97°
+ */
+
+.ag-showcase {
+    --mx: 0;
+    --my: 0;
+    --gold: #c9a84c;
+    --gold-lt: #e8c97a;
+    --gold-pale: #f5e4a8;
+    --gold-dk: #7a5c14;
+    --ink: #16140f;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    min-height: 340px;
+    height: 100%;
+    color: #f3ead6;
+    background:
+        radial-gradient(60% 50% at 50% 46%, rgba(201, 168, 76, 0.22), transparent 70%),
+        radial-gradient(40% 35% at 85% 10%, rgba(232, 201, 122, 0.12), transparent 70%),
+        radial-gradient(45% 40% at 8% 95%, rgba(122, 92, 20, 0.28), transparent 70%),
+        linear-gradient(160deg, #1e1b14 0%, #16140f 55%, #0e0c08 100%);
+}
+
+/* fine grain so the dark does not band */
+.ag-showcase::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    opacity: 0.18;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+}
+
+.ag-bg { position: absolute; inset: 0; z-index: -1; }
+.ag-deco {
+    position: absolute;
+    inset: -10%;
+    width: 120%;
+    height: 120%;
+    opacity: 0.7;
+}
+
+/* ---- 3D stage ------------------------------------------------------------------ */
+
+.ag-stage {
+    position: absolute;
+    inset: 0;
+    perspective: 1100px;
+    perspective-origin: 50% 42%;
+    pointer-events: none;
+}
+
+.ag-glow {
+    position: absolute;
+    left: 50%;
+    top: 42%;
+    width: 420px;
+    height: 420px;
+    translate: -50% -50%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(245, 228, 168, 0.35) 0%, rgba(201, 168, 76, 0.12) 35%, transparent 65%);
+    will-change: transform, opacity;
+    animation: ag-breathe 6s ease-in-out infinite;
+}
+
+.ag-scene {
+    position: absolute;
+    left: 50%;
+    top: 42%;
+    width: 0;
+    height: 0;
+    transform-style: preserve-3d;
+    will-change: transform;
+}
+
+/* gold band orbiting the diamond: 12 stacked circles give the band its thickness */
+.ag-orbit {
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform-style: preserve-3d;
+    transform: translateY(18px) rotateX(74deg);
+}
+.ag-band {
+    position: absolute;
+    left: -175px;
+    top: -175px;
+    width: 350px;
+    height: 350px;
+    transform-style: preserve-3d;
+    will-change: transform;
+    animation: ag-spin-z 26s linear infinite;
+}
+.ag-band span {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 3px solid hsl(43 62% calc(32% + var(--i) * 8%));
+    transform: translateZ(calc((var(--i) - 2.5) * 2.2px));
+}
+.ag-band span:nth-child(4) { border-color: var(--gold-pale); box-shadow: 0 0 24px rgba(245, 228, 168, 0.25); }
+
+/* ---- gems ------------------------------------------------------------------------- */
+
+.ag-hero { position: absolute; left: 0; top: 0; transform-style: preserve-3d; }
+.ag-hero { will-change: transform; animation: ag-bob 7s ease-in-out infinite; }
+
+/* facet colours come from PALETTES in BrandShowcase.jsx (--c per facet) */
+.ag-gem {
+    --s: 1;
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform-style: preserve-3d;
+    transform: rotateX(-18deg) scale3d(var(--s), var(--s), var(--s));
+}
+.ag-hero .ag-gem { --s: 1.55; }
+
+.ag-gem-spin {
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform-style: preserve-3d;
+    will-change: transform;
+    animation: ag-spin-y 16s linear infinite;
+}
+
+.ag-pav, .ag-crown, .ag-table {
+    position: absolute;
+    box-sizing: content-box;
+    backface-visibility: visible;
+}
+
+/* pavilion: CSS border triangle (49.706 × 100px) from the girdle down to the culet */
+.ag-pav {
+    left: -24.853px;
+    top: 0;
+    width: 0;
+    height: 0;
+    border-left: 24.853px solid transparent;
+    border-right: 24.853px solid transparent;
+    border-top: 100px solid var(--c);
+    transform-origin: 50% 0;
+    transform: rotateY(var(--a)) translateZ(60px) rotateX(-36.87deg);
+}
+
+/* crown: CSS border trapezoid (top 24.853px, bottom 49.706px, 41.04px high) up to the table */
+.ag-crown {
+    left: -24.853px;
+    top: -41.04px;
+    width: 24.853px;
+    height: 0;
+    border-left: 12.4265px solid transparent;
+    border-right: 12.4265px solid transparent;
+    border-bottom: 41.04px solid var(--c);
+    transform-origin: 50% 100%;
+    transform: rotateY(var(--a)) translateZ(60px) rotateX(46.97deg);
+}
+
+/* 6-sided cut (small floating gems): side 2·60·tan30° = 69.28px, crown top 2·30·tan30° = 34.64px */
+.ag-n6 .ag-pav { left: -34.64px; border-left-width: 34.64px; border-right-width: 34.64px; }
+.ag-n6 .ag-crown { left: -34.64px; width: 34.64px; border-left-width: 17.32px; border-right-width: 17.32px; }
+
+/* table on top (round reads fine at this size and needs no clip mask) */
+.ag-table {
+    left: -30px;
+    top: -30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--c);
+    transform: translateY(-28px) rotateX(90deg);
+}
+
+/* coloured gems orbiting the diamond: the dashed path sits on the tilted plane; each gem follows
+ * the same ellipse with a precomputed translate3d loop (see orbitKeyframes in BrandShowcase.jsx). */
+.ag-gem-orbit {
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform-style: preserve-3d;
+    transform: translateY(6px) rotateX(72deg) rotateZ(-14deg);
+}
+.ag-orbit-path {
+    position: absolute;
+    left: -255px;
+    top: -255px;
+    width: 510px;
+    height: 510px;
+    border-radius: 50%;
+    border: 1px dashed rgba(232, 201, 122, 0.28);
+}
+.ag-orbiter {
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform-style: preserve-3d;
+    will-change: transform;
+}
+.ag-orbiter .ag-gem { --s: 0.42; }
+.ag-orbiter .ag-sapphire { --s: 0.48; }
+.ag-orbiter .ag-emerald { --s: 0.38; }
+.ag-orbiter .ag-gem-spin { animation-duration: 9s; }
+
+/* sparkles */
+.ag-spark {
+    position: absolute;
+    fill: var(--gold-pale);
+    opacity: 0;
+    will-change: transform, opacity;
+    animation: ag-twinkle 3.6s ease-in-out infinite;
+}
+
+/* ---- copy --------------------------------------------------------------------------- */
+
+.ag-copy {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    min-height: 340px;
+    padding: 2rem;
+    pointer-events: none;
+}
+.ag-copy a, .ag-copy button { pointer-events: auto; }
+.ag-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold-pale) 0%, var(--gold) 45%, var(--gold-dk) 100%);
+    box-shadow: 0 0 0 1px rgba(245, 228, 168, 0.35), 0 6px 20px rgba(201, 168, 76, 0.35);
+}
+.ag-logo img { width: 24px; height: 24px; object-fit: contain; }
+.ag-brand {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.35rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    background: linear-gradient(135deg, var(--gold-pale), var(--gold) 60%, var(--gold-lt));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+.ag-copy-bottom { display: flex; flex-direction: column; gap: 0.8rem; max-width: 30rem; }
+.ag-eyebrow {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--gold);
+}
+.ag-title {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(2rem, 3.2vw, 2.9rem);
+    line-height: 1.05;
+    font-weight: 500;
+    color: #f8f1e0;
+    text-shadow: 0 2px 30px rgba(0, 0, 0, 0.5);
+}
+.ag-title em {
+    font-style: italic;
+    background: linear-gradient(120deg, var(--gold-pale) 0%, var(--gold) 50%, var(--gold-lt) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+.ag-text { font-size: 0.92rem; line-height: 1.6; color: rgba(243, 234, 214, 0.72); }
+.ag-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.25rem; }
+.ag-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.38rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.76rem;
+    color: #f3ead6;
+    border: 1px solid rgba(201, 168, 76, 0.35);
+    background: rgba(201, 168, 76, 0.08);
+    backdrop-filter: blur(6px);
+}
+.ag-chip i { color: var(--gold-lt); }
+
+@media (min-width: 1024px) {
+    .ag-copy { padding: 3.25rem; }
+}
+
+/* small screens: compact banner above the form */
+@media (max-width: 1023px) {
+    .ag-showcase, .ag-copy { min-height: 300px; }
+    .ag-stage { perspective-origin: 72% 50%; }
+    .ag-glow, .ag-scene { left: 74%; top: 46%; }
+    .ag-scene { scale: 0.62; }
+    .ag-text { display: none; }
+    .ag-copy-bottom { max-width: 60%; }
+}
+@media (max-width: 639px) {
+    .ag-showcase, .ag-copy { min-height: 260px; }
+    .ag-copy { padding: 1.5rem; }
+    .ag-glow, .ag-scene { left: 76%; top: 36%; }
+    .ag-glow { width: 260px; height: 260px; }
+    .ag-scene { scale: 0.46; }
+    .ag-copy-bottom { max-width: 56%; }
+    .ag-title { font-size: 1.7rem; }
+    .ag-chips, .ag-gem-orbit, .ag-orbiter { display: none; }
+}
+
+/* ---- motion ------------------------------------------------------------------------ */
+
+@keyframes ag-spin-y { to { transform: rotateY(360deg); } }
+@keyframes ag-spin-z { to { transform: rotateZ(360deg); } }
+@keyframes ag-bob { 0%, 100% { transform: translate3d(0, 0, 0); } 50% { transform: translate3d(0, -14px, 0); } }
+@keyframes ag-breathe { 0%, 100% { opacity: 0.75; transform: scale(1); } 50% { opacity: 1; transform: scale(1.08); } }
+@keyframes ag-twinkle { 0%, 100% { opacity: 0; transform: scale(0.4) rotate(0deg); } 45% { opacity: 1; transform: scale(1) rotate(45deg); } 70% { opacity: 0.2; } }
+
+@media (prefers-reduced-motion: reduce) {
+    .ag-showcase *, .ag-showcase *::before, .ag-showcase *::after { animation: none !important; transition: none !important; }
+    .ag-spark { opacity: 0.8; }
+}

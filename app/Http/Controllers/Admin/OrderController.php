@@ -24,9 +24,13 @@ class OrderController extends Controller
 {
     public function __construct(private OrderService $orders, private CurrencyService $fx) {}
 
-    private function query(Request $request): Builder
+    /** Retail orders by default; `account_type=business` for B2B (used by the B2B orders screen). */
+    public function query(Request $request): Builder
     {
-        $q = Order::query()->withCount('items');
+        $q = Order::query()->withCount('items')->where('account_type', $request->input('account_type') === 'business' ? 'business' : 'customer');
+        if ($request->filled('sales_rep_id')) {
+            $q->where('sales_rep_id', $request->integer('sales_rep_id'));
+        }
         foreach (['status', 'stage', 'currency', 'placed_from'] as $f) {
             if ($request->filled($f)) {
                 $q->whereIn($f, (array) $request->input($f));
@@ -42,7 +46,7 @@ class OrderController extends Controller
             $q->where('created_at', '<=', $request->date('to')->endOfDay());
         }
         if ($request->boolean('to_craft')) {
-            $q->whereIn('status', ['paid', 'partially_refunded'])->whereIn('stage', ['placed', 'crafting']);
+            $q->whereIn('status', Order::FULFILLABLE)->whereIn('stage', ['placed', 'crafting']);
         }
         if ($request->boolean('stock_issue')) {
             $q->where('stock_issue', true);
@@ -53,7 +57,8 @@ class OrderController extends Controller
         if (($term = trim((string) $request->input('q'))) !== '') {
             $q->where(fn ($w) => $w->where('order_number', 'like', "%{$term}%")
                 ->orWhere('email', 'like', "%{$term}%")
-                ->orWhere('ship_name', 'like', "%{$term}%"));
+                ->orWhere('ship_name', 'like', "%{$term}%")
+                ->orWhere('company_name', 'like', "%{$term}%"));
         }
         $sort = (string) $request->input('sort', '-id');
         $col = ltrim($sort, '-');
@@ -74,9 +79,9 @@ class OrderController extends Controller
         ]);
     }
 
-    private function row(Order $o): array
+    public function row(Order $o): array
     {
-        return [
+        return $this->b2bFields($o) + [
             'id' => $o->id,
             'order_number' => $o->order_number,
             'email' => $o->email,
@@ -121,14 +126,40 @@ class OrderController extends Controller
         return response()->json(['data' => $this->detail($this->find($number))]);
     }
 
-    private function detail(Order $o): array
+    /** B2B extras (company, tier, sales person, commission); empty for retail orders. */
+    private function b2bFields(Order $o): array
     {
-        $o->load(['items', 'history.admin:id,name', 'notes.admin:id,name', 'user' => fn ($q) => $q->withCount('orders')]);
+        if (! $o->isBusiness()) {
+            return [];
+        }
+        $eur = fn ($v) => $v === null ? null : $this->fx->money((int) $v, 'EUR');
+
+        return [
+            'account_type' => 'business',
+            'company_name' => $o->company_name,
+            'tier' => $o->b2b_tier_name,
+            'sales_rep' => $o->salesRep ? ['id' => $o->salesRep->id, 'name' => $o->salesRep->name] : null,
+            'commission' => $o->commission_amount === null ? null : [
+                'rate' => $o->commission_rate,
+                'base' => $this->fx->money((int) $o->commission_base, $o->currency),
+                'amount' => $this->fx->money((int) $o->commission_amount, $o->currency),
+                'amount_eur' => $eur($o->commission_amount_eur),
+                'state' => $o->commissionState(),
+            ],
+            'approved_at' => $o->approved_at?->toIso8601String(),
+            'can_approve' => $o->status === 'awaiting_approval',
+            'can_cancel_b2b' => $o->status === 'awaiting_approval' || ($o->status === 'confirmed' && ! in_array($o->stage, ['shipped', 'delivered'], true)),
+        ];
+    }
+
+    public function detail(Order $o): array
+    {
+        $o->load(['items', 'history.admin:id,name', 'notes.admin:id,name', 'salesRep:id,name', 'user' => fn ($q) => $q->withCount('orders')]);
         $m = fn ($v) => $this->fx->money((int) $v, $o->currency);
         $eur = fn ($v) => $this->fx->money((int) $v, 'EUR');
         $stripeBase = str_starts_with((string) config('services.stripe.secret'), 'sk_live') ? 'https://dashboard.stripe.com' : 'https://dashboard.stripe.com/test';
 
-        return array_merge($o->only([
+        return array_merge($this->b2bFields($o), $o->only([
             'id', 'order_number', 'email', 'placed_from', 'status', 'stage', 'currency', 'exchange_rate', 'coupon_code', 'coupon_snapshot',
             'shipping_method_code', 'shipping_method_name', 'shipping_delivery_time', 'ship_name', 'ship_phone', 'ship_line1', 'ship_city',
             'ship_state', 'ship_zip', 'ship_country', 'ship_country_code', 'stripe_payment_intent_id', 'stripe_customer_id', 'carrier',
@@ -269,7 +300,7 @@ class OrderController extends Controller
         return response()->view('admin.order-'.$type, ['order' => $order, 'fx' => $this->fx]);
     }
 
-    private function find(string $number): Order
+    public function find(string $number): Order
     {
         return Order::where('order_number', strtoupper($number))->firstOrFail();
     }

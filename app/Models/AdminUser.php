@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Notifications\AdminResetPassword;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Activitylog\LogOptions;
@@ -37,6 +38,17 @@ class AdminUser extends Authenticatable
     public function hasTwoFactorEnabled(): bool
     {
         return $this->two_factor_secret !== null && $this->two_factor_confirmed_at !== null;
+    }
+
+    public function salesRep(): HasOne
+    {
+        return $this->hasOne(SalesRep::class);
+    }
+
+    /** Sales person whose B2B access is limited to their own businesses (no b2b.view). */
+    public function isScopedSalesRep(): bool
+    {
+        return ! $this->can('b2b.view') && $this->can('b2b.sales');
     }
 
     public function sendPasswordResetNotification($token): void

@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth';
-import nav, { quickCreate } from '../nav';
+import nav, { b2bNav, b2bQuickCreate, quickCreate } from '../nav';
 import Dropdown from '../components/Dropdown';
 import { Icon, Initials, Modal } from '../components/ui';
 import { getThemeMode, setThemeMode } from '../theme';
+import { B2B_ANY } from '../lib';
 
 /** Metronic demo10 layout: dark sidebar + rounded content panel. */
 export default function AppLayout() {
@@ -33,16 +34,21 @@ export default function AppLayout() {
         return () => document.removeEventListener('keydown', onKey);
     }, []);
 
-    const items = nav.filter((i) => i.header || can(i.perm));
+    // B2C | B2B mode comes from the URL (/b2b/*), so links and reloads keep the right sidebar.
+    const hasB2c = nav.some((i) => !i.header && can(i.perm));
+    const hasB2b = b2bNav.some((i) => !i.header && can(i.perm));
+    const b2bMode = location.pathname === '/b2b' || location.pathname.startsWith('/b2b/') || (!hasB2c && hasB2b);
+    const home = b2bMode ? '/b2b' : '/';
+    const items = (b2bMode ? b2bNav : nav).filter((i) => i.header || can(i.perm));
     const visible = items.filter((i, idx) => !i.header || (items[idx + 1] && !items[idx + 1].header));
-    const creates = quickCreate.filter((q) => can(q.perm));
+    const creates = (b2bMode ? b2bQuickCreate : quickCreate).filter((q) => can(q.perm));
 
     return (
         <div className="flex grow [--header-height:60px] [--sidebar-width:270px]">
             {/* Mobile header */}
             <header className="flex lg:hidden items-center fixed z-10 top-0 start-0 end-0 shrink-0 bg-mono dark:bg-background h-(--header-height)">
                 <div className="kt-container-fluid flex items-center justify-between flex-wrap gap-3">
-                    <Link to="/" className="flex items-center gap-2.5">
+                    <Link to={home} className="flex items-center gap-2.5">
                         <Logo />
                         <span className="text-white font-medium">AANI GEMAS</span>
                     </Link>
@@ -59,7 +65,7 @@ export default function AppLayout() {
                 <aside className={`demo10-sidebar ${mobileOpen ? 'open' : ''} flex flex-col fixed top-0 bottom-0 z-20 items-stretch shrink-0 w-(--sidebar-width) dark bg-zinc-950 lg:bg-transparent`}>
                     <div className="flex flex-col gap-2.5">
                         <div className="flex items-center gap-2.5 px-3.5 h-[70px]">
-                            <Link to="/"><Logo /></Link>
+                            <Link to={home}><Logo /></Link>
                             <Dropdown
                                 className="grow min-w-0"
                                 placement="bottom-start"
@@ -76,6 +82,7 @@ export default function AppLayout() {
                                 <Link className="kt-dropdown-menu-link" to="/profile"><Icon name="profile-circle" /> My profile</Link>
                             </Dropdown>
                         </div>
+                        {hasB2c && hasB2b && <ModeSwitch b2b={b2bMode} />}
                         <div className="flex items-center gap-2.5 px-3.5">
                             {creates.length > 0 ? (
                                 <Dropdown
@@ -140,6 +147,20 @@ export default function AppLayout() {
     );
 }
 
+/** B2C | B2B switch: swaps the whole sidebar and lands on that mode's dashboard. */
+function ModeSwitch({ b2b }) {
+    const navigate = useNavigate();
+    const btn = (active) => `grow justify-center kt-btn kt-btn-sm ${active ? 'kt-btn-primary' : 'kt-btn-ghost text-white/70 hover:text-white'}`;
+    return (
+        <div className="px-3.5">
+            <div className="flex gap-1 rounded-lg border border-white/10 bg-white/5 p-1" role="tablist" aria-label="Admin mode">
+                <button type="button" role="tab" aria-selected={!b2b} className={btn(!b2b)} onClick={() => !b2b || navigate('/')}><Icon name="basket" /> B2C</button>
+                <button type="button" role="tab" aria-selected={b2b} className={btn(b2b)} onClick={() => b2b || navigate('/b2b')}><Icon name="shop" /> B2B</button>
+            </div>
+        </div>
+    );
+}
+
 function Logo() {
     return (
         <span className="flex items-center justify-center size-[34px] rounded-full bg-gradient-to-br from-amber-300 to-yellow-600 shadow ring-2 ring-white/10 overflow-hidden">
@@ -163,7 +184,7 @@ const titleCls = 'kt-menu-title text-sm text-foreground font-medium kt-menu-item
 
 function LeafItem({ item }) {
     return (
-        <NavLink to={item.to} end={item.to === '/'} className={({ isActive }) => `kt-menu-item ${isActive ? 'active' : ''}`}>
+        <NavLink to={item.to} end={item.to === '/' || item.to === '/b2b'} className={({ isActive }) => `kt-menu-item ${isActive ? 'active' : ''}`}>
             <span className={linkCls}>
                 <span className={iconCls}><Icon name={item.icon} /></span>
                 <span className={titleCls}>{item.label}</span>
@@ -253,10 +274,10 @@ function SearchPalette({ open, onClose }) {
 
     const entries = useMemo(() => {
         const out = [];
-        nav.forEach((n) => {
+        [...nav, ...b2bNav].forEach((n) => {
             if (n.header || !can(n.perm)) return;
             if (n.children) n.children.forEach((c) => out.push({ label: c.label, group: n.label, to: c.to, icon: n.icon }));
-            else out.push({ label: n.label, group: 'Pages', to: n.to, icon: n.icon });
+            else out.push({ label: n.to.startsWith('/b2b') && !n.label.startsWith('B2B') ? `B2B ${n.label.toLowerCase()}` : n.label, group: n.to.startsWith('/b2b') ? 'B2B' : 'Pages', to: n.to, icon: n.icon });
         });
         out.push({ label: 'My profile', group: 'Account', to: '/profile', icon: 'profile-circle' });
         return out;
@@ -267,6 +288,9 @@ function SearchPalette({ open, onClose }) {
     if (/^ag-?\d{3,}$/i.test(term) && can('orders.view')) {
         const num = term.toUpperCase().replace(/^AG-?/, 'AG-');
         results = [{ label: `Open order ${num}`, group: 'Orders', to: `/orders/${num}`, icon: 'handcart' }, ...results];
+    } else if (/^ag-?\d{3,}$/i.test(term) && can(B2B_ANY)) {
+        const num = term.toUpperCase().replace(/^AG-?/, 'AG-');
+        results = [{ label: `Open B2B order ${num}`, group: 'B2B', to: `/b2b/orders/${num}`, icon: 'handcart' }, ...results];
     } else if (term.includes('@') && can('customers.view')) {
         results = [{ label: `Find orders for ${q.trim()}`, group: 'Orders', to: `/orders?q=${encodeURIComponent(q.trim())}`, icon: 'handcart' }, ...results];
     }

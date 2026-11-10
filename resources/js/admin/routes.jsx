@@ -1,4 +1,5 @@
 import { lazy } from 'react';
+import { B2B_ANY } from './lib';
 
 // Authenticated admin screens: path → component (+ required permission).
 const routes = [
@@ -38,6 +39,17 @@ const routes = [
     { path: '/roles', perm: 'staff.manage', component: lazy(() => import('./pages/system/Roles')) },
     { path: '/activity', perm: 'activity.view', component: lazy(() => import('./pages/system/Activity')) },
     { path: '/settings', perm: 'settings.manage', component: lazy(() => import('./pages/system/AppSettings')) },
+
+    // B2B mode. '/b2b' first: sales persons (no dashboard.view) land here.
+    { path: '/b2b', perm: B2B_ANY, component: lazy(() => import('./pages/b2b/B2bDashboard')) },
+    { path: '/b2b/orders', perm: B2B_ANY, component: lazy(() => import('./pages/b2b/B2bOrders')) },
+    { path: '/b2b/orders/:number', perm: B2B_ANY, component: lazy(() => import('./pages/orders/OrderDetail')) },
+    { path: '/b2b/businesses', perm: B2B_ANY, component: lazy(() => import('./pages/b2b/Businesses')) },
+    { path: '/b2b/businesses/:id', perm: B2B_ANY, component: lazy(() => import('./pages/b2b/BusinessDetail')) },
+    { path: '/b2b/commissions', perm: B2B_ANY, component: lazy(() => import('./pages/b2b/Commissions')) },
+    { path: '/b2b/payouts', perm: [...B2B_ANY, 'b2b.payouts'], component: lazy(() => import('./pages/b2b/Payouts')) },
+    { path: '/b2b/sales-reps', perm: ['b2b.view', 'b2b.manage', 'b2b.payouts'], component: lazy(() => import('./pages/b2b/SalesReps')) },
+    { path: '/b2b/tiers', perm: 'b2b.manage', component: lazy(() => import('./pages/b2b/Tiers')) },
 ];
 
 export default routes;
