@@ -61,7 +61,10 @@ class CatalogController extends Controller
         $q = Product::visible()->with(['images', 'category']);
 
         if ($cat = $request->input('category')) {
-            $q->whereHas('category', fn ($c) => $c->where('slug', $cat));
+            // `jewellery` groups every category except the raw gemstones and mountings.
+            $cat === 'jewellery'
+                ? $q->whereHas('category', fn ($c) => $c->whereNotIn('slug', ['gemstones', 'mountings']))
+                : $q->whereHas('category', fn ($c) => $c->where('slug', $cat));
         }
         if ($stones = array_filter((array) $request->input('stone', []))) {
             $q->where(function ($w) use ($stones) {

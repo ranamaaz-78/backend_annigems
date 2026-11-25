@@ -160,37 +160,33 @@
         "to": "/"
       },
       {
-        "label": "Shop All",
-        "to": "/shop"
+        "label": "Gemstones",
+        "to": "/shop?cat=gemstones"
       },
       {
-        "label": "Rings",
-        "to": "/shop?cat=rings"
+        "label": "Mountings",
+        "to": "/shop?cat=mountings"
       },
       {
-        "label": "Necklaces",
-        "to": "/shop?cat=necklaces"
+        "label": "Jewellery",
+        "to": "/shop?cat=jewellery"
       },
       {
-        "label": "Earrings",
-        "to": "/shop?cat=earrings"
-      },
-      {
-        "label": "Bracelets",
-        "to": "/shop?cat=bracelets"
-      },
-      {
-        "label": "✦ Design Your Ring",
+        "label": "Design Your Ring",
         "to": "/design-your-ring",
         "highlight": true
       },
       {
-        "label": "Wishlist",
-        "to": "/wishlist"
+        "label": "About",
+        "to": "/about"
       },
       {
-        "label": "Our Story",
-        "to": "/about"
+        "label": "Contact",
+        "to": "/contact"
+      },
+      {
+        "label": "Wishlist",
+        "to": "/wishlist"
       },
       {
         "label": "Services",
@@ -199,10 +195,6 @@
       {
         "label": "Wholesale / B2B",
         "to": "/wholesale"
-      },
-      {
-        "label": "Contact",
-        "to": "/contact"
       },
       {
         "label": "Track Order",
@@ -426,6 +418,18 @@
         "label": "Bracelets",
         "image": "/images/cat_bracelets.jpg",
         "count": 5
+      },
+      {
+        "id": "gemstones",
+        "label": "Gemstones",
+        "image": "/images/ring1_emerald.jpg",
+        "count": 0
+      },
+      {
+        "id": "mountings",
+        "label": "Mountings",
+        "image": "/images/ring2_plain.jpg",
+        "count": 0
       }
     ],
     "badges": [
