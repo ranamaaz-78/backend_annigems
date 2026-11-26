@@ -399,37 +399,37 @@
         "id": "rings",
         "label": "Rings",
         "image": "/images/ring1_plain.jpg",
-        "count": 6
+        "count": 4
       },
       {
         "id": "necklaces",
         "label": "Necklaces",
         "image": "/images/cat_necklaces.jpg",
-        "count": 8
+        "count": 2
       },
       {
         "id": "earrings",
         "label": "Earrings",
         "image": "/images/cat_earrings.jpg",
-        "count": 10
+        "count": 2
       },
       {
         "id": "bracelets",
         "label": "Bracelets",
         "image": "/images/cat_bracelets.jpg",
-        "count": 5
+        "count": 2
       },
       {
         "id": "gemstones",
         "label": "Gemstones",
         "image": "/images/ring1_emerald.jpg",
-        "count": 0
+        "count": 4
       },
       {
         "id": "mountings",
         "label": "Mountings",
         "image": "/images/ring2_plain.jpg",
-        "count": 0
+        "count": 2
       }
     ],
     "badges": [
@@ -512,7 +512,7 @@
     "products": [
       {
         "id": "r1",
-        "category": "rings",
+        "category": "mountings",
         "name": "Aurora Solitaire",
         "subtitle": "Classic 4-Prong Cathedral Setting",
         "price": 799,
@@ -532,6 +532,7 @@
         "weight": "3.2g",
         "description": "A timeless cathedral setting with four elegant prongs that elevate any chosen stone, letting light dance through every facet. Hand-finished by master artisans.",
         "details": [
+          "Centre stone sold separately",
           "18K Yellow Gold",
           "4-Prong Cathedral Setting",
           "High Polish Finish",
@@ -549,7 +550,7 @@
       },
       {
         "id": "r2",
-        "category": "rings",
+        "category": "mountings",
         "name": "Elise Vintage Halo",
         "subtitle": "Ornate Milgrain Setting",
         "price": 1250,
@@ -569,6 +570,7 @@
         "weight": "4.8g",
         "description": "Inspired by Edwardian artistry. Delicate milgrain borders and hand-carved filigree create an heirloom-worthy masterpiece. Each piece takes over 40 hours to create.",
         "details": [
+          "Centre stone sold separately",
           "18K Yellow Gold",
           "Milgrain Halo Setting",
           "Satin + High Polish Finish",
@@ -910,6 +912,138 @@
           "sapphire",
           "bangle",
           "statement"
+        ],
+        "inStock": true,
+        "customizable": false
+      },
+      {
+        "id": "g1",
+        "category": "gemstones",
+        "name": "Burmese Ruby",
+        "subtitle": "Loose Gemstone · 1.2 ct",
+        "price": 450,
+        "originalPrice": null,
+        "rating": 0,
+        "reviews": 0,
+        "badge": null,
+        "image": "/images/gem_ruby.svg",
+        "gallery": [
+          "/images/gem_ruby.svg"
+        ],
+        "metal": null,
+        "stone": "Burmese Ruby 1.2ct",
+        "weight": "1.2 ct",
+        "description": "Fiery passion. A 1.2 carat Burmese Ruby of AAA clarity from the Mogok Valley, Myanmar. Buy it loose, or set it in one of our mountings.",
+        "details": [
+          "1.2 carat",
+          "AAA clarity",
+          "Origin: Mogok Valley, Myanmar",
+          "Rarity: Rare",
+          "Fits our Aurora and Elise mountings"
+        ],
+        "tags": [
+          "ruby",
+          "red",
+          "loose stone"
+        ],
+        "inStock": true,
+        "customizable": false
+      },
+      {
+        "id": "g2",
+        "category": "gemstones",
+        "name": "Ceylon Sapphire",
+        "subtitle": "Loose Gemstone · 1.5 ct",
+        "price": 520,
+        "originalPrice": null,
+        "rating": 0,
+        "reviews": 0,
+        "badge": null,
+        "image": "/images/gem_sapphire.svg",
+        "gallery": [
+          "/images/gem_sapphire.svg"
+        ],
+        "metal": null,
+        "stone": "Ceylon Sapphire 1.5ct",
+        "weight": "1.5 ct",
+        "description": "Royal elegance. A 1.5 carat Ceylon Sapphire of VVS1 clarity from Sri Lanka. Buy it loose, or set it in one of our mountings.",
+        "details": [
+          "1.5 carat",
+          "VVS1 clarity",
+          "Origin: Sri Lanka",
+          "Rarity: Premium",
+          "Fits our Aurora and Elise mountings"
+        ],
+        "tags": [
+          "sapphire",
+          "blue",
+          "loose stone"
+        ],
+        "inStock": true,
+        "customizable": false
+      },
+      {
+        "id": "g3",
+        "category": "gemstones",
+        "name": "Colombian Emerald",
+        "subtitle": "Loose Gemstone · 1.3 ct",
+        "price": 580,
+        "originalPrice": null,
+        "rating": 0,
+        "reviews": 0,
+        "badge": null,
+        "image": "/images/gem_emerald.svg",
+        "gallery": [
+          "/images/gem_emerald.svg"
+        ],
+        "metal": null,
+        "stone": "Colombian Emerald 1.3ct",
+        "weight": "1.3 ct",
+        "description": "The finest green. A 1.3 carat Colombian Emerald of VS1 clarity from the Muzo mines. Buy it loose, or set it in one of our mountings.",
+        "details": [
+          "1.3 carat",
+          "VS1 clarity",
+          "Origin: Muzo, Colombia",
+          "Rarity: Rare",
+          "Fits our Aurora and Elise mountings"
+        ],
+        "tags": [
+          "emerald",
+          "green",
+          "loose stone"
+        ],
+        "inStock": true,
+        "customizable": false
+      },
+      {
+        "id": "g4",
+        "category": "gemstones",
+        "name": "White Diamond",
+        "subtitle": "Loose Gemstone · 1.0 ct D VS1",
+        "price": 1200,
+        "originalPrice": null,
+        "rating": 0,
+        "reviews": 0,
+        "badge": null,
+        "image": "/images/gem_diamond.svg",
+        "gallery": [
+          "/images/gem_diamond.svg"
+        ],
+        "metal": null,
+        "stone": "White Diamond 1.0ct D VS1",
+        "weight": "1.0 ct",
+        "description": "The eternal classic. A 1.0 carat D-colour, VS1 White Diamond, GIA certified. Buy it loose, or set it in one of our mountings.",
+        "details": [
+          "1.0 carat",
+          "D colour, VS1 clarity",
+          "GIA certified",
+          "Rarity: Elite",
+          "Fits our Aurora and Elise mountings"
+        ],
+        "tags": [
+          "diamond",
+          "white",
+          "loose stone"
         ],
         "inStock": true,
         "customizable": false

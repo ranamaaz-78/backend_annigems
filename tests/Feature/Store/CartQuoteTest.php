@@ -127,11 +127,14 @@ class CartQuoteTest extends TestCase
             ->assertJsonPath('data.free_shipping_threshold.amount', 50000)
             ->assertJsonMissingPath('data.app');
         $this->api('GET', 'bootstrap', platform: 'mobile')->assertOk()->assertJsonStructure(['data' => ['app' => ['ios', 'android', 'maintenance']]]);
-        $this->api('GET', 'home')->assertOk()->assertJsonCount(5, 'data.featured_products')->assertJsonPath('data.categories.0.count', 6);
-        $this->api('GET', 'products?category=rings&per_page=50')->assertOk()->assertJsonCount(6, 'data');
-        $this->api('GET', 'products?stone[]=Ruby')->assertOk()->assertJsonCount(2, 'data');
-        $this->api('GET', 'products?max_price=80000&sort=price-asc')->assertOk()->assertJsonPath('data.0.legacy_id', 'n2');
-        $this->api('GET', 'products/r1')->assertOk()->assertJsonCount(4, 'data.gallery')->assertJsonCount(4, 'data.related');
+        $this->api('GET', 'home')->assertOk()->assertJsonCount(5, 'data.featured_products')->assertJsonPath('data.categories.0.count', 4);
+        $this->api('GET', 'products?category=rings&per_page=50')->assertOk()->assertJsonCount(4, 'data');
+        $this->api('GET', 'products?category=mountings')->assertOk()->assertJsonCount(2, 'data');
+        $this->api('GET', 'products?category=gemstones')->assertOk()->assertJsonCount(4, 'data');
+        $this->api('GET', 'products?category=jewellery&per_page=50')->assertOk()->assertJsonCount(10, 'data');
+        $this->api('GET', 'products?stone[]=Ruby')->assertOk()->assertJsonCount(3, 'data');
+        $this->api('GET', 'products?max_price=80000&sort=price-asc')->assertOk()->assertJsonPath('data.0.legacy_id', 'g1');
+        $this->api('GET', 'products/r1')->assertOk()->assertJsonCount(4, 'data.gallery')->assertJsonCount(1, 'data.related');
         $this->api('GET', 'products/aurora-solitaire')->assertOk()->assertJsonPath('data.legacy_id', 'r1');
         $this->api('GET', 'products/nope')->assertNotFound();
         $this->api('GET', 'configurator')->assertOk()->assertJsonCount(8, 'data.combos')

@@ -23,10 +23,16 @@ class SeedTest extends TestCase
         Storage::fake('public');
         $this->seed();
 
-        $this->assertSame(12, Product::count());
+        $this->assertSame(16, Product::count());
         $r1 = Product::findBySlugOrLegacy('r1');
         $this->assertSame(79900, $r1->price);
         $this->assertTrue($r1->has_sizes);
+        // Plain settings are sold as mountings; the Design Your Ring stones are sold loose too.
+        $this->assertSame('mountings', $r1->category->slug);
+        $ruby = Product::findBySlugOrLegacy('g1');
+        $this->assertSame('gemstones', $ruby->category->slug);
+        $this->assertSame(45000, $ruby->price);
+        $this->assertFalse($ruby->has_sizes);
         $this->assertSame(0, Product::findBySlugOrLegacy('r6')->stock_qty);
         $this->assertSame(149000, Product::findBySlugOrLegacy('r2')->compare_at_price);
 
@@ -44,5 +50,6 @@ class SeedTest extends TestCase
         $this->assertSame(['AANI10', 'WELCOME15'], Coupon::orderBy('code')->pluck('code')->all());
         $this->assertTrue(User::where('email', 'demo@aanigems.com')->exists());
         Storage::disk('public')->assertExists('images/ring1_ruby.jpg');
+        Storage::disk('public')->assertExists('images/gem_ruby.svg');
     }
 }

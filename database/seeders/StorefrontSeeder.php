@@ -196,7 +196,7 @@ class StorefrontSeeder extends Seeder
         $ringSizes = $this->d['catalog']['ringSizes'];
 
         foreach ($this->d['catalog']['products'] as $i => $p) {
-            $isRing = $p['category'] === 'rings';
+            $isRing = in_array($p['category'], ['rings', 'mountings'], true); // mountings are sized like rings
             $product = Product::withTrashed()->updateOrCreate(['legacy_id' => $p['id']], [
                 'category_id' => $categories[$p['category']],
                 'slug' => Str::slug($p['name']),
