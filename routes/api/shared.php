@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 // Store / content (public)
 Route::get('bootstrap', [Api\StoreController::class, 'bootstrap']);
 Route::get('home', [Api\StoreController::class, 'home']);
+Route::get('metal-rates', [Api\StoreController::class, 'metalRates']);
 Route::get('categories', [Api\CatalogController::class, 'categories']);
 Route::get('products', [Api\CatalogController::class, 'products']);
 Route::get('products/{slugOrLegacyId}', [Api\CatalogController::class, 'show']);

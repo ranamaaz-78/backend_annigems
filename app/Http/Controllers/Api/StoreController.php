@@ -124,6 +124,17 @@ class StoreController extends Controller
         ]]);
     }
 
+    /**
+     * Live metal rates
+     *
+     * Gold and silver spot prices (per ounce and per gram) in the request currency, for display only.
+     * `data` is null while no reading is available.
+     */
+    public function metalRates(\App\Services\MetalRatesService $rates): \Illuminate\Http\JsonResponse
+    {
+        return response()->json(['data' => $rates->feed()]);
+    }
+
     public static function categoriesQuery()
     {
         return Category::active()->orderBy('sort_order')->orderBy('id')

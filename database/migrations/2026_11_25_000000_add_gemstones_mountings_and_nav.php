@@ -12,6 +12,11 @@ return new class extends Migration
 {
     public function up(): void
     {
+        // Fresh installs get everything from the seeder; this only upgrades an already seeded database.
+        if (! DB::table('categories')->exists()) {
+            return;
+        }
+
         $max = (int) DB::table('categories')->max('sort_order');
         foreach (['gemstones' => ['Gemstones', 'images/ring1_emerald.jpg'], 'mountings' => ['Mountings', 'images/ring2_plain.jpg']] as $slug => [$name, $image]) {
             if (! DB::table('categories')->where('slug', $slug)->exists()) {

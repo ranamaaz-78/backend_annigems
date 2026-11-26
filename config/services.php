@@ -57,6 +57,13 @@ return [
         ],
     ],
 
+    // Live gold/silver spot feed shown on the storefront (display only, no key needed).
+    'metals' => [
+        'url' => env('METALS_API_URL', 'https://api.gold-api.com/price'),
+        // Only for PHP installs without a CA bundle (e.g. WAMP). TLS verification stays on.
+        'ca_bundle' => env('METALS_CA_BUNDLE'),
+    ],
+
     'goldapi' => [
         'key' => env('GOLD_API_KEY'),
         'url' => env('GOLD_API_URL', 'https://www.goldapi.io/api/XAU/EUR'),
